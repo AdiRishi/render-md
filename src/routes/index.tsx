@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Route as RouteIcon, Server, Shield, Sparkles, Waves, Zap } from 'lucide-react'
+import { ComponentExample } from '@/components/component-example'
 
 export const Route = createFileRoute('/')({ component: App })
 
@@ -100,6 +101,9 @@ function App() {
             </div>
           ))}
         </div>
+      </section>
+      <section>
+        <ComponentExample />
       </section>
     </div>
   )
