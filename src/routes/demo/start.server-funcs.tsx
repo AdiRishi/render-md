@@ -22,7 +22,7 @@ type Todo = {
   name: string
 }
 
-async function readTodos(): Promise<Array<Todo>> {
+async function readTodos(): Promise<Todo[]> {
   return JSON.parse(
     await fs.promises.readFile(TODOS_FILE, 'utf-8').catch(() =>
       JSON.stringify(
