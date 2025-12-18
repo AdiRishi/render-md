@@ -1,12 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import {
-  Route as RouteIcon,
-  Server,
-  Shield,
-  Sparkles,
-  Waves,
-  Zap,
-} from 'lucide-react'
+import { Route as RouteIcon, Server, Shield, Sparkles, Waves, Zap } from 'lucide-react'
 
 export const Route = createFileRoute('/')({ component: App })
 
@@ -72,9 +65,8 @@ function App() {
             The framework for next generation AI applications
           </p>
           <p className="text-lg text-gray-400 max-w-3xl mx-auto mb-8">
-            Full-stack framework powered by TanStack Router for React and Solid.
-            Build modern applications with server functions, streaming, and type
-            safety.
+            Full-stack framework powered by TanStack Router for React and Solid. Build modern
+            applications with server functions, streaming, and type safety.
           </p>
           <div className="flex flex-col items-center gap-4">
             <a
@@ -103,12 +95,8 @@ function App() {
               className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 hover:border-cyan-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10"
             >
               <div className="mb-4">{feature.icon}</div>
-              <h3 className="text-xl font-semibold text-white mb-3">
-                {feature.title}
-              </h3>
-              <p className="text-gray-400 leading-relaxed">
-                {feature.description}
-              </p>
+              <h3 className="text-xl font-semibold text-white mb-3">{feature.title}</h3>
+              <p className="text-gray-400 leading-relaxed">{feature.description}</p>
             </div>
           ))}
         </div>

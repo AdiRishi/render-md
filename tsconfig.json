@@ -1,11 +1,6 @@
 {
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "eslint.config.js",
-    "prettier.config.js",
-    "vite.config.js"
-  ],
+  "include": ["**/*.ts", "**/*.tsx", "eslint.config.js", "prettier.config.js", "vite.config.js"],
+  "exclude": ["node_modules", ".output", ".wrangler", ".tanstack", "public"],
 
   "compilerOptions": {
     "target": "ES2022",
