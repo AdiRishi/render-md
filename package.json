@@ -73,6 +73,7 @@
     "@vitejs/plugin-react": "^5.1.2",
     "jsdom": "^27.3.0",
     "prettier": "^3.7.4",
+    "rollup-plugin-visualizer": "^6.0.5",
     "typescript": "^5.9.3",
     "unified": "^11.0.5",
     "vite": "^7.3.0",
