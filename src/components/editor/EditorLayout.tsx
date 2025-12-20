@@ -1,12 +1,31 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 
 import { EditorHeader, type ViewMode } from './EditorHeader'
-import { MarkdownPane } from './MarkdownPane'
+import { MarkdownPane, defaultContent } from './MarkdownPane'
 import { PreviewPane } from './PreviewPane'
 import { StatusBar } from './StatusBar'
 
+/**
+ * Calculate word count and reading time from markdown content
+ */
+function useContentStats(content: string) {
+  return useMemo(() => {
+    // Count words (split by whitespace, filter empty strings)
+    const words = content.trim().split(/\s+/).filter(Boolean)
+    const wordCount = words.length
+
+    // Average reading speed: 200 words per minute
+    const readingTime = Math.max(1, Math.ceil(wordCount / 200))
+
+    return { wordCount, readingTime }
+  }, [content])
+}
+
 export function EditorLayout() {
   const [viewMode, setViewMode] = useState<ViewMode>('split')
+  const [markdown, setMarkdown] = useState(defaultContent)
+
+  const { wordCount, readingTime } = useContentStats(markdown)
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
@@ -16,27 +35,27 @@ export function EditorLayout() {
         {viewMode === 'split' && (
           <>
             <div className="w-1/2 border-r border-border">
-              <MarkdownPane />
+              <MarkdownPane value={markdown} onChange={setMarkdown} />
             </div>
             <div className="w-1/2">
-              <PreviewPane />
+              <PreviewPane markdown={markdown} />
             </div>
           </>
         )}
 
         {viewMode === 'editor' && (
           <div className="w-full h-full">
-            <MarkdownPane />
+            <MarkdownPane value={markdown} onChange={setMarkdown} />
           </div>
         )}
 
         {viewMode === 'preview' && (
           <div className="w-full h-full">
-            <PreviewPane />
+            <PreviewPane markdown={markdown} />
           </div>
         )}
 
-        <StatusBar wordCount={42} readingTime={3} />
+        <StatusBar wordCount={wordCount} readingTime={readingTime} />
       </main>
     </div>
   )
