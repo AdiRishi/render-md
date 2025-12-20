@@ -13,11 +13,11 @@ export const editorTheme = createTheme({
     caret: '#137fec', // primary blue
     selection: '#137fec26', // primary with opacity
     selectionMatch: '#137fec1a',
-    lineHighlight: 'transparent', // subtle highlight, matches design
-    gutterBackground: '#f9fafb', // slight gray tint like design
-    gutterForeground: '#cbd5e1', // slate-300
+    lineHighlight: 'transparent', // no line highlight for clean look
+    gutterBackground: '#f8fafc', // slate-50 - matches design exactly
+    gutterForeground: '#cbd5e1', // slate-300 - matches design exactly
     gutterActiveForeground: '#94a3b8', // slate-400
-    gutterBorder: 'transparent',
+    gutterBorder: '#f1f5f9', // slate-100 - subtle border like design
     fontFamily:
       "'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
@@ -133,4 +133,3 @@ export const editorThemeDark = createTheme({
     { tag: t.propertyName, color: '#22d3ee' },
   ],
 })
-

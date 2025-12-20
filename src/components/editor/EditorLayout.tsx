@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 import { EditorHeader, type ViewMode } from './EditorHeader'
 import { MarkdownPane, defaultContent } from './MarkdownPane'
