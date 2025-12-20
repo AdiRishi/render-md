@@ -1,293 +1,343 @@
-Welcome to your new TanStack app!
+<div align="center">
+  <img src="public/logo512.png" alt="MDViewer Logo" width="120" height="120" />
 
-# Getting Started
+# MDViewer
 
-To run this application:
+**A calm space for your thoughts.**
+
+A modern, real-time markdown editor with live preview, syntax highlighting,
+LaTeX math support, and GitHub Flavored Markdown.
+
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=white)](https://react.dev)
+[![TanStack](https://img.shields.io/badge/TanStack_Start-1.x-FF4154?style=flat)](https://tanstack.com/start)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat)](LICENSE)
+
+</div>
+
+---
+
+## ✨ Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 📝 **Rich Markdown Editing**
+
+- Syntax-highlighted markdown editor powered by CodeMirror
+- Line numbers, bracket matching, and smart indentation
+- Multiple selections and rectangular selection support
+- Custom editor theme matching the design system
+
+</td>
+<td width="50%">
+
+### 👁️ **Live Preview**
+
+- Real-time rendering with React's deferred updates
+- Smooth performance even with large documents
+- Clean, readable typography with proper spacing
+- Responsive preview container
+
+</td>
+</tr>
+<tr>
+<td>
+
+### 🧮 **LaTeX Math Support**
+
+- Inline math: `$E = mc^2$`
+- Block equations with full LaTeX syntax
+- Powered by KaTeX for fast rendering
+- Beautiful mathematical typography
+
+</td>
+<td>
+
+### 📊 **GitHub Flavored Markdown**
+
+- Tables with alignment support
+- Task lists with checkboxes
+- Strikethrough text
+- Auto-linking URLs
+
+</td>
+</tr>
+<tr>
+<td>
+
+### 🎨 **Syntax Highlighting**
+
+- 150+ programming languages
+- One Dark theme for code blocks
+- Line numbers for longer code snippets
+- Inline code styling
+
+</td>
+<td>
+
+### 🖥️ **Flexible View Modes**
+
+- **Split view**: Editor and preview side-by-side
+- **Editor only**: Focus on writing
+- **Preview only**: See the final result
+- Smooth transitions between modes
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) 18.x or later
+- [pnpm](https://pnpm.io/) 10.x or later
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/yourusername/render-md.git
+cd render-md
+
+# Install dependencies
 pnpm install
-pnpm start
+
+# Start the development server
+pnpm dev
 ```
 
-# Building For Production
+The app will be available at **http://localhost:3000**
 
-To build this application for production:
+---
+
+## 📖 Markdown Guide
+
+MDViewer supports an extensive markdown syntax. Here's what you can do:
+
+### Basic Formatting
+
+```markdown
+**Bold text** and _italic text_
+**_Bold and italic_**
+~~Strikethrough~~
+`inline code`
+```
+
+### Headings
+
+```markdown
+# H1 - Main Title
+
+## H2 - Section
+
+### H3 - Subsection
+
+#### H4 - Sub-subsection
+
+##### H5 - Minor heading
+
+###### H6 - Smallest heading
+```
+
+### Lists
+
+```markdown
+- Unordered item
+- Another item
+  - Nested item
+
+1. Ordered item
+2. Another item
+
+- [x] Completed task
+- [ ] Pending task
+```
+
+### Code Blocks
+
+````markdown
+```typescript
+interface User {
+  name: string
+  email: string
+}
+```
+````
+
+### Tables
+
+```markdown
+| Left | Center | Right |
+| :--- | :----: | ----: |
+| A    |   B    |     C |
+```
+
+### Math (LaTeX)
+
+```markdown
+Inline: $E = mc^2$
+
+Block:
+$$\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}$$
+```
+
+### Links & Images
+
+```markdown
+[Link text](https://example.com)
+![Alt text](image-url.jpg)
+```
+
+### Blockquotes
+
+```markdown
+> "The art of writing is the art of discovering what you believe."
+> — Gustave Flaubert
+```
+
+---
+
+## 🛠️ Tech Stack
+
+| Category                | Technology                                                                                                        |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| **Framework**           | [TanStack Start](https://tanstack.com/start) (React meta-framework)                                               |
+| **UI Library**          | [React 19](https://react.dev)                                                                                     |
+| **Build Tool**          | [Vite 7](https://vite.dev)                                                                                        |
+| **Styling**             | [Tailwind CSS 4](https://tailwindcss.com)                                                                         |
+| **Components**          | [shadcn/ui](https://ui.shadcn.com) (base-vega style)                                                              |
+| **Editor**              | [CodeMirror 6](https://codemirror.net) via [@uiw/react-codemirror](https://github.com/uiwjs/react-codemirror)     |
+| **Markdown**            | [react-markdown](https://github.com/remarkjs/react-markdown)                                                      |
+| **GFM Support**         | [remark-gfm](https://github.com/remarkjs/remark-gfm)                                                              |
+| **Math**                | [remark-math](https://github.com/remarkjs/remark-math) + [rehype-katex](https://github.com/remarkjs/rehype-katex) |
+| **Syntax Highlighting** | [react-syntax-highlighter](https://github.com/react-syntax-highlighter/react-syntax-highlighter)                  |
+| **Typography**          | [Geist Font](https://vercel.com/font) (Sans & Mono)                                                               |
+| **Icons**               | [Lucide React](https://lucide.dev)                                                                                |
+| **Deployment**          | [Cloudflare Workers](https://workers.cloudflare.com) via [Nitro](https://nitro.unjs.io)                           |
+
+---
+
+## 📁 Project Structure
+
+```
+render-md/
+├── public/                    # Static assets
+├── src/
+│   ├── components/
+│   │   ├── editor/           # Editor components
+│   │   │   ├── EditorHeader.tsx      # View mode toggle, actions
+│   │   │   ├── EditorLayout.tsx      # Main layout orchestrator
+│   │   │   ├── MarkdownPane.tsx      # CodeMirror editor
+│   │   │   ├── PreviewPane.tsx       # Rendered markdown
+│   │   │   └── markdown/
+│   │   │       ├── CodeBlock.tsx     # Syntax-highlighted code
+│   │   │       ├── default-content.ts
+│   │   │       └── markdown-components.tsx
+│   │   ├── ui/               # shadcn/ui components
+│   │   └── ErrorBoundary.tsx
+│   ├── global-styles/
+│   │   ├── editor.css        # CodeMirror custom styles
+│   │   └── tailwind.css      # Tailwind config & theme
+│   ├── lib/
+│   │   ├── editor-theme.ts   # CodeMirror theme
+│   │   └── utils.ts          # Utility functions
+│   ├── routes/
+│   │   ├── __root.tsx        # Root layout
+│   │   └── index.tsx         # Home page
+│   └── router.tsx            # TanStack Router config
+├── components.json           # shadcn/ui config
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+└── nitro.config.ts           # Nitro server config
+```
+
+---
+
+## 🔧 Development
+
+### Available Scripts
+
+| Command        | Description                              |
+| -------------- | ---------------------------------------- |
+| `pnpm dev`     | Start development server on port 3000    |
+| `pnpm build`   | Build for production                     |
+| `pnpm preview` | Preview production build locally         |
+| `pnpm test`    | Run tests with Vitest                    |
+| `pnpm lint`    | Run ESLint                               |
+| `pnpm format`  | Format code with Prettier                |
+| `pnpm check`   | Run all checks (format, lint, typecheck) |
+| `pnpm clean`   | Clean build artifacts                    |
+| `pnpm deploy`  | Deploy to Cloudflare Workers             |
+
+### Adding UI Components
+
+This project uses [shadcn/ui](https://ui.shadcn.com). To add a new component:
+
+```bash
+npx shadcn@latest add <component-name>
+```
+
+### Editor Theme Customization
+
+The CodeMirror theme is defined in `src/lib/editor-theme.ts`. It includes both light and dark variants with carefully crafted color palettes that match the design system.
+
+---
+
+## 🌐 Deployment
+
+### Cloudflare Workers
+
+The project is configured for deployment to Cloudflare Workers:
 
 ```bash
 pnpm build
+pnpm deploy
 ```
 
-## Testing
+### Other Platforms
 
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
+Since this is built with TanStack Start and Nitro, it can be deployed to various platforms. Modify `nitro.config.ts` to target your preferred platform.
 
-```bash
-pnpm test
-```
+---
 
-## Styling
+## 🎨 Design Philosophy
 
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
+MDViewer is designed with a focus on **calm productivity**:
 
-## Linting & Formatting
+- **Clean Interface**: Minimal chrome, maximum content area
+- **Thoughtful Typography**: Geist font family for excellent readability
+- **Subtle Interactions**: Smooth transitions and unobtrusive feedback
+- **Focus on Content**: The preview renders your markdown beautifully without distraction
 
-This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
+The color scheme uses a refined slate palette with a signature blue primary color (`#137fec`) for accents and interactive elements.
 
-```bash
-pnpm lint
-pnpm format
-pnpm check
-```
+---
 
-## Routing
+## 🤝 Contributing
 
-This project uses [TanStack Router](https://tanstack.com/router). The initial setup is a file based router. Which means that the routes are managed as files in `src/routes`.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-### Adding A Route
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-To add a new route to your application just add another a new file in the `./src/routes` directory.
+---
 
-TanStack will automatically generate the content of the route file for you.
+## 📄 License
 
-Now that you have two routes you can use a `Link` component to navigate between them.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### Adding Links
+---
 
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from '@tanstack/react-router'
-```
-
-Then anywhere in your JSX you can use it like so:
-
-```tsx
-<Link to="/about">About</Link>
-```
-
-This will create a link that will navigate to the `/about` route.
-
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you use the `<Outlet />` component.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-
-import { Link } from '@tanstack/react-router'
-
-export const Route = createRootRoute({
-  component: () => (
-    <>
-      <header>
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-        </nav>
-      </header>
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
-  ),
-})
-```
-
-The `<TanStackRouterDevtools />` component is not required so you can remove it if you don't want it in your layout.
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-const peopleRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/people',
-  loader: async () => {
-    const response = await fetch('https://swapi.dev/api/people')
-    return response.json() as Promise<{
-      results: {
-        name: string
-      }[]
-    }>
-  },
-  component: () => {
-    const data = peopleRoute.useLoaderData()
-    return (
-      <ul>
-        {data.results.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    )
-  },
-})
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-### React-Query
-
-React-Query is an excellent addition or alternative to route loading and integrating it into you application is a breeze.
-
-First add your dependencies:
-
-```bash
-pnpm add @tanstack/react-query @tanstack/react-query-devtools
-```
-
-Next we'll need to create a query client and provider. We recommend putting those in `main.tsx`.
-
-```tsx
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-
-// ...
-
-const queryClient = new QueryClient()
-
-// ...
-
-if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement)
-
-  root.render(
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>,
-  )
-}
-```
-
-You can also add TanStack Query Devtools to the root route (optional).
-
-```tsx
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-
-const rootRoute = createRootRoute({
-  component: () => (
-    <>
-      <Outlet />
-      <ReactQueryDevtools buttonPosition="top-right" />
-      <TanStackRouterDevtools />
-    </>
-  ),
-})
-```
-
-Now you can use `useQuery` to fetch your data.
-
-```tsx
-import { useQuery } from '@tanstack/react-query'
-
-import './App.css'
-
-function App() {
-  const { data } = useQuery({
-    queryKey: ['people'],
-    queryFn: () =>
-      fetch('https://swapi.dev/api/people')
-        .then((res) => res.json())
-        .then((data) => data.results as { name: string }[]),
-    initialData: [],
-  })
-
-  return (
-    <div>
-      <ul>
-        {data.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-
-export default App
-```
-
-You can find out everything you need to know on how to use React-Query in the [React-Query documentation](https://tanstack.com/query/latest/docs/framework/react/overview).
-
-## State Management
-
-Another common requirement for React applications is state management. There are many options for state management in React. TanStack Store provides a great starting point for your project.
-
-First you need to add TanStack Store as a dependency:
-
-```bash
-pnpm add @tanstack/store
-```
-
-Now let's create a simple counter in the `src/App.tsx` file as a demonstration.
-
-```tsx
-import { useStore } from '@tanstack/react-store'
-import { Store } from '@tanstack/store'
-import './App.css'
-
-const countStore = new Store(0)
-
-function App() {
-  const count = useStore(countStore)
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>Increment - {count}</button>
-    </div>
-  )
-}
-
-export default App
-```
-
-One of the many nice features of TanStack Store is the ability to derive state from other state. That derived state will update when the base state updates.
-
-Let's check this out by doubling the count using derived state.
-
-```tsx
-import { useStore } from '@tanstack/react-store'
-import { Store, Derived } from '@tanstack/store'
-import './App.css'
-
-const countStore = new Store(0)
-
-const doubledStore = new Derived({
-  fn: () => countStore.state * 2,
-  deps: [countStore],
-})
-doubledStore.mount()
-
-function App() {
-  const count = useStore(countStore)
-  const doubledCount = useStore(doubledStore)
-
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>Increment - {count}</button>
-      <div>Doubled - {doubledCount}</div>
-    </div>
-  )
-}
-
-export default App
-```
-
-We use the `Derived` class to create a new store that is derived from another store. The `Derived` class has a `mount` method that will start the derived store updating.
-
-Once we've created the derived store we can use it in the `App` component just like we would any other store using the `useStore` hook.
-
-You can find out everything you need to know on how to use TanStack Store in the [TanStack Store documentation](https://tanstack.com/store/latest).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
+<div align="center">
+  <sub>Built with ❤️</sub>
+</div>
