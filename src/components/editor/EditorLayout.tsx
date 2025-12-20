@@ -4,6 +4,7 @@ import { EditorHeader, type ViewMode } from './EditorHeader'
 import { MarkdownPane } from './MarkdownPane'
 import { PreviewPane } from './PreviewPane'
 import { defaultContent } from './markdown'
+import { cn } from '@/lib/utils'
 
 export function EditorLayout() {
   const [viewMode, setViewMode] = useState<ViewMode>('split')
@@ -18,28 +19,29 @@ export function EditorLayout() {
       <EditorHeader viewMode={viewMode} onViewModeChange={setViewMode} />
 
       <main className="flex flex-1 overflow-hidden relative">
-        {viewMode === 'split' && (
-          <>
-            <div className="w-1/2 border-r border-border">
-              <MarkdownPane value={markdown} onChange={setMarkdown} />
-            </div>
-            <div className="w-1/2">
-              <PreviewPane markdown={deferredMarkdown} />
-            </div>
-          </>
-        )}
+        {/* Editor pane - always mounted to preserve CodeMirror state (undo history, selections, scroll) */}
+        <div
+          className={cn(
+            'h-full border-r border-border transition-[width] duration-200',
+            viewMode === 'split' && 'w-1/2',
+            viewMode === 'editor' && 'w-full border-r-0',
+            viewMode === 'preview' && 'w-0 overflow-hidden border-r-0',
+          )}
+        >
+          <MarkdownPane value={markdown} onChange={setMarkdown} />
+        </div>
 
-        {viewMode === 'editor' && (
-          <div className="w-full h-full">
-            <MarkdownPane value={markdown} onChange={setMarkdown} />
-          </div>
-        )}
-
-        {viewMode === 'preview' && (
-          <div className="w-full h-full">
-            <PreviewPane markdown={deferredMarkdown} />
-          </div>
-        )}
+        {/* Preview pane - always mounted to preserve scroll position */}
+        <div
+          className={cn(
+            'h-full transition-[width] duration-200',
+            viewMode === 'split' && 'w-1/2',
+            viewMode === 'preview' && 'w-full',
+            viewMode === 'editor' && 'w-0 overflow-hidden',
+          )}
+        >
+          <PreviewPane markdown={deferredMarkdown} />
+        </div>
       </main>
     </div>
   )

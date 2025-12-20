@@ -2,8 +2,9 @@ import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
-import tailwindCss from '../global-styles/tailwind.css?url'
-import editorCss from '../global-styles/editor.css?url'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
+import tailwindCss from '@/global-styles/tailwind.css?url'
+import editorCss from '@/global-styles/editor.css?url'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -41,7 +42,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        <ErrorBoundary>{children}</ErrorBoundary>
         <TanStackDevtools
           config={{
             position: 'bottom-right',
