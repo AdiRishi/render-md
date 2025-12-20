@@ -10,30 +10,6 @@ interface MarkdownPaneProps {
   onChange: (value: string) => void
 }
 
-const defaultContent = `# Welcome to MDViewer
-
-Start typing to see the magic happen in real-time.
-
-## Features
-
-- Live split-screen preview
-- **Markdown syntax highlighting**
-- Clean, distraction-free interface
-- Export to HTML, PDF, or Markdown
-
-### Code Example
-
-\`\`\`javascript
-function greet(name) {
-  return \`Hello, \${name}!\`;
-}
-\`\`\`
-
-> "Markdown is a lightweight markup language for creating formatted text using a plain-text editor."
-
-You can also include [links](https://example.com), images, and tables easily. The preview updates instantly as you type in the editor pane on the left.
-`
-
 export function MarkdownPane({ value, onChange }: MarkdownPaneProps) {
   return (
     <section className="flex flex-col bg-background relative group/editor h-full">
@@ -75,13 +51,6 @@ export function MarkdownPane({ value, onChange }: MarkdownPaneProps) {
           className="h-full editor-scrollbar"
         />
       </div>
-
-      {/* Editor Status Badge (shown on hover) */}
-      <div className="absolute bottom-4 right-6 bg-foreground/80 backdrop-blur text-background text-xs px-2 py-1 rounded-md opacity-0 group-hover/editor:opacity-100 transition-opacity pointer-events-none">
-        Markdown
-      </div>
     </section>
   )
 }
-
-export { defaultContent }

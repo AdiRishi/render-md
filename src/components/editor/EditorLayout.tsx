@@ -1,31 +1,17 @@
-import { useMemo, useState } from 'react'
+import { useDeferredValue, useState } from 'react'
 
 import { EditorHeader, type ViewMode } from './EditorHeader'
-import { MarkdownPane, defaultContent } from './MarkdownPane'
+import { MarkdownPane } from './MarkdownPane'
 import { PreviewPane } from './PreviewPane'
-import { StatusBar } from './StatusBar'
-
-/**
- * Calculate word count and reading time from markdown content
- */
-function useContentStats(content: string) {
-  return useMemo(() => {
-    // Count words (split by whitespace, filter empty strings)
-    const words = content.trim().split(/\s+/).filter(Boolean)
-    const wordCount = words.length
-
-    // Average reading speed: 200 words per minute
-    const readingTime = Math.max(1, Math.ceil(wordCount / 200))
-
-    return { wordCount, readingTime }
-  }, [content])
-}
+import { defaultContent } from './markdown'
 
 export function EditorLayout() {
   const [viewMode, setViewMode] = useState<ViewMode>('split')
   const [markdown, setMarkdown] = useState(defaultContent)
 
-  const { wordCount, readingTime } = useContentStats(markdown)
+  // Use React's useDeferredValue for built-in debouncing
+  // This allows the editor to remain responsive while deferring expensive preview updates
+  const deferredMarkdown = useDeferredValue(markdown)
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
@@ -38,7 +24,7 @@ export function EditorLayout() {
               <MarkdownPane value={markdown} onChange={setMarkdown} />
             </div>
             <div className="w-1/2">
-              <PreviewPane markdown={markdown} />
+              <PreviewPane markdown={deferredMarkdown} />
             </div>
           </>
         )}
@@ -51,11 +37,9 @@ export function EditorLayout() {
 
         {viewMode === 'preview' && (
           <div className="w-full h-full">
-            <PreviewPane markdown={markdown} />
+            <PreviewPane markdown={deferredMarkdown} />
           </div>
         )}
-
-        <StatusBar wordCount={wordCount} readingTime={readingTime} />
       </main>
     </div>
   )

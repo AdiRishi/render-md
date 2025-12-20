@@ -5,5 +5,8 @@ export default defineNitroConfig({
   preset: 'cloudflare_module',
   cloudflare: {
     deployConfig: true,
+    wrangler: {
+      name: 'render-md',
+    },
   },
 })
