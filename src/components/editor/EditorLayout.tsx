@@ -53,7 +53,7 @@ export function EditorLayout() {
 function EditorSkeleton() {
   return (
     <section className="flex flex-col bg-background relative h-full">
-      <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-background sticky top-0 z-10 h-[45px]">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-background sticky top-0 z-10">
         <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           Markdown
         </span>
@@ -70,7 +70,7 @@ function EditorSkeleton() {
 function PreviewSkeleton() {
   return (
     <section className="flex flex-col bg-muted/50 h-full overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-2 border-b border-border shrink-0 z-10 h-[45px]">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-border shrink-0 z-10">
         <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           Preview
         </span>

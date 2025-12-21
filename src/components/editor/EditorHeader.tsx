@@ -64,15 +64,16 @@ export function EditorHeader({ viewMode, onViewModeChange }: EditorHeaderProps) 
           ))}
         </div>
 
-        <Separator orientation="vertical" className="h-6" />
+        <div className="flex items-center">
+          <Separator orientation="vertical" className="h-6" />
+        </div>
 
         {/* Action buttons */}
         <div className="flex gap-2">
-          <Button variant="secondary" size="sm" className="h-9 px-3">
-            <Link className="size-4 mr-2" />
-            <span>Copy Link</span>
+          <Button variant="secondary" size="lg">
+            Copy Link
           </Button>
-          <Button size="sm" className="h-9 px-4 font-bold shadow-md shadow-primary/20">
+          <Button className="font-bold shadow-md shadow-primary/20" size="lg">
             <Share2 className="size-4 mr-2" />
             <span>Share</span>
           </Button>

@@ -159,7 +159,7 @@ export const markdownComponents: Components = {
 
     if (isTaskItem) {
       return (
-        <li className={cn('list-none -ml-6 flex items-baseline gap-2', className)} {...props}>
+        <li className={cn('flex items-baseline gap-2 list-none', className)} {...props}>
           <Checkbox checked={isChecked} disabled className="mt-0.5 shrink-0" />
           {children}
         </li>

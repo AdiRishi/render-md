@@ -20,7 +20,7 @@ function PreviewPaneComponent({ markdown }: PreviewPaneProps) {
   return (
     <section className="flex flex-col bg-muted/50 h-full overflow-hidden">
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-border shrink-0 z-10 h-[45px]">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-border shrink-0 z-10">
         <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           Preview
         </span>

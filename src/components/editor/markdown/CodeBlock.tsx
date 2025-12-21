@@ -59,14 +59,8 @@ export function CodeBlock({ children, className, ...props }: CodeBlockProps) {
         style={oneDark}
         language={language || 'text'}
         PreTag="div"
-        className="m-0! rounded-none! text-sm!"
+        className="m-0! rounded-none! text-sm! leading-relaxed! p-4!"
         showLineNumbers={code.split('\n').length > 3}
-        customStyle={{
-          margin: 0,
-          padding: '1rem',
-          fontSize: '0.875rem',
-          lineHeight: '1.5',
-        }}
       >
         {code}
       </SyntaxHighlighter>
