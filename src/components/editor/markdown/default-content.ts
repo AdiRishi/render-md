@@ -1,117 +1,116 @@
-export const defaultContent = `# Welcome to RenderMD
+export const defaultContent = `# RenderMD
 
-A calm space for your thoughts. Start typing on the left—watch your words come to life on the right.
+![Aurora borealis dancing over snow-capped mountains](https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=900&h=400&fit=crop&q=80)
 
-## The Basics
-
-Write naturally. Use **bold** for emphasis, *italics* for nuance, or ~~strikethrough~~ when you change your mind. Combine them for ***bold italic*** when you really mean it.
-
-Inline \`code\` fits right into your sentences, perfect for mentioning \`variables\` or \`commands\`.
-
-> "The art of writing is the art of discovering what you believe."
->
-> — Gustave Flaubert
-
-## Structure Your Thoughts
-
-### Lists
-
-Unordered, for when order doesn't matter:
-
-- Morning coffee
-- A good book
-- Quiet moments
-
-Ordered, for when it does:
-
-1. Breathe in
-2. Breathe out
-3. Repeat
-
-### Task Lists
-
-Track your progress:
-
-- [x] Learn markdown basics
-- [x] Explore the preview pane
-- [ ] Write something meaningful
-- [ ] Share it with the world
-
-## Code That Speaks
-
-Syntax highlighting makes code readable and beautiful:
-
-\`\`\`typescript
-interface Moment {
-  time: Date
-  thought: string
-  feeling: 'peaceful' | 'inspired' | 'curious'
-}
-
-const now: Moment = {
-  time: new Date(),
-  thought: "This is rather nice.",
-  feeling: 'peaceful'
-}
-\`\`\`
-
-\`\`\`python
-def haiku():
-    """A poem in code."""
-    lines = [
-        "Code flows like water",
-        "Markdown renders thoughts to form",
-        "Peace in every line"
-    ]
-    return "\\n".join(lines)
-\`\`\`
-
-## Tables
-
-Organize information clearly:
-
-| What | Why | How |
-|:-----|:---:|----:|
-| Markdown | Simplicity | Just write |
-| Tables | Clarity | Pipes and dashes |
-| Alignment | Polish | Colons |
-
-## Mathematics
-
-For the curious mind, we support $\\LaTeX$ math.
-
-The beauty of Euler's identity: $e^{i\\pi} + 1 = 0$
-
-The sum of an arithmetic series:
-
-$$\\sum_{k=1}^{n} k = \\frac{n(n+1)}{2}$$
-
-The Gaussian integral:
-
-$$\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}$$
-
-## Links & Images
-
-Visit [Markdown Guide](https://www.markdownguide.org) to learn more, or explore the [CommonMark Spec](https://commonmark.org) for the technical details.
-
-![A peaceful landscape](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop)
-
-*Mountains remind us that some things take time.*
-
-## Heading Levels
-
-# h1 — The Main Title
-## h2 — Major Sections
-### h3 — Subsections
-#### h4 — Details
-##### h5 — Fine Points
-###### h6 — The Smallest
+Write. Preview. *Breathe.* This is your space for **beautiful documents**.
 
 ---
 
-That's the canvas. Now it's yours.
+## Typography & Flow
 
-Start fresh—select all and begin writing. The preview will follow, word by word, thought by thought.
+Mix **bold**, *italic*, and ~~struck~~ text naturally. Use \`inline code\` for technical terms like \`useState\` or \`git rebase\`. Go ***bold italic*** when you mean it.
 
-*Happy writing.*
+> "The universe is made of stories, not of atoms."
+>
+> — Muriel Rukeyser
+
+### Lists
+
+Things that spark joy:
+
+- The smell of rain on concrete
+- Code that works on the first try
+- A perfectly brewed cup of coffee
+
+How to get there:
+
+1. Start with curiosity
+2. Add persistence
+3. Ship it
+
+### Progress
+
+- [x] Build something beautiful
+- [x] Support GFM markdown
+- [ ] Change the world
+- [ ] Take a nap
+
+---
+
+## Code
+
+150+ languages with syntax highlighting:
+
+\`\`\`rust
+fn main() {
+    let stars: Vec<_> = (0..1000)
+        .map(|_| Star::new_random())
+        .filter(|s| s.brightness > 0.7)
+        .collect();
+
+    for star in &stars {
+        star.shine();
+    }
+}
+\`\`\`
+
+\`\`\`sql
+SELECT dreams.name, COUNT(*) as frequency
+FROM consciousness.dreams
+WHERE dreamer = 'you'
+  AND lucid = true
+GROUP BY dreams.name
+ORDER BY frequency DESC
+LIMIT 5;
+\`\`\`
+
+---
+
+## Mathematics
+
+Inline math: $E = mc^2$ · $\\nabla \\times \\mathbf{E} = -\\frac{\\partial \\mathbf{B}}{\\partial t}$
+
+The wave function of possibility:
+
+$$\\Psi(x,t) = A e^{i(kx - \\omega t)}$$
+
+Euler's identity—the most beautiful equation:
+
+$$e^{i\\pi} + 1 = 0$$
+
+---
+
+## Data
+
+| Shortcut | Action | Magic Level |
+|:---------|:------:|------------:|
+| \`⌘ + B\` | **Bold** | ★☆☆ |
+| \`⌘ + I\` | *Italic* | ★☆☆ |
+| \`⌘ + K\` | [Link]() | ★★☆ |
+| \`⌘ + E\` | \`Code\` | ★★★ |
+
+---
+
+## Images & Links
+
+Explore the [GitHub Flavored Markdown](https://github.github.com/gfm/) spec or the [KaTeX docs](https://katex.org/docs/supported.html) for math.
+
+![Milky Way over desert landscape](https://images.unsplash.com/photo-1519681393784-d120267933ba?w=900&h=400&fit=crop&q=80)
+
+*We are all made of star stuff.*
+
+---
+
+### Heading Scale
+
+# h1 — Titles
+## h2 — Sections
+### h3 — Subsections
+#### h4 — Details
+##### h5 — Notes
+###### h6 — Whispers
+
+---
+
+*Clear this canvas and make it yours.*
 `
