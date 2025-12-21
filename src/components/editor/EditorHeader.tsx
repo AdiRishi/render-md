@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Code, Columns2, Eye, FileCode2, Link, Pencil, Share2 } from 'lucide-react'
+import { Code, Columns2, Eye, FileCode2, Pencil, Share2 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
