@@ -3,6 +3,8 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import { ErrorBoundary } from '@/components/ErrorBoundary'
+import { ThemeProvider } from '@/components/theme-provider'
+import { getThemeServerFn } from '@/lib/theme'
 import tailwindCss from '@/global-styles/tailwind.css?url'
 import editorCss from '@/global-styles/editor.css?url'
 
@@ -32,17 +34,22 @@ export const Route = createRootRoute({
     ],
   }),
 
+  loader: () => getThemeServerFn(),
   shellComponent: RootDocument,
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const theme = Route.useLoaderData()
+
   return (
-    <html lang="en">
+    <html lang="en" className={theme}>
       <head>
         <HeadContent />
       </head>
       <body>
-        <ErrorBoundary>{children}</ErrorBoundary>
+        <ThemeProvider theme={theme}>
+          <ErrorBoundary>{children}</ErrorBoundary>
+        </ThemeProvider>
         <TanStackDevtools
           config={{
             position: 'bottom-right',

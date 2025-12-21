@@ -1,5 +1,6 @@
 import { Code, Columns2, Eye } from 'lucide-react'
 
+import { ThemeToggle } from '@/components/theme-toggle'
 import { cn } from '@/lib/utils'
 
 export type ViewMode = 'split' | 'editor' | 'preview'
@@ -24,24 +25,30 @@ export function EditorHeader({ viewMode, onViewModeChange }: EditorHeaderProps) 
         <span className="text-base font-semibold text-foreground">Markdown Editor</span>
       </div>
 
-      {/* View mode toggle */}
-      <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
-        {viewModeButtons.map(({ mode, icon: Icon, label }) => (
-          <button
-            key={mode}
-            onClick={() => onViewModeChange(mode)}
-            className={cn(
-              'p-1.5 rounded-md transition-all',
-              viewMode === mode
-                ? 'bg-background shadow-sm text-foreground'
-                : 'text-muted-foreground hover:text-foreground',
-            )}
-            aria-label={label}
-            title={label}
-          >
-            <Icon className="size-5" />
-          </button>
-        ))}
+      {/* Right section: View mode toggle and theme toggle */}
+      <div className="flex items-center gap-4">
+        {/* View mode toggle */}
+        <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+          {viewModeButtons.map(({ mode, icon: Icon, label }) => (
+            <button
+              key={mode}
+              onClick={() => onViewModeChange(mode)}
+              className={cn(
+                'p-1.5 rounded-md transition-all',
+                viewMode === mode
+                  ? 'bg-background shadow-sm text-foreground'
+                  : 'text-muted-foreground hover:text-foreground',
+              )}
+              aria-label={label}
+              title={label}
+            >
+              <Icon className="size-5" />
+            </button>
+          ))}
+        </div>
+
+        {/* Theme toggle */}
+        <ThemeToggle />
       </div>
     </header>
   )
