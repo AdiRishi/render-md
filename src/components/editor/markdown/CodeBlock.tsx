@@ -1,10 +1,14 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { type ComponentPropsWithoutRef } from 'react'
+import { type ComponentPropsWithoutRef, useState } from 'react'
+import { Check, Copy } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 type CodeBlockProps = ComponentPropsWithoutRef<'code'>
 
 export function CodeBlock({ children, className, ...props }: CodeBlockProps) {
+  const [copied, setCopied] = useState(false)
+
   // Extract language from className (e.g., "language-javascript" -> "javascript")
   const match = /language-(\w+)/.exec(className || '')
   const language = match ? match[1] : null
@@ -27,25 +31,45 @@ export function CodeBlock({ children, className, ...props }: CodeBlockProps) {
     )
   }
 
+  const onCopy = () => {
+    navigator.clipboard.writeText(code)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
   // TODO: Mermaid diagram support could be implemented here
   // if (language === 'mermaid') { ... }
 
   // Regular code blocks - use syntax highlighter
   return (
-    <SyntaxHighlighter
-      style={oneDark}
-      language={language || 'text'}
-      PreTag="div"
-      className="my-4! rounded-lg! text-sm!"
-      showLineNumbers={code.split('\n').length > 3}
-      customStyle={{
-        margin: 0,
-        padding: '1rem',
-        fontSize: '0.875rem',
-        lineHeight: '1.5',
-      }}
-    >
-      {code}
-    </SyntaxHighlighter>
+    <div className="relative group my-4 rounded-lg overflow-hidden border border-border/50">
+      <div className="absolute right-2 top-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+        <Button
+          onClick={onCopy}
+          variant="ghost"
+          size="icon-xs"
+          className="text-zinc-400 hover:text-white hover:bg-zinc-700/50"
+          aria-label="Copy code"
+          title="Copy code"
+        >
+          {copied ? <Check className="text-emerald-400" /> : <Copy />}
+        </Button>
+      </div>
+      <SyntaxHighlighter
+        style={oneDark}
+        language={language || 'text'}
+        PreTag="div"
+        className="!m-0 !rounded-none !text-sm"
+        showLineNumbers={code.split('\n').length > 3}
+        customStyle={{
+          margin: 0,
+          padding: '1rem',
+          fontSize: '0.875rem',
+          lineHeight: '1.5',
+        }}
+      >
+        {code}
+      </SyntaxHighlighter>
+    </div>
   )
 }

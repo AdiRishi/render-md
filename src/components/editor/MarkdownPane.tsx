@@ -1,4 +1,4 @@
-import CodeMirror from '@uiw/react-codemirror'
+import CodeMirror, { type BasicSetupOptions } from '@uiw/react-codemirror'
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown'
 import { languages } from '@codemirror/language-data'
 import { EditorView } from '@codemirror/view'
@@ -8,6 +8,24 @@ import { editorTheme } from '@/lib/editor-theme'
 interface MarkdownPaneProps {
   value: string
   onChange: (value: string) => void
+}
+
+const basicSetup: BasicSetupOptions = {
+  lineNumbers: true,
+  highlightActiveLineGutter: true,
+  highlightActiveLine: true,
+  foldGutter: false,
+  dropCursor: true,
+  allowMultipleSelections: true,
+  indentOnInput: true,
+  bracketMatching: true,
+  closeBrackets: true,
+  autocompletion: false,
+  rectangularSelection: true,
+  crosshairCursor: false,
+  highlightSelectionMatches: true,
+  searchKeymap: true,
+  tabSize: 2,
 }
 
 export function MarkdownPane({ value, onChange }: MarkdownPaneProps) {
@@ -31,23 +49,7 @@ export function MarkdownPane({ value, onChange }: MarkdownPaneProps) {
             EditorView.lineWrapping,
           ]}
           placeholder="Start writing your markdown here..."
-          basicSetup={{
-            lineNumbers: true,
-            highlightActiveLineGutter: true,
-            highlightActiveLine: true,
-            foldGutter: false,
-            dropCursor: true,
-            allowMultipleSelections: true,
-            indentOnInput: true,
-            bracketMatching: true,
-            closeBrackets: true,
-            autocompletion: false,
-            rectangularSelection: true,
-            crosshairCursor: false,
-            highlightSelectionMatches: true,
-            searchKeymap: true,
-            tabSize: 2,
-          }}
+          basicSetup={basicSetup}
           className="h-full editor-scrollbar"
         />
       </div>
