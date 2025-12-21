@@ -141,8 +141,6 @@
     --editor-syntax-heading: var(--primary);
     --editor-syntax-link: var(--primary);
     /* Match the previous dark theme palette from editorThemeDark */
-    --editor-syntax-heading: oklch(0.7137 0.1434 254.624); /* #60a5fa */
-    --editor-syntax-link: oklch(0.7137 0.1434 254.624); /* #60a5fa */
     --editor-syntax-url: oklch(0.7107 0.0351 256.7878); /* #94a3b8 */
     --editor-syntax-code: oklch(0.709 0.1592 293.5412); /* #a78bfa */
     --editor-syntax-fence: oklch(0.5544 0.0407 257.4166); /* #64748b */

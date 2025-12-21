@@ -1,41 +1,32 @@
 import { useDeferredValue, useState } from 'react'
 import { ClientOnly } from '@tanstack/react-router'
+import { cva } from 'class-variance-authority'
 
 import { EditorHeader, type ViewMode } from './EditorHeader'
 import { MarkdownPane } from './MarkdownPane'
 import { PreviewPane } from './PreviewPane'
 import { defaultContent } from './markdown/default-content'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { cn } from '@/lib/utils'
 
-// Helper functions for readable mobile/desktop pane classes
-function getEditorPaneClasses(viewMode: ViewMode) {
-  // Mobile: full width, hidden only when showing preview
-  const mobile = viewMode === 'preview' ? 'max-md:hidden' : 'max-md:w-full'
+const editorPaneVariants = cva('h-full min-w-0 transition-[width] duration-200 border-border', {
+  variants: {
+    viewMode: {
+      split: 'max-md:w-full md:w-1/2 md:border-r',
+      editor: 'max-md:w-full md:w-full md:border-r-0',
+      preview: 'max-md:hidden md:w-0 md:overflow-hidden md:border-r-0',
+    } satisfies Record<ViewMode, string>,
+  },
+})
 
-  // Desktop: width transitions based on view mode
-  const desktop = {
-    split: 'md:w-1/2 md:border-r',
-    editor: 'md:w-full md:border-r-0',
-    preview: 'md:w-0 md:overflow-hidden md:border-r-0',
-  }[viewMode]
-
-  return cn('h-full min-w-0 transition-[width] duration-200 border-border', mobile, desktop)
-}
-
-function getPreviewPaneClasses(viewMode: ViewMode) {
-  // Mobile: full width, hidden unless showing preview
-  const mobile = viewMode === 'preview' ? 'max-md:w-full' : 'max-md:hidden'
-
-  // Desktop: width transitions based on view mode
-  const desktop = {
-    split: 'md:w-1/2',
-    preview: 'md:w-full',
-    editor: 'md:w-0 md:overflow-hidden',
-  }[viewMode]
-
-  return cn('h-full min-w-0 transition-[width] duration-200', mobile, desktop)
-}
+const previewPaneVariants = cva('h-full min-w-0 transition-[width] duration-200', {
+  variants: {
+    viewMode: {
+      split: 'max-md:hidden md:w-1/2',
+      preview: 'max-md:w-full md:w-full',
+      editor: 'max-md:hidden md:w-0 md:overflow-hidden',
+    } satisfies Record<ViewMode, string>,
+  },
+})
 
 export function EditorLayout() {
   const [viewMode, setViewMode] = useState<ViewMode>('split')
@@ -65,14 +56,14 @@ export function EditorLayout() {
 
       <main className="flex flex-1 overflow-hidden">
         {/* Editor pane - always mounted to preserve CodeMirror state (undo history, selections, scroll) */}
-        <div className={getEditorPaneClasses(viewMode)}>
+        <div className={editorPaneVariants({ viewMode })}>
           <ClientOnly fallback={<EditorSkeleton />}>
             <MarkdownPane value={markdown} onChange={setMarkdown} />
           </ClientOnly>
         </div>
 
         {/* Preview pane - always mounted to preserve scroll position */}
-        <div className={getPreviewPaneClasses(viewMode)}>
+        <div className={previewPaneVariants({ viewMode })}>
           <ClientOnly fallback={<PreviewSkeleton />}>
             <PreviewPane markdown={deferredMarkdown} />
           </ClientOnly>

@@ -1,7 +1,7 @@
 import { Code, Columns2, Eye } from 'lucide-react'
+import { cva } from 'class-variance-authority'
 
 import { ThemeToggle } from '@/components/theme-toggle'
-import { cn } from '@/lib/utils'
 
 export type ViewMode = 'split' | 'editor' | 'preview'
 
@@ -15,6 +15,18 @@ const viewModeButtons = [
   { mode: 'editor' as const, icon: Code, label: 'Editor Only' },
   { mode: 'preview' as const, icon: Eye, label: 'Preview Only' },
 ]
+
+const viewModeButtonVariants = cva('p-1.5 rounded-md transition-all', {
+  variants: {
+    state: {
+      active: 'bg-background shadow-sm text-foreground',
+      inactive: 'text-muted-foreground hover:text-foreground',
+    },
+  },
+  defaultVariants: {
+    state: 'inactive',
+  },
+})
 
 export function EditorHeader({ viewMode, onViewModeChange }: EditorHeaderProps) {
   return (
@@ -33,12 +45,9 @@ export function EditorHeader({ viewMode, onViewModeChange }: EditorHeaderProps) 
             <button
               key={mode}
               onClick={() => onViewModeChange(mode)}
-              className={cn(
-                'p-1.5 rounded-md transition-all',
-                viewMode === mode
-                  ? 'bg-background shadow-sm text-foreground'
-                  : 'text-muted-foreground hover:text-foreground',
-              )}
+              className={viewModeButtonVariants({
+                state: viewMode === mode ? 'active' : 'inactive',
+              })}
               aria-label={label}
               title={label}
             >
