@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
-  "short_name": "TanStack App",
-  "name": "Create TanStack App Sample",
+  "short_name": "RenderMD",
+  "name": "RenderMD - Markdown Editor",
   "icons": [
     {
       "src": "favicon.ico",

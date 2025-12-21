@@ -4,7 +4,7 @@ This file provides guidance to AI agents when working with code in this reposito
 
 ## Project Overview
 
-MDViewer is a real-time markdown editor with live preview, built with TanStack Start (React 19 meta-framework), TypeScript, and Tailwind CSS 4. It supports GitHub Flavored Markdown, LaTeX math (KaTeX), and syntax highlighting for 150+ languages.
+RenderMD is a real-time markdown editor with live preview, built with TanStack Start (React 19 meta-framework), TypeScript, and Tailwind CSS 4. It supports GitHub Flavored Markdown, LaTeX math (KaTeX), and syntax highlighting for 150+ languages.
 
 ## Commands
 

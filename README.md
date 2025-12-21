@@ -1,7 +1,7 @@
 <div align="center">
-  <img src="public/logo512.png" alt="MDViewer Logo" width="120" height="120" />
+  <img src="public/logo512.png" alt="RenderMD Logo" width="120" height="120" />
 
-# MDViewer
+# RenderMD
 
 **A calm space for your thoughts.**
 
@@ -118,7 +118,7 @@ The app will be available at **http://localhost:3000**
 
 ## 📖 Markdown Guide
 
-MDViewer supports an extensive markdown syntax. Here's what you can do:
+RenderMD supports an extensive markdown syntax. Here's what you can do:
 
 ### Basic Formatting
 
@@ -309,7 +309,7 @@ Since this is built with TanStack Start and Nitro, it can be deployed to various
 
 ## 🎨 Design Philosophy
 
-MDViewer is designed with a focus on **calm productivity**:
+RenderMD is designed with a focus on **calm productivity**:
 
 - **Clean Interface**: Minimal chrome, maximum content area
 - **Thoughtful Typography**: Geist font family for excellent readability

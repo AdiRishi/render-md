@@ -1,4 +1,4 @@
-export const defaultContent = `# Welcome to MDViewer
+export const defaultContent = `# Welcome to RenderMD
 
 A calm space for your thoughts. Start typing on the left—watch your words come to life on the right.
 
