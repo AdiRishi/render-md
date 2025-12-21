@@ -5,7 +5,37 @@ import { EditorHeader, type ViewMode } from './EditorHeader'
 import { MarkdownPane } from './MarkdownPane'
 import { PreviewPane } from './PreviewPane'
 import { defaultContent } from './markdown/default-content'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils'
+
+// Helper functions for readable mobile/desktop pane classes
+function getEditorPaneClasses(viewMode: ViewMode) {
+  // Mobile: full width, hidden only when showing preview
+  const mobile = viewMode === 'preview' ? 'max-md:hidden' : 'max-md:w-full'
+
+  // Desktop: width transitions based on view mode
+  const desktop = {
+    split: 'md:w-1/2 md:border-r',
+    editor: 'md:w-full md:border-r-0',
+    preview: 'md:w-0 md:overflow-hidden md:border-r-0',
+  }[viewMode]
+
+  return cn('h-full min-w-0 transition-[width] duration-200 border-border', mobile, desktop)
+}
+
+function getPreviewPaneClasses(viewMode: ViewMode) {
+  // Mobile: full width, hidden unless showing preview
+  const mobile = viewMode === 'preview' ? 'max-md:w-full' : 'max-md:hidden'
+
+  // Desktop: width transitions based on view mode
+  const desktop = {
+    split: 'md:w-1/2',
+    preview: 'md:w-full',
+    editor: 'md:w-0 md:overflow-hidden',
+  }[viewMode]
+
+  return cn('h-full min-w-0 transition-[width] duration-200', mobile, desktop)
+}
 
 export function EditorLayout() {
   const [viewMode, setViewMode] = useState<ViewMode>('split')
@@ -17,30 +47,32 @@ export function EditorLayout() {
     <div className="flex flex-col h-screen overflow-hidden">
       <EditorHeader viewMode={viewMode} onViewModeChange={setViewMode} />
 
-      <main className="flex flex-1 overflow-hidden relative">
+      {/* Mobile tab bar - visible only below md breakpoint */}
+      <Tabs
+        value={viewMode === 'split' ? 'editor' : viewMode}
+        onValueChange={(v) => setViewMode(v as ViewMode)}
+        className="md:hidden border-b border-border"
+      >
+        <TabsList className="w-full rounded-none p-1">
+          <TabsTrigger value="editor" className="flex-1">
+            Editor
+          </TabsTrigger>
+          <TabsTrigger value="preview" className="flex-1">
+            Preview
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
+
+      <main className="flex flex-1 overflow-hidden">
         {/* Editor pane - always mounted to preserve CodeMirror state (undo history, selections, scroll) */}
-        <div
-          className={cn(
-            'h-full border-r border-border transition-[width] duration-200',
-            viewMode === 'split' && 'w-1/2',
-            viewMode === 'editor' && 'w-full border-r-0',
-            viewMode === 'preview' && 'w-0 overflow-hidden border-r-0',
-          )}
-        >
+        <div className={getEditorPaneClasses(viewMode)}>
           <ClientOnly fallback={<EditorSkeleton />}>
             <MarkdownPane value={markdown} onChange={setMarkdown} />
           </ClientOnly>
         </div>
 
         {/* Preview pane - always mounted to preserve scroll position */}
-        <div
-          className={cn(
-            'h-full transition-[width] duration-200',
-            viewMode === 'split' && 'w-1/2',
-            viewMode === 'preview' && 'w-full',
-            viewMode === 'editor' && 'w-0 overflow-hidden',
-          )}
-        >
+        <div className={getPreviewPaneClasses(viewMode)}>
           <ClientOnly fallback={<PreviewSkeleton />}>
             <PreviewPane markdown={deferredMarkdown} />
           </ClientOnly>

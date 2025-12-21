@@ -26,8 +26,8 @@ function PreviewPaneComponent({ markdown }: PreviewPaneProps) {
       </div>
 
       {/* Preview Content */}
-      <div className="flex-1 overflow-y-auto editor-scrollbar">
-        <div className="max-w-[720px] mx-auto w-full p-8 pb-20">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden editor-scrollbar">
+        <div className="max-w-[720px] mx-auto w-full p-4 pb-20 md:p-8 md:pb-20">
           <article className="max-w-none">
             <ReactMarkdown
               remarkPlugins={remarkPlugins}

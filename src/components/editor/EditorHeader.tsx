@@ -28,7 +28,7 @@ export function EditorHeader({ viewMode, onViewModeChange }: EditorHeaderProps) 
       {/* Right section: View mode toggle and theme toggle */}
       <div className="flex items-center gap-4">
         {/* View mode toggle */}
-        <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+        <div className="hidden md:flex items-center gap-1 bg-muted rounded-lg p-1">
           {viewModeButtons.map(({ mode, icon: Icon, label }) => (
             <button
               key={mode}
