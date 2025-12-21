@@ -1,4 +1,4 @@
-import { Code, Columns2, Eye, FileCode2 } from 'lucide-react'
+import { Code, Columns2, Eye } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
@@ -20,9 +20,7 @@ export function EditorHeader({ viewMode, onViewModeChange }: EditorHeaderProps) 
     <header className="flex items-center justify-between border-b border-border bg-background px-6 py-3 shrink-0">
       {/* Left section: Logo and app title */}
       <div className="flex items-center gap-3">
-        <div className="size-8 flex items-center justify-center bg-primary/10 rounded-lg text-primary">
-          <FileCode2 className="size-5" />
-        </div>
+        <img src="/logo192.png" alt="RenderMD" className="size-8" />
         <span className="text-base font-semibold text-foreground">Markdown Editor</span>
       </div>
 
