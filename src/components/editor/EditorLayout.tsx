@@ -3,7 +3,7 @@ import { useDeferredValue, useState } from 'react'
 import { EditorHeader, type ViewMode } from './EditorHeader'
 import { MarkdownPane } from './MarkdownPane'
 import { PreviewPane } from './PreviewPane'
-import { defaultContent } from './markdown'
+import { defaultContent } from './markdown/default-content'
 import { cn } from '@/lib/utils'
 
 export function EditorLayout() {
