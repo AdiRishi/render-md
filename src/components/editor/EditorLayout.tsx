@@ -1,4 +1,5 @@
 import { useDeferredValue, useState } from 'react'
+import { ClientOnly } from '@tanstack/react-router'
 
 import { EditorHeader, type ViewMode } from './EditorHeader'
 import { MarkdownPane } from './MarkdownPane'
@@ -10,8 +11,6 @@ export function EditorLayout() {
   const [viewMode, setViewMode] = useState<ViewMode>('split')
   const [markdown, setMarkdown] = useState(defaultContent)
 
-  // Use React's useDeferredValue for built-in debouncing
-  // This allows the editor to remain responsive while deferring expensive preview updates
   const deferredMarkdown = useDeferredValue(markdown)
 
   return (
@@ -28,7 +27,9 @@ export function EditorLayout() {
             viewMode === 'preview' && 'w-0 overflow-hidden border-r-0',
           )}
         >
-          <MarkdownPane value={markdown} onChange={setMarkdown} />
+          <ClientOnly fallback={<EditorSkeleton />}>
+            <MarkdownPane value={markdown} onChange={setMarkdown} />
+          </ClientOnly>
         </div>
 
         {/* Preview pane - always mounted to preserve scroll position */}
@@ -40,9 +41,48 @@ export function EditorLayout() {
             viewMode === 'editor' && 'w-0 overflow-hidden',
           )}
         >
-          <PreviewPane markdown={deferredMarkdown} />
+          <ClientOnly fallback={<PreviewSkeleton />}>
+            <PreviewPane markdown={deferredMarkdown} />
+          </ClientOnly>
         </div>
       </main>
     </div>
+  )
+}
+
+function EditorSkeleton() {
+  return (
+    <section className="flex flex-col bg-background relative h-full">
+      <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-background sticky top-0 z-10 h-[45px]">
+        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+          Markdown
+        </span>
+      </div>
+      <div className="flex-1 p-4">
+        <div className="h-4 w-3/4 bg-muted animate-pulse rounded" />
+        <div className="h-4 w-1/2 bg-muted animate-pulse rounded mt-2" />
+        <div className="h-4 w-2/3 bg-muted animate-pulse rounded mt-2" />
+      </div>
+    </section>
+  )
+}
+
+function PreviewSkeleton() {
+  return (
+    <section className="flex flex-col bg-muted/50 h-full overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-2 border-b border-border shrink-0 z-10 h-[45px]">
+        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+          Preview
+        </span>
+      </div>
+      <div className="flex-1 p-8">
+        <div className="max-w-[720px] mx-auto space-y-4">
+          <div className="h-8 w-1/2 bg-muted animate-pulse rounded" />
+          <div className="h-4 w-full bg-muted animate-pulse rounded" />
+          <div className="h-4 w-5/6 bg-muted animate-pulse rounded" />
+          <div className="h-4 w-3/4 bg-muted animate-pulse rounded" />
+        </div>
+      </div>
+    </section>
   )
 }
