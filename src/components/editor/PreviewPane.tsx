@@ -18,9 +18,9 @@ const rehypePlugins: PluggableList = [rehypeKatex]
 
 function PreviewPaneComponent({ markdown }: PreviewPaneProps) {
   return (
-    <section className="flex flex-col bg-muted/50 overflow-y-auto h-full editor-scrollbar">
+    <section className="flex flex-col bg-muted/50 h-full overflow-hidden">
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-6 py-2 border-b border-transparent bg-muted/50 sticky top-0 z-10 h-[45px]">
+      <div className="flex items-center justify-between px-4 py-2 border-b border-border shrink-0 z-10 h-[45px]">
         <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           Preview
         </span>
@@ -33,16 +33,18 @@ function PreviewPaneComponent({ markdown }: PreviewPaneProps) {
       </div>
 
       {/* Preview Content */}
-      <div className="max-w-[720px] mx-auto w-full p-8 pb-20">
-        <article className="max-w-none">
-          <ReactMarkdown
-            remarkPlugins={remarkPlugins}
-            rehypePlugins={rehypePlugins}
-            components={markdownComponents}
-          >
-            {markdown}
-          </ReactMarkdown>
-        </article>
+      <div className="flex-1 overflow-y-auto editor-scrollbar">
+        <div className="max-w-[720px] mx-auto w-full p-8 pb-20">
+          <article className="max-w-none">
+            <ReactMarkdown
+              remarkPlugins={remarkPlugins}
+              rehypePlugins={rehypePlugins}
+              components={markdownComponents}
+            >
+              {markdown}
+            </ReactMarkdown>
+          </article>
+        </div>
       </div>
     </section>
   )
