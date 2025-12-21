@@ -24,5 +24,6 @@ jobs:
       - run: pnpm check
       - run: pnpm build
 
-      - name: Coveralls Coverage Report
-        uses: coverallsapp/github-action@v2
+      # Add coverage report later
+      # - name: Coveralls Coverage Report
+      #   uses: coverallsapp/github-action@v2
