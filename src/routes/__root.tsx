@@ -27,6 +27,20 @@ export const Route = createRootRoute({
           'markdown editor, live preview, markdown preview, online markdown editor, GFM, GitHub Flavored Markdown, LaTeX math, KaTeX, syntax highlighting, code blocks, markdown to HTML, real-time editor',
       }),
     ],
+    scripts: [
+      {
+        src: 'https://www.googletagmanager.com/gtag/js?id=G-BF428L3QLQ',
+        async: true,
+      },
+      {
+        children: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-BF428L3QLQ');
+        `,
+      },
+    ],
     links: [
       {
         rel: 'stylesheet',
