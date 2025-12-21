@@ -3,8 +3,6 @@
 
 # RenderMD
 
-**A calm space for your thoughts.**
-
 A modern, real-time markdown editor with live preview, syntax highlighting,
 LaTeX math support, and GitHub Flavored Markdown.
 
@@ -20,74 +18,12 @@ LaTeX math support, and GitHub Flavored Markdown.
 
 ## ✨ Features
 
-<table>
-<tr>
-<td width="50%">
-
-### 📝 **Rich Markdown Editing**
-
-- Syntax-highlighted markdown editor powered by CodeMirror
-- Line numbers, bracket matching, and smart indentation
-- Multiple selections and rectangular selection support
-- Custom editor theme matching the design system
-
-</td>
-<td width="50%">
-
-### 👁️ **Live Preview**
-
-- Real-time rendering with React's deferred updates
-- Smooth performance even with large documents
-- Clean, readable typography with proper spacing
-- Responsive preview container
-
-</td>
-</tr>
-<tr>
-<td>
-
-### 🧮 **LaTeX Math Support**
-
-- Inline math: `$E = mc^2$`
-- Block equations with full LaTeX syntax
-- Powered by KaTeX for fast rendering
-- Beautiful mathematical typography
-
-</td>
-<td>
-
-### 📊 **GitHub Flavored Markdown**
-
-- Tables with alignment support
-- Task lists with checkboxes
-- Strikethrough text
-- Auto-linking URLs
-
-</td>
-</tr>
-<tr>
-<td>
-
-### 🎨 **Syntax Highlighting**
-
-- 150+ programming languages
-- One Dark theme for code blocks
-- Line numbers for longer code snippets
-- Inline code styling
-
-</td>
-<td>
-
-### 🖥️ **Flexible View Modes**
-
-- **Split view**: Editor and preview side-by-side
-- **Editor only**: Focus on writing
-- **Preview only**: See the final result
-- Smooth transitions between modes
-
-</td>
-</tr>
-</table>
+- 📝 **Rich Markdown Editing** — Syntax highlighting, line numbers, bracket matching, and smart indentation
+- 👁️ **Live Preview** — Real-time rendering with smooth performance on large documents
+- 🧮 **LaTeX Math Support** — Inline and block equations powered by KaTeX
+- 📊 **GitHub Flavored Markdown** — Tables, task lists, strikethrough, and auto-linking
+- 🎨 **Syntax Highlighting** — 150+ languages with One Dark theme
+- 🖥️ **Flexible View Modes** — Split, editor-only, or preview-only layouts
 
 ---
 
@@ -116,90 +52,24 @@ The app will be available at **http://localhost:3000**
 
 ---
 
-## 📖 Markdown Guide
+## 📖 Supported Markdown Features
 
-RenderMD supports an extensive markdown syntax. Here's what you can do:
-
-### Basic Formatting
-
-```markdown
-**Bold text** and _italic text_
-**_Bold and italic_**
-~~Strikethrough~~
-`inline code`
-```
-
-### Headings
-
-```markdown
-# H1 - Main Title
-
-## H2 - Section
-
-### H3 - Subsection
-
-#### H4 - Sub-subsection
-
-##### H5 - Minor heading
-
-###### H6 - Smallest heading
-```
-
-### Lists
-
-```markdown
-- Unordered item
-- Another item
-  - Nested item
-
-1. Ordered item
-2. Another item
-
-- [x] Completed task
-- [ ] Pending task
-```
-
-### Code Blocks
-
-````markdown
-```typescript
-interface User {
-  name: string
-  email: string
-}
-```
-````
-
-### Tables
-
-```markdown
-| Left | Center | Right |
-| :--- | :----: | ----: |
-| A    |   B    |     C |
-```
-
-### Math (LaTeX)
-
-```markdown
-Inline: $E = mc^2$
-
-Block:
-$$\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}$$
-```
-
-### Links & Images
-
-```markdown
-[Link text](https://example.com)
-![Alt text](image-url.jpg)
-```
-
-### Blockquotes
-
-```markdown
-> "The art of writing is the art of discovering what you believe."
-> — Gustave Flaubert
-```
+| Feature                   | Powered by                                |
+| ------------------------- | ----------------------------------------- |
+| Headings (h1–h6)          | react-markdown                            |
+| Bold, italic, emphasis    | react-markdown                            |
+| Links & images            | react-markdown                            |
+| Blockquotes               | react-markdown                            |
+| Ordered & unordered lists | react-markdown                            |
+| Horizontal rules          | react-markdown                            |
+| Inline code               | react-markdown + custom styling           |
+| Code blocks (150+ langs)  | react-syntax-highlighter (One Dark theme) |
+| Tables                    | remark-gfm                                |
+| Task lists                | remark-gfm + shadcn/ui Checkbox           |
+| Strikethrough             | remark-gfm                                |
+| Autolinks                 | remark-gfm                                |
+| Inline math (`$...$`)     | remark-math + rehype-katex                |
+| Block math (`$$...$$`)    | remark-math + rehype-katex                |
 
 ---
 
@@ -220,43 +90,6 @@ $$\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}$$
 | **Typography**          | [Geist Font](https://vercel.com/font) (Sans & Mono)                                                               |
 | **Icons**               | [Lucide React](https://lucide.dev)                                                                                |
 | **Deployment**          | [Cloudflare Workers](https://workers.cloudflare.com) via [Nitro](https://nitro.unjs.io)                           |
-
----
-
-## 📁 Project Structure
-
-```
-render-md/
-├── public/                    # Static assets
-├── src/
-│   ├── components/
-│   │   ├── editor/           # Editor components
-│   │   │   ├── EditorHeader.tsx      # View mode toggle, actions
-│   │   │   ├── EditorLayout.tsx      # Main layout orchestrator
-│   │   │   ├── MarkdownPane.tsx      # CodeMirror editor
-│   │   │   ├── PreviewPane.tsx       # Rendered markdown
-│   │   │   └── markdown/
-│   │   │       ├── CodeBlock.tsx     # Syntax-highlighted code
-│   │   │       ├── default-content.ts
-│   │   │       └── markdown-components.tsx
-│   │   ├── ui/               # shadcn/ui components
-│   │   └── ErrorBoundary.tsx
-│   ├── global-styles/
-│   │   ├── editor.css        # CodeMirror custom styles
-│   │   └── tailwind.css      # Tailwind config & theme
-│   ├── lib/
-│   │   ├── editor-theme.ts   # CodeMirror theme
-│   │   └── utils.ts          # Utility functions
-│   ├── routes/
-│   │   ├── __root.tsx        # Root layout
-│   │   └── index.tsx         # Home page
-│   └── router.tsx            # TanStack Router config
-├── components.json           # shadcn/ui config
-├── package.json
-├── tsconfig.json
-├── vite.config.ts
-└── nitro.config.ts           # Nitro server config
-```
 
 ---
 

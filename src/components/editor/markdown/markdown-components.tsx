@@ -146,6 +146,7 @@ export const markdownComponents: Components = {
    * ------------------------------------------------------------------------- */
   li: ({ node, children, className, ...props }) => {
     // Check if this is a task list item (contains a checkbox as first child)
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const checkboxNode = node?.children?.find(
       (child: unknown) =>
         child &&

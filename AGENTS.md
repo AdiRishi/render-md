@@ -41,6 +41,41 @@ index.tsx → EditorLayout
 - `src/global-styles/` - Tailwind CSS and CodeMirror styles
 - `src/routes/` - TanStack Router file-based routing
 
+### Project Structure
+
+```
+render-md/
+├── public/                    # Static assets
+├── src/
+│   ├── components/
+│   │   ├── editor/           # Editor components
+│   │   │   ├── EditorHeader.tsx      # View mode toggle, actions
+│   │   │   ├── EditorLayout.tsx      # Main layout orchestrator
+│   │   │   ├── MarkdownPane.tsx      # CodeMirror editor
+│   │   │   ├── PreviewPane.tsx       # Rendered markdown
+│   │   │   └── markdown/
+│   │   │       ├── CodeBlock.tsx     # Syntax-highlighted code
+│   │   │       ├── default-content.ts
+│   │   │       └── markdown-components.tsx
+│   │   ├── ui/               # shadcn/ui components
+│   │   └── ErrorBoundary.tsx
+│   ├── global-styles/
+│   │   ├── editor.css        # CodeMirror custom styles
+│   │   └── tailwind.css      # Tailwind config & theme
+│   ├── lib/
+│   │   ├── editor-theme.ts   # CodeMirror theme
+│   │   └── utils.ts          # Utility functions
+│   ├── routes/
+│   │   ├── __root.tsx        # Root layout
+│   │   └── index.tsx         # Home page
+│   └── router.tsx            # TanStack Router config
+├── components.json           # shadcn/ui config
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+└── nitro.config.ts           # Nitro server config
+```
+
 ### Markdown Rendering Pipeline
 
 1. **Input**: CodeMirror editor in MarkdownPane
