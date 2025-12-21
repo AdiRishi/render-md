@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import { CheckCircle } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
@@ -19,17 +18,11 @@ const rehypePlugins: PluggableList = [rehypeKatex]
 function PreviewPaneComponent({ markdown }: PreviewPaneProps) {
   return (
     <section className="flex flex-col bg-muted/50 h-full overflow-hidden">
-      {/* Toolbar */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-border shrink-0 z-10">
+      {/* Header */}
+      <div className="flex items-center px-4 py-2.5 border-b border-border shrink-0">
         <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           Preview
         </span>
-        <div className="flex gap-2">
-          <span className="text-xs text-muted-foreground flex items-center gap-1">
-            <CheckCircle className="size-3.5 text-emerald-500" />
-            Saved
-          </span>
-        </div>
       </div>
 
       {/* Preview Content */}
