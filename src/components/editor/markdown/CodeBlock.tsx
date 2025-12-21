@@ -48,18 +48,23 @@ export function CodeBlock({ children, className, ...props }: CodeBlockProps) {
           onClick={onCopy}
           variant="ghost"
           size="icon-xs"
-          className="text-zinc-400 hover:text-white hover:bg-zinc-700/50"
+          className="text-white/70 hover:text-white hover:bg-white/10"
           aria-label="Copy code"
           title="Copy code"
         >
-          {copied ? <Check className="text-emerald-400" /> : <Copy />}
+          {copied ? <Check className="size-4 text-emerald-400" /> : <Copy className="size-4" />}
         </Button>
       </div>
       <SyntaxHighlighter
         style={oneDark}
         language={language || 'text'}
         PreTag="div"
-        className="m-0! rounded-none! text-sm! leading-relaxed! p-4!"
+        className="text-sm leading-relaxed"
+        customStyle={{
+          margin: 0,
+          padding: '1rem',
+          borderRadius: 0,
+        }}
         showLineNumbers={code.split('\n').length > 3}
       >
         {code}

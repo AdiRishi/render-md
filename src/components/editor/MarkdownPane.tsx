@@ -30,7 +30,7 @@ const basicSetup: BasicSetupOptions = {
 
 export function MarkdownPane({ value, onChange }: MarkdownPaneProps) {
   return (
-    <section className="flex flex-col bg-background relative group/editor h-full">
+    <section className="flex flex-col bg-background relative h-full">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-background sticky top-0 z-10">
         <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
@@ -50,7 +50,7 @@ export function MarkdownPane({ value, onChange }: MarkdownPaneProps) {
           ]}
           placeholder="Start writing your markdown here..."
           basicSetup={basicSetup}
-          className="h-full editor-scrollbar"
+          className="h-full"
         />
       </div>
     </section>

@@ -3,45 +3,38 @@
  * These styles customize the appearance of the editor to match the design system
  */
 
-/* Editor CSS Variables */
+/* Shared scrollbar styling for editor + preview panes */
 :root {
-    --editor-bg: oklch(1 0 0);
-    --editor-line-bg: oklch(0.98 0.001 286.375);
-    --editor-line-number: oklch(0.75 0.01 286);
+    --scrollbar-thumb: oklch(0.82 0.01 260);
+    --scrollbar-thumb-hover: oklch(0.7 0.01 260);
 }
 
 .dark {
-    --editor-bg: oklch(0.13 0.01 260);
-    --editor-line-bg: oklch(0.08 0.01 260);
-    --editor-line-number: oklch(0.4 0.01 260);
+    --scrollbar-thumb: oklch(0.3 0.01 260);
+    --scrollbar-thumb-hover: oklch(0.4 0.01 260);
 }
 
-@theme inline {
-    --color-editor-bg: var(--editor-bg);
-    --color-editor-line-bg: var(--editor-line-bg);
-    --color-editor-line-number: var(--editor-line-number);
+:where(.editor-scrollbar, .cm-editor .cm-scroller) {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
 }
 
-/* Custom scrollbar for editor panels */
-.editor-scrollbar::-webkit-scrollbar {
+:where(.editor-scrollbar, .cm-editor .cm-scroller)::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
-.editor-scrollbar::-webkit-scrollbar-track {
+
+:where(.editor-scrollbar, .cm-editor .cm-scroller)::-webkit-scrollbar-track {
     background: transparent;
 }
-.editor-scrollbar::-webkit-scrollbar-thumb {
-    background: oklch(0.82 0.01 260);
+
+:where(.editor-scrollbar, .cm-editor .cm-scroller)::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
     border-radius: 4px;
 }
-.editor-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: oklch(0.7 0.01 260);
-}
-.dark .editor-scrollbar::-webkit-scrollbar-thumb {
-    background: oklch(0.3 0.01 260);
-}
-.dark .editor-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: oklch(0.4 0.01 260);
+
+:where(.editor-scrollbar, .cm-editor .cm-scroller)::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
 }
 
 /* =============================================================================
@@ -72,15 +65,8 @@
    ============================================================================= */
 
 .cm-editor .cm-gutters {
-    background-color: #f8fafc !important; /* bg-slate-50 from design */
-    border-right: 1px solid #f1f5f9; /* border-slate-100 */
     min-width: 48px; /* w-12 from design */
     padding-right: 0;
-}
-
-.dark .cm-editor .cm-gutters {
-    background-color: #0d1117 !important; /* dark mode gutter from design */
-    border-right: 1px solid #1e293b;
 }
 
 /* Line number gutter element styling */
@@ -94,34 +80,4 @@
     text-align: right;
     font-size: 12px; /* text-xs from design */
     line-height: 24px; /* h-6 from design */
-    color: #cbd5e1; /* text-slate-300 from design */
-}
-
-.dark .cm-editor .cm-lineNumbers .cm-gutterElement {
-    color: #475569; /* text-slate-600 for dark mode */
-}
-
-/* =============================================================================
-   CodeMirror Scrollbar Styling
-   ============================================================================= */
-
-.cm-editor .cm-scroller::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-.cm-editor .cm-scroller::-webkit-scrollbar-track {
-    background: transparent;
-}
-.cm-editor .cm-scroller::-webkit-scrollbar-thumb {
-    background: oklch(0.82 0.01 260);
-    border-radius: 4px;
-}
-.cm-editor .cm-scroller::-webkit-scrollbar-thumb:hover {
-    background: oklch(0.7 0.01 260);
-}
-.dark .cm-editor .cm-scroller::-webkit-scrollbar-thumb {
-    background: oklch(0.3 0.01 260);
-}
-.dark .cm-editor .cm-scroller::-webkit-scrollbar-thumb:hover {
-    background: oklch(0.4 0.01 260);
 }
