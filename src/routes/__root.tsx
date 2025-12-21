@@ -3,6 +3,7 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import { ErrorBoundary } from '@/components/ErrorBoundary'
+import { NotFound } from '@/components/NotFound'
 import tailwindCss from '@/global-styles/tailwind.css?url'
 import editorCss from '@/global-styles/editor.css?url'
 
@@ -32,6 +33,7 @@ export const Route = createRootRoute({
     ],
   }),
 
+  notFoundComponent: NotFound,
   shellComponent: RootDocument,
 })
 

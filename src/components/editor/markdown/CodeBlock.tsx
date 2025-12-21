@@ -1,5 +1,5 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import oneDark from 'react-syntax-highlighter/dist/esm/styles/prism/one-dark'
 import { type ComponentPropsWithoutRef, useState } from 'react'
 import { Check, Copy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -59,7 +59,7 @@ export function CodeBlock({ children, className, ...props }: CodeBlockProps) {
         style={oneDark}
         language={language || 'text'}
         PreTag="div"
-        className="!m-0 !rounded-none !text-sm"
+        className="m-0! rounded-none! text-sm!"
         showLineNumbers={code.split('\n').length > 3}
         customStyle={{
           margin: 0,
