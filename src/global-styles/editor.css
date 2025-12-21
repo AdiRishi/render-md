@@ -3,17 +3,6 @@
  * These styles customize the appearance of the editor to match the design system
  */
 
-/* Shared scrollbar styling for editor + preview panes */
-:root {
-    --scrollbar-thumb: oklch(0.82 0.01 260);
-    --scrollbar-thumb-hover: oklch(0.7 0.01 260);
-}
-
-.dark {
-    --scrollbar-thumb: oklch(0.3 0.01 260);
-    --scrollbar-thumb-hover: oklch(0.4 0.01 260);
-}
-
 :where(.editor-scrollbar, .cm-editor .cm-scroller) {
     scrollbar-width: thin;
     scrollbar-color: var(--scrollbar-thumb) transparent;

@@ -64,6 +64,8 @@ export function CodeBlock({ children, className, ...props }: CodeBlockProps) {
           margin: 0,
           padding: '1rem',
           borderRadius: 0,
+          backgroundColor: 'var(--codeblock-bg)',
+          color: 'var(--codeblock-fg)',
         }}
         showLineNumbers={code.split('\n').length > 3}
       >
