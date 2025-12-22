@@ -9,7 +9,7 @@ import { PreviewPane } from './PreviewPane'
 import { defaultContent } from './markdown/default-content'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-const editorPaneVariants = cva('h-full min-w-0 transition-[width] duration-200 border-border', {
+const editorPaneVariants = cva('h-full min-h-0 min-w-0 transition-[width] duration-200 border-border', {
   variants: {
     viewMode: {
       split: 'max-md:w-full md:w-1/2 md:border-r',
@@ -19,7 +19,7 @@ const editorPaneVariants = cva('h-full min-w-0 transition-[width] duration-200 b
   },
 })
 
-const previewPaneVariants = cva('h-full min-w-0 transition-[width] duration-200', {
+const previewPaneVariants = cva('h-full min-h-0 min-w-0 transition-[width] duration-200', {
   variants: {
     viewMode: {
       split: 'max-md:hidden md:w-1/2',
@@ -111,7 +111,7 @@ export function EditorLayout() {
   }, [])
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
+    <div className="fixed inset-0 flex flex-col overflow-hidden">
       <EditorHeader viewMode={viewMode} onViewModeChange={setViewMode} />
 
       {/* Mobile tab bar - visible only below md breakpoint */}
@@ -130,7 +130,7 @@ export function EditorLayout() {
         </TabsList>
       </Tabs>
 
-      <main className="flex flex-1 overflow-hidden">
+      <main className="flex flex-1 min-h-0 overflow-hidden">
         {/* Editor pane - always mounted to preserve CodeMirror state (undo history, selections, scroll) */}
         <div className={editorPaneVariants({ viewMode })}>
           <ClientOnly fallback={<EditorSkeleton />}>

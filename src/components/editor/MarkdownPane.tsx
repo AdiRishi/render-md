@@ -72,7 +72,7 @@ export function MarkdownPane({ value, onChange, onScroll, editorViewRef }: Markd
   }, [editorViewRef])
 
   return (
-    <section className="flex flex-col bg-background relative h-full">
+    <section className="flex flex-col bg-background relative h-full min-h-0">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-background sticky top-0 z-10">
         <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
@@ -81,7 +81,7 @@ export function MarkdownPane({ value, onChange, onScroll, editorViewRef }: Markd
       </div>
 
       {/* Editor */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 min-h-0 overflow-hidden">
         <CodeMirror
           value={value}
           onChange={onChange}

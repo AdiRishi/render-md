@@ -19,7 +19,7 @@ const rehypePlugins: PluggableList = [rehypeKatex]
 
 function PreviewPaneComponent({ markdown, onScroll, scrollRef }: PreviewPaneProps) {
   return (
-    <section className="flex flex-col bg-muted/50 h-full overflow-hidden">
+    <section className="flex flex-col bg-muted/50 h-full min-h-0 overflow-hidden">
       {/* Header */}
       <div className="flex items-center px-4 py-2.5 border-b border-border shrink-0">
         <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
@@ -31,7 +31,7 @@ function PreviewPaneComponent({ markdown, onScroll, scrollRef }: PreviewPaneProp
       <div
         ref={scrollRef}
         onScroll={onScroll}
-        className="flex-1 overflow-y-auto overflow-x-hidden editor-scrollbar"
+        className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden editor-scrollbar"
       >
         <div className="max-w-[720px] mx-auto w-full p-4 pb-20 md:p-8 md:pb-20">
           <article className="max-w-none">
