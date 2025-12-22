@@ -12,7 +12,6 @@ const config = defineConfig({
   plugins: [
     devtools(),
     nitro(),
-    // this is the plugin that enables path aliases
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
     }),
@@ -22,6 +21,7 @@ const config = defineConfig({
     visualizer(),
     sitemapPlugin({
       baseUrl: 'https://www.render-md.com',
+      verbose: true,
     }),
   ],
 })
