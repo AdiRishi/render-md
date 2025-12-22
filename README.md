@@ -6,11 +6,7 @@
 A modern, real-time markdown editor with live preview, syntax highlighting,
 LaTeX math support, and GitHub Flavored Markdown.
 
-[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=white)](https://react.dev)
-[![TanStack](https://img.shields.io/badge/TanStack_Start-1.x-FF4154?style=flat)](https://tanstack.com/start)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat)](LICENSE)
+[![CI](https://github.com/AdiRishi/render-md/actions/workflows/ci.yml/badge.svg)](https://github.com/AdiRishi/render-md/actions/workflows/ci.yml) ![GitHub License](https://img.shields.io/github/license/AdiRishi/render-md) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/AdiRishi/render-md/pulls)
 
 </div>
 
@@ -31,7 +27,7 @@ LaTeX math support, and GitHub Flavored Markdown.
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) 18.x or later
+- [Node.js](https://nodejs.org/) 22.x or later
 - [pnpm](https://pnpm.io/) 10.x or later
 
 ### Installation
