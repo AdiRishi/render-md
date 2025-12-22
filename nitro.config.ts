@@ -7,10 +7,7 @@ export default defineNitroConfig({
     deployConfig: true,
     wrangler: {
       name: 'render-md',
-      routes: [
-        { pattern: 'render-md.com', custom_domain: true },
-        { pattern: 'www.render-md.com', custom_domain: true },
-      ],
+      routes: [{ pattern: 'www.render-md.com', custom_domain: true }],
       observability: {
         enabled: true,
         head_sampling_rate: 1,
