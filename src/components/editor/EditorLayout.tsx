@@ -9,15 +9,18 @@ import { PreviewPane } from './PreviewPane'
 import { defaultContent } from './markdown/default-content'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-const editorPaneVariants = cva('h-full min-h-0 min-w-0 transition-[width] duration-200 border-border', {
-  variants: {
-    viewMode: {
-      split: 'max-md:w-full md:w-1/2 md:border-r',
-      editor: 'max-md:w-full md:w-full md:border-r-0',
-      preview: 'max-md:hidden md:w-0 md:overflow-hidden md:border-r-0',
-    } satisfies Record<ViewMode, string>,
+const editorPaneVariants = cva(
+  'h-full min-h-0 min-w-0 transition-[width] duration-200 border-border',
+  {
+    variants: {
+      viewMode: {
+        split: 'max-md:w-full md:w-1/2 md:border-r',
+        editor: 'max-md:w-full md:w-full md:border-r-0',
+        preview: 'max-md:hidden md:w-0 md:overflow-hidden md:border-r-0',
+      } satisfies Record<ViewMode, string>,
+    },
   },
-})
+)
 
 const previewPaneVariants = cva('h-full min-h-0 min-w-0 transition-[width] duration-200', {
   variants: {
