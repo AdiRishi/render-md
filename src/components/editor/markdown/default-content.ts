@@ -1,6 +1,6 @@
 export const defaultContent = `# RenderMD
 
-![Aurora borealis dancing over snow-capped mountains](https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=900&h=400&fit=crop&q=80)
+![Aurora borealis dancing over snow-capped mountains](https://imagedelivery.net/dUGyBDwDArlYQF97CccBHg/69b78600-3195-42c1-9750-e27bebe26800/public)
 
 Write. Preview. *Breathe.* This is your space for **beautiful documents**.
 
@@ -95,7 +95,7 @@ $$e^{i\\pi} + 1 = 0$$
 
 Explore the [GitHub Flavored Markdown](https://github.github.com/gfm/) spec or the [KaTeX docs](https://katex.org/docs/supported.html) for math.
 
-![Milky Way over desert landscape](https://images.unsplash.com/photo-1519681393784-d120267933ba?w=900&h=400&fit=crop&q=80)
+![Milky Way over desert landscape](https://imagedelivery.net/dUGyBDwDArlYQF97CccBHg/94528f14-4913-4f02-c6dd-6f5734a98400/public)
 
 *We are all made of star stuff.*
 
