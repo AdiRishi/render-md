@@ -1,6 +1,7 @@
-import { useDeferredValue, useState } from 'react'
+import { type UIEvent, useCallback, useDeferredValue, useEffect, useRef, useState } from 'react'
 import { ClientOnly } from '@tanstack/react-router'
 import { cva } from 'class-variance-authority'
+import { type EditorView } from '@codemirror/view'
 
 import { EditorHeader, type ViewMode } from './EditorHeader'
 import { MarkdownPane } from './MarkdownPane'
@@ -34,6 +35,81 @@ export function EditorLayout() {
 
   const deferredMarkdown = useDeferredValue(markdown)
 
+  // Scroll sync refs
+  const editorViewRef = useRef<EditorView | null>(null)
+  const previewScrollRef = useRef<HTMLDivElement | null>(null)
+  const scrollSourceRef = useRef<'editor' | 'preview' | null>(null)
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Cleanup scroll timeout on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current)
+      }
+    }
+  }, [])
+
+  // Handle editor scroll → sync to preview
+  const handleEditorScroll = useCallback(
+    (scrollTop: number, scrollHeight: number, clientHeight: number) => {
+      // Skip if preview initiated this scroll cycle
+      if (scrollSourceRef.current === 'preview') return
+
+      const previewEl = previewScrollRef.current
+      if (!previewEl) return
+
+      // Mark editor as scroll source
+      scrollSourceRef.current = 'editor'
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
+
+      // Calculate scroll percentage and apply to preview
+      const maxScroll = scrollHeight - clientHeight
+      const previewMaxScroll = previewEl.scrollHeight - previewEl.clientHeight
+      if (maxScroll <= 0 || previewMaxScroll <= 0) return
+
+      const scrollPercent = scrollTop / maxScroll
+      const targetScroll = scrollPercent * previewMaxScroll
+
+      previewEl.scrollTop = targetScroll
+
+      // Reset scroll source after debounce to allow future syncs
+      scrollTimeoutRef.current = setTimeout(() => {
+        scrollSourceRef.current = null
+      }, 50)
+    },
+    [],
+  )
+
+  // Handle preview scroll → sync to editor
+  const handlePreviewScroll = useCallback((e: UIEvent<HTMLDivElement>) => {
+    // Skip if editor initiated this scroll cycle
+    if (scrollSourceRef.current === 'editor') return
+
+    const previewEl = e.currentTarget
+    const editorView = editorViewRef.current
+    if (!editorView) return
+
+    // Mark preview as scroll source
+    scrollSourceRef.current = 'preview'
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
+
+    // Calculate scroll percentage and apply to editor
+    const previewMaxScroll = previewEl.scrollHeight - previewEl.clientHeight
+    const editorMaxScroll = editorView.scrollDOM.scrollHeight - editorView.scrollDOM.clientHeight
+    if (previewMaxScroll <= 0 || editorMaxScroll <= 0) return
+
+    const scrollPercent = previewEl.scrollTop / previewMaxScroll
+    const targetScroll = scrollPercent * editorMaxScroll
+
+    editorView.scrollDOM.scrollTop = targetScroll
+
+    // Reset scroll source after debounce to allow future syncs
+    scrollTimeoutRef.current = setTimeout(() => {
+      scrollSourceRef.current = null
+    }, 50)
+  }, [])
+
   return (
     <div className="flex flex-col h-screen overflow-hidden">
       <EditorHeader viewMode={viewMode} onViewModeChange={setViewMode} />
@@ -58,14 +134,23 @@ export function EditorLayout() {
         {/* Editor pane - always mounted to preserve CodeMirror state (undo history, selections, scroll) */}
         <div className={editorPaneVariants({ viewMode })}>
           <ClientOnly fallback={<EditorSkeleton />}>
-            <MarkdownPane value={markdown} onChange={setMarkdown} />
+            <MarkdownPane
+              value={markdown}
+              onChange={setMarkdown}
+              onScroll={handleEditorScroll}
+              editorViewRef={editorViewRef}
+            />
           </ClientOnly>
         </div>
 
         {/* Preview pane - always mounted to preserve scroll position */}
         <div className={previewPaneVariants({ viewMode })}>
           <ClientOnly fallback={<PreviewSkeleton />}>
-            <PreviewPane markdown={deferredMarkdown} />
+            <PreviewPane
+              markdown={deferredMarkdown}
+              onScroll={handlePreviewScroll}
+              scrollRef={previewScrollRef}
+            />
           </ClientOnly>
         </div>
       </main>

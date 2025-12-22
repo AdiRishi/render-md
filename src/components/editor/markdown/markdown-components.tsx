@@ -1,7 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+// Disabled because node?.position is needed - TypeScript types `node` as possibly undefined
+// but eslint thinks it's always defined. We need the optional chain for safety.
+
 import { type Components } from 'react-markdown'
 import { CodeBlock } from './CodeBlock'
 import { cn } from '@/lib/utils'
-import { textVariants, typographyComponents } from '@/components/ui/text'
+import { textVariants } from '@/components/ui/text'
 import {
   Table,
   TableBody,
@@ -15,6 +19,7 @@ import { Input } from '@/components/ui/input'
 
 /**
  * Comprehensive markdown components using shadcn/ui primitives.
+ * All block-level elements include data-source-line for scroll sync.
  *
  * Standard markdown elements:
  *   a, blockquote, br, code, em, h1-h6, hr, img, li, ol, p, pre, strong, ul
@@ -24,20 +29,79 @@ import { Input } from '@/components/ui/input'
  */
 export const markdownComponents: Components = {
   /* ---------------------------------------------------------------------------
-   * Typography (from text.tsx)
-   * h1, h2, h3, h4, h5, p, blockquote, ul, ol, li
+   * Typography with data-source-line for scroll sync
+   * h1, h2, h3, h4, h5, h6, p, blockquote, ul, ol, li
    * ------------------------------------------------------------------------- */
-  ...typographyComponents,
-
-  /* ---------------------------------------------------------------------------
-   * Headings (h6 not in typographyComponents, add manually)
-   * ------------------------------------------------------------------------- */
+  h1: ({ node, className, ...props }) => (
+    <h1
+      data-source-line={node?.position?.start.line}
+      className={cn(textVariants({ variant: 'h1' }), className)}
+      {...props}
+    />
+  ),
+  h2: ({ node, className, ...props }) => (
+    <h2
+      data-source-line={node?.position?.start.line}
+      className={cn(textVariants({ variant: 'h2' }), className)}
+      {...props}
+    />
+  ),
+  h3: ({ node, className, ...props }) => (
+    <h3
+      data-source-line={node?.position?.start.line}
+      className={cn(textVariants({ variant: 'h3' }), className)}
+      {...props}
+    />
+  ),
+  h4: ({ node, className, ...props }) => (
+    <h4
+      data-source-line={node?.position?.start.line}
+      className={cn(textVariants({ variant: 'h4' }), className)}
+      {...props}
+    />
+  ),
+  h5: ({ node, className, ...props }) => (
+    <h5
+      data-source-line={node?.position?.start.line}
+      className={cn(textVariants({ variant: 'h5' }), className)}
+      {...props}
+    />
+  ),
   h6: ({ node, className, ...props }) => (
     <h6
+      data-source-line={node?.position?.start.line}
       className={cn(
         'scroll-m-20 text-base font-semibold tracking-tight mt-4 mb-1 first:mt-0',
         className,
       )}
+      {...props}
+    />
+  ),
+  p: ({ node, className, ...props }) => (
+    <p
+      data-source-line={node?.position?.start.line}
+      className={cn(textVariants({ variant: 'p' }), className)}
+      {...props}
+    />
+  ),
+  blockquote: ({ node, className, ...props }) => (
+    <blockquote
+      data-source-line={node?.position?.start.line}
+      className={cn(textVariants({ variant: 'blockquote' }), className)}
+      {...props}
+    />
+  ),
+  ul: ({ node, className, ...props }) => (
+    <ul
+      data-source-line={node?.position?.start.line}
+      className={cn(textVariants({ variant: 'ul' }), className)}
+      {...props}
+    />
+  ),
+  ol: ({ node, className, ...props }) => (
+    <ol
+      data-source-line={node?.position?.start.line}
+      className={cn(textVariants({ variant: 'ol' }), className)}
       {...props}
     />
   ),
@@ -47,7 +111,11 @@ export const markdownComponents: Components = {
    * ------------------------------------------------------------------------- */
   code: CodeBlock,
   pre: ({ node, children, className, ...props }) => (
-    <pre className={cn('overflow-x-auto', className)} {...props}>
+    <pre
+      data-source-line={node?.position?.start.line}
+      className={cn('overflow-x-auto', className)}
+      {...props}
+    >
       {children}
     </pre>
   ),
@@ -75,6 +143,7 @@ export const markdownComponents: Components = {
    * ------------------------------------------------------------------------- */
   img: ({ node, src, alt, className, ...props }) => (
     <img
+      data-source-line={node?.position?.start.line}
       src={src}
       alt={alt || ''}
       loading="lazy"
@@ -98,7 +167,11 @@ export const markdownComponents: Components = {
    * Horizontal rule
    * ------------------------------------------------------------------------- */
   hr: ({ node, className, ...props }) => (
-    <hr className={cn('bg-border my-5 h-px border-0', className)} {...props} />
+    <hr
+      data-source-line={node?.position?.start.line}
+      className={cn('bg-border my-5 h-px border-0', className)}
+      {...props}
+    />
   ),
 
   /* ---------------------------------------------------------------------------
@@ -110,7 +183,7 @@ export const markdownComponents: Components = {
    * Tables (using shadcn table components)
    * ------------------------------------------------------------------------- */
   table: ({ node, className, ...props }) => (
-    <div className="my-6">
+    <div data-source-line={node?.position?.start.line} className="my-6">
       <Table className={className} {...props} />
     </div>
   ),
@@ -146,7 +219,7 @@ export const markdownComponents: Components = {
    * ------------------------------------------------------------------------- */
   li: ({ node, children, className, ...props }) => {
     // Check if this is a task list item (contains a checkbox as first child)
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
     const checkboxNode = node?.children?.find(
       (child: unknown) =>
         child &&
@@ -160,7 +233,11 @@ export const markdownComponents: Components = {
 
     if (isTaskItem) {
       return (
-        <li className={cn('flex items-baseline gap-2 list-none', className)} {...props}>
+        <li
+          data-source-line={node?.position?.start.line}
+          className={cn('flex items-baseline gap-2 list-none', className)}
+          {...props}
+        >
           <Checkbox checked={isChecked} disabled className="mt-0.5 shrink-0" />
           {children}
         </li>
@@ -168,7 +245,7 @@ export const markdownComponents: Components = {
     }
 
     return (
-      <li className={className} {...props}>
+      <li data-source-line={node?.position?.start.line} className={className} {...props}>
         {children}
       </li>
     )
