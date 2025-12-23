@@ -43,6 +43,10 @@ export const Route = createRootRoute({
     ],
     links: [
       {
+        rel: 'preconnect',
+        href: 'https://imagedelivery.net',
+      },
+      {
         rel: 'stylesheet',
         href: tailwindCss,
       },

@@ -4,7 +4,7 @@ import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import { type PluggableList } from 'unified'
-import 'katex/dist/katex.min.css'
+import 'katex/dist/katex-swap.min.css'
 import { markdownComponents } from './markdown/markdown-components'
 
 interface PreviewPaneProps {
