@@ -9,7 +9,6 @@ import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { ThemeProvider } from '@/components/theme-provider'
 import { getThemeServerFn } from '@/lib/theme'
 import tailwindCss from '@/global-styles/tailwind.css?url'
-import editorCss from '@/global-styles/editor.css?url'
 
 const GA_ID = 'G-BF428L3QLQ'
 
@@ -46,10 +45,6 @@ export const Route = createRootRoute({
       {
         rel: 'stylesheet',
         href: tailwindCss,
-      },
-      {
-        rel: 'stylesheet',
-        href: editorCss,
       },
       {
         rel: 'apple-touch-icon',

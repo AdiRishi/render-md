@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { EditorLayout } from '@/components/editor/EditorLayout'
 import { seo } from '@/lib/seo'
+import editorCss from '@/global-styles/editor.css?url'
 
 export const Route = createFileRoute('/')({
   head: () => ({
@@ -16,6 +17,10 @@ export const Route = createFileRoute('/')({
       }),
     ],
     links: [
+      {
+        rel: 'stylesheet',
+        href: editorCss,
+      },
       {
         rel: 'canonical',
         href: 'https://www.render-md.com',
