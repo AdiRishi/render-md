@@ -1,3 +1,6 @@
+// react-scan must be imported before React and TanStack Start
+import { scan } from 'react-scan'
+import { useEffect } from 'react'
 import { ClientOnly, HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
@@ -70,6 +73,13 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const theme = Route.useLoaderData()
+
+  // Initialize React Scan after hydration (dev mode only)
+  useEffect(() => {
+    scan({
+      enabled: false,
+    })
+  }, [])
 
   return (
     <html lang="en" className={theme}>

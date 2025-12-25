@@ -74,6 +74,7 @@
     "eslint": "^9.39.2",
     "jsdom": "^27.3.0",
     "prettier": "^3.7.4",
+    "react-scan": "^0.4.3",
     "rollup-plugin-visualizer": "^6.0.5",
     "typescript": "^5.9.3",
     "unified": "^11.0.5",
