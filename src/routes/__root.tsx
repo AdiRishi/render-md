@@ -1,4 +1,4 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import { ClientOnly, HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
@@ -7,6 +7,19 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { getThemeServerFn } from '@/lib/theme'
 import tailwindCss from '@/global-styles/tailwind.css?url'
 import editorCss from '@/global-styles/editor.css?url'
+
+const GA_ID = 'G-BF428L3QLQ'
+
+// Render GA scripts only on client to avoid hydration mismatch
+// See: https://tanstack.com/start/latest/docs/framework/react/guide/execution-model
+function GoogleAnalytics() {
+  return (
+    <>
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+      <script async src="/ga-init.js" />
+    </>
+  )
+}
 
 export const Route = createRootRoute({
   head: () => ({
@@ -21,20 +34,6 @@ export const Route = createRootRoute({
       // Default fallback - child routes should override with their own SEO
       { name: 'theme-color', content: '#137fec' },
       { name: 'author', content: 'RenderMD' },
-    ],
-    scripts: [
-      {
-        src: 'https://www.googletagmanager.com/gtag/js?id=G-BF428L3QLQ',
-        async: true,
-      },
-      {
-        children: `
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-BF428L3QLQ');
-        `,
-      },
     ],
     links: [
       {
@@ -76,6 +75,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     <html lang="en" className={theme}>
       <head>
         <HeadContent />
+        <ClientOnly fallback={null}>
+          <GoogleAnalytics />
+        </ClientOnly>
       </head>
       <body>
         <ThemeProvider theme={theme}>
