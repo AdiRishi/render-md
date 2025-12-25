@@ -1,9 +1,9 @@
+import { useEffect, useState } from 'react'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import {
   ArrowRight,
   Bold,
   Code,
-  Download,
   GraduationCap,
   Heading1,
   Link as LinkIcon,
@@ -15,11 +15,24 @@ import {
   Table,
 } from 'lucide-react'
 
-import { SiteHeader } from '@/components/cheatsheet/SiteHeader'
-import { SiteFooter } from '@/components/cheatsheet/SiteFooter'
 import { CheatsheetSection } from '@/components/cheatsheet/CheatsheetSection'
+import { SiteFooter } from '@/components/cheatsheet/SiteFooter'
+import { SiteHeader } from '@/components/cheatsheet/SiteHeader'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import { seo } from '@/lib/seo'
+
+const SECTION_IDS = [
+  'headers',
+  'emphasis',
+  'lists',
+  'links',
+  'code',
+  'blockquotes',
+  'tables',
+  'math',
+  'horizontal-rules',
+] as const
 
 export const Route = createFileRoute('/cheatsheet')({
   head: () => ({
@@ -44,6 +57,38 @@ export const Route = createFileRoute('/cheatsheet')({
 })
 
 function CheatsheetPage() {
+  const [activeSectionId, setActiveSectionId] = useState<string>('headers')
+
+  useEffect(() => {
+    const visibleSections = new Set<string>()
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            visibleSections.add(entry.target.id)
+          } else {
+            visibleSections.delete(entry.target.id)
+          }
+        })
+
+        // Pick the first visible section in document order
+        const topSection = SECTION_IDS.find((id) => visibleSections.has(id))
+        if (topSection) {
+          setActiveSectionId(topSection)
+        }
+      },
+      { rootMargin: '-20% 0px -70% 0px', threshold: 0 },
+    )
+
+    SECTION_IDS.forEach((id) => {
+      const element = document.getElementById(id)
+      if (element) observer.observe(element)
+    })
+
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <div className="relative flex min-h-screen w-full flex-col bg-muted/30">
       <SiteHeader />
@@ -73,7 +118,7 @@ function CheatsheetPage() {
                 examples, and instantly preview your formatting.
               </p>
 
-              <div className="flex flex-wrap items-center gap-4 mt-4">
+              <div className="mt-4">
                 <Button
                   render={<Link to="/" />}
                   nativeButton={false}
@@ -82,16 +127,6 @@ function CheatsheetPage() {
                 >
                   <PenSquare className="size-5" />
                   Try the Editor
-                </Button>
-                <Button
-                  render={<a href="#" />}
-                  nativeButton={false}
-                  variant="outline"
-                  size="lg"
-                  className="h-12 px-6 rounded-xl"
-                >
-                  <Download className="size-5" />
-                  PDF Guide
                 </Button>
               </div>
             </div>
@@ -149,6 +184,7 @@ function CheatsheetPage() {
                 iconColorClass="text-purple-600 dark:text-purple-400"
                 title="Emphasis"
                 description="Bold, Italic, Strikethrough"
+                defaultOpen
                 syntaxContent={
                   <div className="flex flex-col gap-2">
                     <p>**Bold text**</p>
@@ -185,6 +221,7 @@ function CheatsheetPage() {
                 iconColorClass="text-green-600 dark:text-green-400"
                 title="Lists"
                 description="Ordered, Unordered, Tasks"
+                defaultOpen
                 syntaxContent={
                   <div className="flex flex-col gap-1">
                     <p>1. First item</p>
@@ -242,6 +279,7 @@ function CheatsheetPage() {
                 iconColorClass="text-orange-600 dark:text-orange-400"
                 title="Links & Images"
                 description="Hyperlinks and image embedding"
+                defaultOpen
                 syntaxContent={
                   <div className="flex flex-col gap-2">
                     <p>[Link Text](https://example.com)</p>
@@ -283,6 +321,7 @@ function CheatsheetPage() {
                 iconColorClass="text-slate-600 dark:text-slate-300"
                 title="Code"
                 description="Inline code and code blocks"
+                defaultOpen
                 syntaxContent={
                   <div className="flex flex-col gap-2">
                     <p>`Inline code`</p>
@@ -324,6 +363,7 @@ function CheatsheetPage() {
                 iconColorClass="text-yellow-600 dark:text-yellow-400"
                 title="Blockquotes"
                 description="Highlighting quotes"
+                defaultOpen
                 syntaxContent={
                   <div className="flex flex-col gap-1">
                     <p>&gt; This is a blockquote.</p>
@@ -358,6 +398,7 @@ function CheatsheetPage() {
                 iconColorClass="text-cyan-600 dark:text-cyan-400"
                 title="Tables"
                 description="GFM tables with alignment"
+                defaultOpen
                 syntaxContent={
                   <div className="flex flex-col gap-1 text-xs">
                     <p>| Header 1 | Header 2 | Header 3 |</p>
@@ -401,6 +442,7 @@ function CheatsheetPage() {
                 iconColorClass="text-pink-600 dark:text-pink-400"
                 title="Math (LaTeX)"
                 description="Inline and block equations via KaTeX"
+                defaultOpen
                 syntaxContent={
                   <div className="flex flex-col gap-2">
                     <p>Inline: $E = mc^2$</p>
@@ -447,6 +489,7 @@ function CheatsheetPage() {
                 iconColorClass="text-gray-600 dark:text-gray-400"
                 title="Horizontal Rules"
                 description="Section dividers"
+                defaultOpen
                 syntaxContent={
                   <div className="flex flex-col gap-2">
                     <p>Three or more:</p>
@@ -539,9 +582,21 @@ function CheatsheetPage() {
                     <a
                       key={item.id}
                       href={`#${item.id}`}
-                      className="flex items-center justify-between py-2 text-sm text-muted-foreground hover:text-primary transition-colors border-l-2 border-transparent hover:border-primary pl-3 -ml-3 group/nav"
+                      className={cn(
+                        'flex items-center justify-between py-2 text-sm transition-colors border-l-2 pl-3 -ml-3 group/nav',
+                        activeSectionId === item.id
+                          ? 'text-primary border-primary font-medium'
+                          : 'text-muted-foreground border-transparent hover:text-primary hover:border-primary',
+                      )}
                     >
-                      <span className="group-hover/nav:translate-x-1 transition-transform">
+                      <span
+                        className={cn(
+                          'transition-transform',
+                          activeSectionId === item.id
+                            ? 'translate-x-1'
+                            : 'group-hover/nav:translate-x-1',
+                        )}
+                      >
                         {item.label}
                       </span>
                     </a>

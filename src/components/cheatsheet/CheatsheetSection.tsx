@@ -34,6 +34,7 @@ export function CheatsheetSection({
   return (
     <Accordion defaultValue={defaultOpen ? [id] : []} className="w-full">
       <AccordionItem
+        id={id}
         value={id}
         className="scroll-mt-24 group/section rounded-xl border border-border bg-card shadow-sm transition-all duration-200 data-[open]:ring-2 data-[open]:ring-primary/20"
       >
