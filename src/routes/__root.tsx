@@ -4,6 +4,9 @@ import { useEffect } from 'react'
 import { ClientOnly, HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import geistLatinWoff2 from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url'
+import geistMonoLatinWoff2 from '@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2?url'
+import geistSansLatinWoff2 from '@fontsource/geist-sans/files/geist-sans-latin-400-normal.woff2?url'
 
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { ThemeProvider } from '@/components/theme-provider'
@@ -41,6 +44,28 @@ export const Route = createRootRoute({
       {
         rel: 'preconnect',
         href: 'https://imagedelivery.net',
+      },
+      // Preload critical fonts to avoid CSS-to-font request chain
+      {
+        rel: 'preload',
+        href: geistLatinWoff2,
+        as: 'font',
+        type: 'font/woff2',
+        crossOrigin: 'anonymous',
+      },
+      {
+        rel: 'preload',
+        href: geistMonoLatinWoff2,
+        as: 'font',
+        type: 'font/woff2',
+        crossOrigin: 'anonymous',
+      },
+      {
+        rel: 'preload',
+        href: geistSansLatinWoff2,
+        as: 'font',
+        type: 'font/woff2',
+        crossOrigin: 'anonymous',
       },
       {
         rel: 'stylesheet',
