@@ -5,7 +5,6 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { ThemeProvider } from '@/components/theme-provider'
 import { getThemeServerFn } from '@/lib/theme'
-import { seo } from '@/lib/seo'
 import tailwindCss from '@/global-styles/tailwind.css?url'
 import editorCss from '@/global-styles/editor.css?url'
 
@@ -19,13 +18,9 @@ export const Route = createRootRoute({
         name: 'viewport',
         content: 'width=device-width, initial-scale=1',
       },
-      ...seo({
-        title: 'RenderMD - Real-Time Markdown Editor with Live Preview',
-        description:
-          'RenderMD is a free real-time markdown editor with instant live preview. Write GitHub Flavored Markdown with LaTeX math support, syntax highlighting for 150+ languages, tables, and code blocks.',
-        keywords:
-          'markdown editor, live preview, markdown preview, online markdown editor, GFM, GitHub Flavored Markdown, LaTeX math, KaTeX, syntax highlighting, code blocks, markdown to HTML, real-time editor',
-      }),
+      // Default fallback - child routes should override with their own SEO
+      { name: 'theme-color', content: '#137fec' },
+      { name: 'author', content: 'RenderMD' },
     ],
     scripts: [
       {
@@ -53,10 +48,6 @@ export const Route = createRootRoute({
       {
         rel: 'stylesheet',
         href: editorCss,
-      },
-      {
-        rel: 'canonical',
-        href: 'https://www.render-md.com',
       },
       {
         rel: 'apple-touch-icon',
