@@ -19,6 +19,7 @@ import { CheatsheetSection } from '@/components/cheatsheet/CheatsheetSection'
 import { SiteFooter } from '@/components/cheatsheet/SiteFooter'
 import { SiteHeader } from '@/components/cheatsheet/SiteHeader'
 import { Button } from '@/components/ui/button'
+import { getCfImageUrl } from '@/lib/cf-image'
 import { cn } from '@/lib/utils'
 import { seo } from '@/lib/seo'
 
@@ -44,6 +45,7 @@ export const Route = createFileRoute('/cheatsheet')({
         keywords:
           'markdown cheatsheet, markdown syntax, markdown guide, markdown reference, GFM, GitHub Flavored Markdown, markdown tutorial, markdown examples, LaTeX markdown, code blocks markdown',
         url: 'https://www.render-md.com/cheatsheet',
+        image: getCfImageUrl('cheatsheetOg'),
       }),
     ],
     links: [

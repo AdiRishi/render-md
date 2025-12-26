@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { EditorLayout } from '@/components/editor/EditorLayout'
+import { getCfImageUrl } from '@/lib/cf-image'
 import { seo } from '@/lib/seo'
 import editorCss from '@/global-styles/editor.css?url'
 
@@ -14,6 +15,7 @@ export const Route = createFileRoute('/')({
         keywords:
           'markdown editor, live preview, markdown preview, online markdown editor, GFM, GitHub Flavored Markdown, LaTeX math, KaTeX, syntax highlighting, code blocks, markdown to HTML, real-time editor',
         url: 'https://www.render-md.com',
+        image: getCfImageUrl('editorOg'),
       }),
     ],
     links: [

@@ -2,20 +2,13 @@ type SeoParams = {
   title: string
   description: string
   keywords?: string
-  image?: string
+  image: string
   url?: string
 }
 
 const SITE_URL = 'https://www.render-md.com'
-const DEFAULT_IMAGE = `${SITE_URL}/og-preview.png`
 
-export const seo = ({
-  title,
-  description,
-  keywords,
-  image = DEFAULT_IMAGE,
-  url = SITE_URL,
-}: SeoParams) => [
+export const seo = ({ title, description, keywords, image, url = SITE_URL }: SeoParams) => [
   { title },
   { name: 'description', content: description },
   ...(keywords ? [{ name: 'keywords', content: keywords }] : []),
