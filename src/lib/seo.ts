@@ -1,3 +1,5 @@
+import { getCfImageUrl } from './cf-image'
+
 type SeoParams = {
   title: string
   description: string
@@ -67,7 +69,7 @@ export const getWebAppJsonLd = () => ({
     'Syntax highlighting for 150+ languages',
     'Dark and light themes',
   ],
-  screenshot: `${SITE_URL}/og-preview.png`,
+  screenshot: getCfImageUrl('editorOg'),
   aggregateRating: undefined, // Can add if you have ratings
 })
 
@@ -82,6 +84,7 @@ export const getCheatsheetJsonLd = () => [
     headline: 'The Ultimate Markdown Cheatsheet',
     description:
       'Complete markdown syntax reference with examples for headers, emphasis, lists, links, images, code blocks, tables, and LaTeX math.',
+    image: getCfImageUrl('cheatsheetOg'),
     author: {
       '@type': 'Organization',
       name: 'RenderMD',
