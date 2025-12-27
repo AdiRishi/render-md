@@ -1,0 +1,54 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="512"
+  height="512"
+  viewBox="0 0 256 256"
+  fill="none"
+>
+  <!-- Blue rounded rectangle -->
+  <rect
+    x="8"
+    y="56"
+    width="240"
+    height="144"
+    rx="28"
+    ry="28"
+    fill="#158BFF"
+  />
+
+  <!-- Stylized "M" -->
+  <path
+    fill="#000000"
+    d="
+      M 48 176
+      L 48 88
+      L 76 88
+      L 96 120
+      L 116 88
+      L 144 88
+      L 144 176
+      L 120 176
+      L 120 132
+      L 96 162
+      L 72 132
+      L 72 176
+      Z
+    "
+  />
+
+  <!-- Down arrow -->
+  <path
+    fill="#000000"
+    d="
+      M 180 88
+      L 204 88
+      L 204 140
+      L 220 140
+      L 192 176
+      L 164 140
+      L 180 140
+      Z
+    "
+  />
+</svg>
+

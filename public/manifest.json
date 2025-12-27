@@ -1,28 +1,31 @@
 {
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "id": "/",
   "short_name": "RenderMD",
   "name": "RenderMD - Real-Time Markdown Editor",
   "description": "A free real-time markdown editor with instant live preview. Write GitHub Flavored Markdown with LaTeX math support, syntax highlighting for 150+ languages, tables, and code blocks.",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
     },
     {
       "src": "logo192.png",
       "type": "image/png",
       "sizes": "192x192",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ],
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "theme_color": "#137fec",
   "background_color": "#0a0a0a",

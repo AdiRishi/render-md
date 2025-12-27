@@ -21,7 +21,7 @@ import { SiteHeader } from '@/components/cheatsheet/SiteHeader'
 import { Button } from '@/components/ui/button'
 import { getCfImageUrl } from '@/lib/cf-image'
 import { cn } from '@/lib/utils'
-import { seo } from '@/lib/seo'
+import { getCheatsheetJsonLd, jsonLdScripts, seo } from '@/lib/seo'
 
 const SECTION_IDS = [
   'headers',
@@ -54,6 +54,7 @@ export const Route = createFileRoute('/cheatsheet')({
         href: 'https://www.render-md.com/cheatsheet',
       },
     ],
+    scripts: jsonLdScripts(getCheatsheetJsonLd()),
   }),
   component: CheatsheetPage,
 })

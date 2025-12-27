@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { EditorLayout } from '@/components/editor/EditorLayout'
 import { getCfImageUrl } from '@/lib/cf-image'
-import { seo } from '@/lib/seo'
+import { getWebAppJsonLd, jsonLdScripts, seo } from '@/lib/seo'
 import editorCss from '@/global-styles/editor.css?url'
 
 export const Route = createFileRoute('/')({
@@ -28,6 +28,7 @@ export const Route = createFileRoute('/')({
         href: 'https://www.render-md.com',
       },
     ],
+    scripts: jsonLdScripts(getWebAppJsonLd()),
   }),
   component: App,
 })

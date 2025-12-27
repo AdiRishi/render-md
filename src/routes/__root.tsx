@@ -71,14 +71,39 @@ export const Route = createRootRoute({
         rel: 'stylesheet',
         href: tailwindCss,
       },
+      // Favicon declarations - SVG is prioritized by Google, then PNG (48px minimum)
       {
-        rel: 'apple-touch-icon',
+        rel: 'icon',
+        type: 'image/svg+xml',
+        href: '/favicon.svg',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '48x48',
+        href: '/favicon-48.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
         sizes: '192x192',
         href: '/logo192.png',
       },
       {
         rel: 'icon',
+        type: 'image/png',
+        sizes: '512x512',
+        href: '/logo512.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/x-icon',
         href: '/favicon.ico',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '192x192',
+        href: '/logo192.png',
       },
       {
         rel: 'manifest',
