@@ -61,10 +61,10 @@
     --editor-selection-match: oklch(0.6011 0.1868 254.5 / 0.16);
     --editor-line-highlight: oklch(0.2795 0.0368 260.031); /* #1e293b */
 
-    --editor-gutter-bg: oklch(0.2077 0.0398 265.7549); /* #0f172a */
+    --editor-gutter-bg: oklch(0.1763 0.014 258.36); /* #0d1117 */
     --editor-gutter-fg: oklch(0.4455 0.0374 257.2808); /* #475569 */
     --editor-gutter-active-fg: oklch(0.7107 0.0351 256.7878); /* #94a3b8 */
-    --editor-gutter-border: oklch(0.2795 0.0368 260.031); /* #1e293b */
+    --editor-gutter-border: oklch(0.1763 0.014 258.36); /* #0d1117 - matches gutter bg */
 
     /* Editor syntax highlighting tokens (dark) */
     --editor-syntax-heading: var(--primary);
