@@ -32,7 +32,7 @@ jobs:
           NODE_ENV: production
 
       - name: Deploy Worker Version
-        id: deploy
+        id: deploy-worker-preview
         uses: cloudflare/wrangler-action@v3
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -63,4 +63,4 @@ jobs:
               body: body
             });
         env:
-          PREVIEW_URL: ${{ steps.deploy.outputs.deployment-url }}
+          PREVIEW_URL: ${{ steps.deploy-worker-preview.outputs.deployment-url }}
