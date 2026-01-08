@@ -2,6 +2,7 @@ import { Code, Columns2, Eye } from 'lucide-react'
 import { cva } from 'class-variance-authority'
 
 import { ThemeToggle } from '@/components/theme-toggle'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 export type ViewMode = 'split' | 'editor' | 'preview'
 
@@ -16,17 +17,20 @@ const viewModeButtons = [
   { mode: 'preview' as const, icon: Eye, label: 'Preview Only' },
 ]
 
-const viewModeButtonVariants = cva('p-1.5 rounded-md transition-all', {
-  variants: {
-    state: {
-      active: 'bg-background shadow-sm text-foreground',
-      inactive: 'text-muted-foreground hover:text-foreground',
+const viewModeButtonVariants = cva(
+  'p-1.5 rounded-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+  {
+    variants: {
+      state: {
+        active: 'bg-background shadow-sm text-foreground',
+        inactive: 'text-muted-foreground hover:text-foreground',
+      },
+    },
+    defaultVariants: {
+      state: 'inactive',
     },
   },
-  defaultVariants: {
-    state: 'inactive',
-  },
-})
+)
 
 export function EditorHeader({ viewMode, onViewModeChange }: EditorHeaderProps) {
   return (
@@ -42,17 +46,23 @@ export function EditorHeader({ viewMode, onViewModeChange }: EditorHeaderProps) 
         {/* View mode toggle */}
         <div className="hidden md:flex items-center gap-1 bg-muted rounded-lg p-1">
           {viewModeButtons.map(({ mode, icon: Icon, label }) => (
-            <button
-              key={mode}
-              onClick={() => onViewModeChange(mode)}
-              className={viewModeButtonVariants({
-                state: viewMode === mode ? 'active' : 'inactive',
-              })}
-              aria-label={label}
-              title={label}
-            >
-              <Icon className="size-5" />
-            </button>
+            <Tooltip key={mode}>
+              <TooltipTrigger
+                render={
+                  <button
+                    onClick={() => onViewModeChange(mode)}
+                    className={viewModeButtonVariants({
+                      state: viewMode === mode ? 'active' : 'inactive',
+                    })}
+                    aria-label={label}
+                    aria-pressed={viewMode === mode}
+                  >
+                    <Icon className="size-5" />
+                  </button>
+                }
+              />
+              <TooltipContent>{label}</TooltipContent>
+            </Tooltip>
           ))}
         </div>
 
