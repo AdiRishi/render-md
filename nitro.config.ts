@@ -15,6 +15,7 @@ export default defineNitroConfig({
         enabled: true,
         head_sampling_rate: 1,
       },
+      preview_urls: true,
     },
   },
 })
