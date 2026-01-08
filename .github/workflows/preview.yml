@@ -37,7 +37,7 @@ jobs:
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          command: versions upload --message="PR#${{ github.event.number }}"
+          command: versions upload --message="PR#${{ github.event.number }}" -c .output/server/wrangler.json
           packageManager: 'pnpm'
 
       - name: Comment Preview URL
