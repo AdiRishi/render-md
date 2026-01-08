@@ -1,7 +1,7 @@
 import { defineNitroConfig } from 'nitro/config'
 
 export default defineNitroConfig({
-  compatibilityDate: '2025-12-18',
+  compatibilityDate: '2026-01-08',
   preset: 'cloudflare_module',
   cloudflare: {
     deployConfig: true,
@@ -14,6 +14,10 @@ export default defineNitroConfig({
       observability: {
         enabled: true,
         head_sampling_rate: 1,
+      },
+      // @ts-expect-error - Nitro is not updated here
+      traces: {
+        enabled: true,
       },
       preview_urls: true,
     },
