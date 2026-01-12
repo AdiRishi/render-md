@@ -11,9 +11,9 @@ export const Route = createFileRoute('/')({
       ...seo({
         title: 'RenderMD - Real-Time Markdown Editor with Live Preview',
         description:
-          'RenderMD is a free real-time markdown editor with instant live preview. Write GitHub Flavored Markdown with LaTeX math support, syntax highlighting for 150+ languages, tables, and code blocks.',
+          'RenderMD is a free real-time markdown editor with instant live preview. Includes a comprehensive markdown cheatsheet. Write GitHub Flavored Markdown with LaTeX math support, syntax highlighting for 150+ languages, tables, and code blocks.',
         keywords:
-          'markdown editor, live preview, markdown preview, online markdown editor, GFM, GitHub Flavored Markdown, LaTeX math, KaTeX, syntax highlighting, code blocks, markdown to HTML, real-time editor',
+          'markdown editor, live preview, markdown preview, online markdown editor, GFM, GitHub Flavored Markdown, LaTeX math, KaTeX, syntax highlighting, code blocks, markdown to HTML, real-time editor, markdown cheatsheet, markdown syntax guide',
         url: 'https://www.render-md.com',
         image: getCfImageUrl('editorOg'),
       }),

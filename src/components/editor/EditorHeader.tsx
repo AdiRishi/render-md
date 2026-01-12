@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { Code, Columns2, Eye } from 'lucide-react'
 import { cva } from 'class-variance-authority'
 
@@ -37,12 +38,23 @@ export function EditorHeader({ viewMode, onViewModeChange }: EditorHeaderProps) 
     <header className="flex items-center justify-between border-b border-border bg-background px-6 py-3 shrink-0">
       {/* Left section: Logo and app title */}
       <div className="flex items-center gap-3">
-        <img src="/logo192.png" alt="RenderMD" className="size-8" />
-        <span className="text-base font-semibold text-foreground">Markdown Editor</span>
+        <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          <img src="/logo192.png" alt="RenderMD" className="size-8" />
+          <span className="text-base font-semibold text-foreground">Markdown Editor</span>
+        </Link>
       </div>
 
       {/* Right section: View mode toggle and theme toggle */}
       <div className="flex items-center gap-4">
+        <nav className="hidden md:flex items-center gap-4 mr-2">
+          <Link
+            to="/cheatsheet"
+            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Cheatsheet
+          </Link>
+        </nav>
+
         {/* View mode toggle */}
         <div className="hidden md:flex items-center gap-1 bg-muted rounded-lg p-1">
           {viewModeButtons.map(({ mode, icon: Icon, label }) => (
