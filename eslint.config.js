@@ -19,6 +19,7 @@ export default [
     rules: {
       '@typescript-eslint/array-type': ['error', { default: 'array-simple' }],
       'import/consistent-type-specifier-style': ['error', 'prefer-inline'],
+      '@typescript-eslint/no-unnecessary-condition': 'off',
     },
   },
 ]

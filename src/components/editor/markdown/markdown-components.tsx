@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 // Disabled because node?.position is needed - TypeScript types `node` as possibly undefined
 // but eslint thinks it's always defined. We need the optional chain for safety.
 

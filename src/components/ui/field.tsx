@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { useMemo } from 'react'
 import { type VariantProps, cva } from 'class-variance-authority'
 

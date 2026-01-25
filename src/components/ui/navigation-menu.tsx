@@ -20,7 +20,10 @@ function NavigationMenu({ className, children, ...props }: NavigationMenuPrimiti
   )
 }
 
-function NavigationMenuList({ className, ...props }: NavigationMenuPrimitive.List.Props) {
+function NavigationMenuList({
+  className,
+  ...props
+}: React.ComponentPropsWithRef<typeof NavigationMenuPrimitive.List>) {
   return (
     <NavigationMenuPrimitive.List
       data-slot="navigation-menu-list"
@@ -30,7 +33,10 @@ function NavigationMenuList({ className, ...props }: NavigationMenuPrimitive.Lis
   )
 }
 
-function NavigationMenuItem({ className, ...props }: NavigationMenuPrimitive.Item.Props) {
+function NavigationMenuItem({
+  className,
+  ...props
+}: React.ComponentPropsWithRef<typeof NavigationMenuPrimitive.Item>) {
   return (
     <NavigationMenuPrimitive.Item
       data-slot="navigation-menu-item"
@@ -119,7 +125,10 @@ function NavigationMenuLink({ className, ...props }: NavigationMenuPrimitive.Lin
   )
 }
 
-function NavigationMenuIndicator({ className, ...props }: NavigationMenuPrimitive.Icon.Props) {
+function NavigationMenuIndicator({
+  className,
+  ...props
+}: React.ComponentPropsWithRef<typeof NavigationMenuPrimitive.Icon>) {
   return (
     <NavigationMenuPrimitive.Icon
       data-slot="navigation-menu-indicator"
