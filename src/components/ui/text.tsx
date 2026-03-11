@@ -15,7 +15,7 @@ const textVariants = cva('', {
   variants: {
     variant: {
       a: 'text-primary font-medium underline underline-offset-4',
-      blockquote: 'my-4 border-l-2 border-muted-foreground/30 pl-4 italic text-muted-foreground',
+      blockquote: 'my-4 border-s-2 border-muted-foreground/30 ps-4 italic text-muted-foreground',
       h1: 'scroll-m-20 text-4xl font-extrabold tracking-tight mt-8 mb-4 first:mt-0',
       h2: 'scroll-m-20 text-3xl font-semibold tracking-tight mt-8 mb-3 first:mt-0',
       h3: 'scroll-m-20 text-2xl font-semibold tracking-tight mt-6 mb-2 first:mt-0',
@@ -23,8 +23,8 @@ const textVariants = cva('', {
       h5: 'scroll-m-20 text-lg font-semibold tracking-tight mt-4 mb-1 first:mt-0',
       p: 'leading-7 my-3 first:mt-0 last:mb-0',
       small: 'text-sm font-medium leading-none',
-      ul: 'my-3 ml-6 list-disc [&>li]:mt-1 first:mt-0 last:mb-0',
-      ol: 'my-3 ml-6 list-decimal [&>li]:mt-1 first:mt-0 last:mb-0',
+      ul: 'my-3 ms-6 list-disc [&>li]:mt-1 first:mt-0 last:mb-0',
+      ol: 'my-3 ms-6 list-decimal [&>li]:mt-1 first:mt-0 last:mb-0',
       li: '',
       code: 'bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm',
       lead: 'text-muted-foreground text-xl',
