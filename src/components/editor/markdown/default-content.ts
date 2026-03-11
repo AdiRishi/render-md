@@ -64,6 +64,39 @@ ORDER BY frequency DESC
 LIMIT 5;
 \`\`\`
 
+\`\`\`mermaid
+flowchart TD
+  Idea([Spark of an idea]) --> Capture[Capture the rough notes]
+  Capture --> Structure{Choose the shape}
+
+  Structure --> Narrative[Long-form narrative]
+  Structure --> Reference[Reference guide]
+  Structure --> Visual[Visual explainer]
+
+  Narrative --> Outline[Build the outline]
+  Reference --> System[Map the system]
+  Visual --> Storyboard[Sketch the story beats]
+
+  Outline --> Research[Pull supporting details]
+  System --> Research
+  Storyboard --> Research
+
+  Research --> Draft[Write the first draft]
+  Draft --> Polish[Refine voice and pacing]
+  Polish --> Diagram[Design the Mermaid flow]
+
+  subgraph Review Loop
+    Diagram --> Preview[Preview as Excalidraw]
+    Preview --> Check{Is it clear?}
+    Check -->|No| Revise[Rework labels and layout]
+    Revise --> Diagram
+    Check -->|Yes| Ready[Ready to publish]
+  end
+
+  Ready --> Publish[Ship the document]
+  Publish --> Share([Readers share it widely])
+\`\`\`
+
 ---
 
 ## Mathematics

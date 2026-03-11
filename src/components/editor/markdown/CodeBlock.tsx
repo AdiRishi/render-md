@@ -2,22 +2,27 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import oneDark from 'react-syntax-highlighter/dist/esm/styles/prism/one-dark'
 import { type ComponentPropsWithoutRef, useState } from 'react'
 import { Check, Copy } from 'lucide-react'
+
+import { MermaidDiagram } from './MermaidDiagram'
+import { getCodeBlockLanguage, isInlineCodeBlock } from './code-block.utils'
 import { Button } from '@/components/ui/button'
 
-type CodeBlockProps = ComponentPropsWithoutRef<'code'>
+type CodeBlockProps = ComponentPropsWithoutRef<'code'> & {
+  'data-source-line'?: number
+}
 
-export function CodeBlock({ children, className, ...props }: CodeBlockProps) {
+export function CodeBlock({
+  children,
+  className,
+  'data-source-line': sourceLine,
+  ...props
+}: CodeBlockProps) {
   const [copied, setCopied] = useState(false)
 
-  // Extract language from className (e.g., "language-javascript" -> "javascript")
-  const match = /language-(\w+)/.exec(className || '')
-  const language = match ? match[1] : null
-
+  const language = getCodeBlockLanguage(className)
   // Get the code content as a string
   const code = String(children).replace(/\n$/, '')
-
-  // Check if this is inline code (no language specified and single line)
-  const isInline = !match && !String(children).includes('\n')
+  const isInline = isInlineCodeBlock(children, language)
 
   // Inline code - render as styled span
   if (isInline) {
@@ -37,12 +42,16 @@ export function CodeBlock({ children, className, ...props }: CodeBlockProps) {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  // TODO: Mermaid diagram support could be implemented here
-  // if (language === 'mermaid') { ... }
+  if (language === 'mermaid' || language === 'mmd') {
+    return <MermaidDiagram code={code} sourceLine={sourceLine} />
+  }
 
   // Regular code blocks - use syntax highlighter
   return (
-    <div className="relative group my-4 rounded-lg overflow-hidden border border-border/50">
+    <div
+      data-source-line={sourceLine}
+      className="relative group my-4 rounded-lg overflow-hidden border border-border/50"
+    >
       <div className="absolute right-2 top-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
         <Button
           onClick={onCopy}

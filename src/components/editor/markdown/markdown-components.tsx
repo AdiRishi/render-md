@@ -1,3 +1,4 @@
+import { Children, cloneElement, isValidElement } from 'react'
 // Disabled because node?.position is needed - TypeScript types `node` as possibly undefined
 // but eslint thinks it's always defined. We need the optional chain for safety.
 
@@ -109,15 +110,22 @@ export const markdownComponents: Components = {
    * Code
    * ------------------------------------------------------------------------- */
   code: CodeBlock,
-  pre: ({ node, children, className, ...props }) => (
-    <pre
-      data-source-line={node?.position?.start.line}
-      className={cn('overflow-x-auto', className)}
-      {...props}
-    >
-      {children}
-    </pre>
-  ),
+  pre: ({ node, children, className, ...props }) => {
+    const sourceLine = node?.position?.start.line
+    const child = Children.only(children)
+
+    if (isValidElement<{ 'data-source-line'?: number }>(child)) {
+      return cloneElement(child, {
+        'data-source-line': sourceLine,
+      })
+    }
+
+    return (
+      <pre data-source-line={sourceLine} className={cn('overflow-x-auto', className)} {...props}>
+        {children}
+      </pre>
+    )
+  },
 
   /* ---------------------------------------------------------------------------
    * Links
