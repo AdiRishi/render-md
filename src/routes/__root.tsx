@@ -36,9 +36,6 @@ export const Route = createRootRoute({
         name: 'viewport',
         content: 'width=device-width, initial-scale=1',
       },
-      // Default fallback - child routes should override with their own SEO
-      { name: 'theme-color', content: '#137fec' },
-      { name: 'author', content: 'RenderMD' },
     ],
     links: [
       {
@@ -71,12 +68,6 @@ export const Route = createRootRoute({
         rel: 'stylesheet',
         href: tailwindCss,
       },
-      // Favicon declarations - SVG is prioritized by Google, then PNG (48px minimum)
-      {
-        rel: 'icon',
-        type: 'image/svg+xml',
-        href: '/favicon.svg',
-      },
       {
         rel: 'icon',
         type: 'image/png',
@@ -85,25 +76,13 @@ export const Route = createRootRoute({
       },
       {
         rel: 'icon',
-        type: 'image/png',
-        sizes: '192x192',
-        href: '/logo192.png',
-      },
-      {
-        rel: 'icon',
-        type: 'image/png',
-        sizes: '512x512',
-        href: '/logo512.png',
-      },
-      {
-        rel: 'icon',
         type: 'image/x-icon',
         href: '/favicon.ico',
       },
       {
         rel: 'apple-touch-icon',
-        sizes: '192x192',
-        href: '/logo192.png',
+        sizes: '180x180',
+        href: '/apple-touch-icon.png',
       },
       {
         rel: 'manifest',

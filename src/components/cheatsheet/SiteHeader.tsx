@@ -10,7 +10,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-border bg-background/90 backdrop-blur-md px-4 py-3 md:px-10">
       <Link to="/" className="flex items-center gap-3">
         <img src="/logo192.png" alt="RenderMD" className="size-8" />
-        <span className="text-lg font-bold leading-tight tracking-tight">Markdown Editor</span>
+        <span className="text-lg font-bold leading-tight tracking-tight">RenderMD</span>
       </Link>
 
       <div className="flex items-center gap-6">

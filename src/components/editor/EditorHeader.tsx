@@ -40,7 +40,7 @@ export function EditorHeader({ viewMode, onViewModeChange }: EditorHeaderProps) 
       <div className="flex items-center gap-3">
         <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <img src="/logo192.png" alt="RenderMD" className="size-8" />
-          <span className="text-base font-semibold text-foreground">Markdown Editor</span>
+          <span className="text-base font-semibold text-foreground">RenderMD</span>
         </Link>
       </div>
 

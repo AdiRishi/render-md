@@ -2,15 +2,9 @@
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "id": "/",
   "short_name": "RenderMD",
-  "name": "RenderMD - Real-Time Markdown Editor",
-  "description": "A free real-time markdown editor with instant live preview. Write GitHub Flavored Markdown with LaTeX math support, syntax highlighting for 150+ languages, tables, and code blocks.",
+  "name": "RenderMD",
+  "description": "Real-time markdown editing with instant preview, Mermaid diagrams, LaTeX math, and syntax highlighting.",
   "icons": [
-    {
-      "src": "favicon.svg",
-      "type": "image/svg+xml",
-      "sizes": "any",
-      "purpose": "any"
-    },
     {
       "src": "logo192.png",
       "type": "image/png",
@@ -18,16 +12,34 @@
       "purpose": "any"
     },
     {
+      "src": "icon-192-maskable.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180",
+      "purpose": "any"
+    },
+    {
       "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any"
+    },
+    {
+      "src": "icon-512-maskable.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
   ],
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "theme_color": "#137fec",
-  "background_color": "#0a0a0a",
+  "theme_color": "#1a68ff",
+  "background_color": "#081428",
   "categories": ["productivity", "utilities", "developer tools"]
 }

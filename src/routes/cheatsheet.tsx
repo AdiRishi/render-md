@@ -41,11 +41,10 @@ export const Route = createFileRoute('/cheatsheet')({
       ...seo({
         title: 'Markdown Cheatsheet - Complete Syntax Reference | RenderMD',
         description:
-          'The ultimate markdown cheatsheet with syntax examples and live previews. Learn headers, emphasis, lists, links, images, code blocks, tables, LaTeX math, and more.',
-        keywords:
-          'markdown cheatsheet, markdown syntax, markdown guide, markdown reference, GFM, GitHub Flavored Markdown, markdown tutorial, markdown examples, LaTeX markdown, code blocks markdown',
+          'A complete markdown syntax reference with examples for headers, emphasis, lists, links, code blocks, tables, Mermaid, and LaTeX math.',
         url: 'https://www.render-md.com/cheatsheet',
         image: getCfImageUrl('cheatsheetOg'),
+        imageAlt: 'RenderMD markdown cheatsheet page with live formatting examples',
       }),
     ],
     links: [

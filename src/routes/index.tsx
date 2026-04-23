@@ -2,18 +2,16 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { EditorLayout } from '@/components/editor/EditorLayout'
 import { getCfImageUrl } from '@/lib/cf-image'
-import { getWebAppJsonLd, jsonLdScripts, seo } from '@/lib/seo'
+import { getHomeJsonLd, jsonLdScripts, seo } from '@/lib/seo'
 import editorCss from '@/global-styles/editor.css?url'
 
 export const Route = createFileRoute('/')({
   head: () => ({
     meta: [
       ...seo({
-        title: 'RenderMD - Real-Time Markdown Editor with Live Preview',
+        title: 'RenderMD | Real-Time Markdown Editor',
         description:
-          'RenderMD is a free real-time markdown editor with instant live preview. Includes a comprehensive markdown cheatsheet. Write GitHub Flavored Markdown with Mermaid diagrams, LaTeX math support, syntax highlighting for 150+ languages, tables, and code blocks.',
-        keywords:
-          'markdown editor, live preview, markdown preview, online markdown editor, GFM, GitHub Flavored Markdown, Mermaid diagrams, mermaid markdown, LaTeX math, KaTeX, syntax highlighting, code blocks, markdown to HTML, real-time editor, markdown cheatsheet, markdown syntax guide',
+          'Write markdown and see the rendered result instantly. RenderMD supports GitHub Flavored Markdown, Mermaid diagrams, LaTeX math, tables, and syntax highlighting.',
         url: 'https://www.render-md.com',
         image: getCfImageUrl('editorOg'),
       }),
@@ -28,7 +26,7 @@ export const Route = createFileRoute('/')({
         href: 'https://www.render-md.com',
       },
     ],
-    scripts: jsonLdScripts(getWebAppJsonLd()),
+    scripts: jsonLdScripts(getHomeJsonLd()),
   }),
   component: App,
 })
