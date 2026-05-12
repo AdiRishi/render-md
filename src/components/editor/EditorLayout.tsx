@@ -6,8 +6,8 @@ import { type EditorView } from '@codemirror/view'
 import { EditorHeader, type ViewMode } from './EditorHeader'
 import { MarkdownPane } from './MarkdownPane'
 import { PreviewPane } from './PreviewPane'
-import { defaultContent } from './markdown/default-content'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useEditorContentStore } from '@/stores/editor-content-store'
 
 const editorPaneVariants = cva(
   'h-full min-h-0 min-w-0 transition-[width] duration-200 border-border',
@@ -34,7 +34,8 @@ const previewPaneVariants = cva('h-full min-h-0 min-w-0 transition-[width] durat
 
 export function EditorLayout() {
   const [viewMode, setViewMode] = useState<ViewMode>('split')
-  const [markdown, setMarkdown] = useState(defaultContent)
+  const markdown = useEditorContentStore((state) => state.markdown)
+  const setMarkdown = useEditorContentStore((state) => state.setMarkdown)
 
   const deferredMarkdown = useDeferredValue(markdown)
 
