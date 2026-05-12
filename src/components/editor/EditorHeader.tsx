@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Code, Columns2, Eye } from 'lucide-react'
+import { Code, Columns2, Eye, RotateCcw } from 'lucide-react'
 import { cva } from 'class-variance-authority'
 
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -9,7 +9,9 @@ export type ViewMode = 'split' | 'editor' | 'preview'
 
 interface EditorHeaderProps {
   viewMode: ViewMode
+  canResetMarkdown: boolean
   onViewModeChange: (mode: ViewMode) => void
+  onResetMarkdown: () => void
 }
 
 const viewModeButtons = [
@@ -33,7 +35,16 @@ const viewModeButtonVariants = cva(
   },
 )
 
-export function EditorHeader({ viewMode, onViewModeChange }: EditorHeaderProps) {
+const actionButtonVariants = cva(
+  'p-2 rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-40',
+)
+
+export function EditorHeader({
+  viewMode,
+  canResetMarkdown,
+  onViewModeChange,
+  onResetMarkdown,
+}: EditorHeaderProps) {
   return (
     <header className="flex items-center justify-between border-b border-border bg-background px-6 py-3 shrink-0">
       {/* Left section: Logo and app title */}
@@ -54,6 +65,22 @@ export function EditorHeader({ viewMode, onViewModeChange }: EditorHeaderProps) 
             Cheatsheet
           </Link>
         </nav>
+
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <button
+                onClick={onResetMarkdown}
+                disabled={!canResetMarkdown}
+                className={actionButtonVariants()}
+                aria-label="Reset to default markdown"
+              >
+                <RotateCcw className="size-5" />
+              </button>
+            }
+          />
+          <TooltipContent>Reset to default markdown</TooltipContent>
+        </Tooltip>
 
         {/* View mode toggle */}
         <div className="hidden md:flex items-center gap-1 bg-muted rounded-lg p-1">
