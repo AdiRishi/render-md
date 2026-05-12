@@ -55,27 +55,39 @@ const expiringLocalStorage: StateStorage = {
     const storage = getLocalStorage()
     if (!storage) return null
 
-    const storedValue = storage.getItem(name)
-    if (!storedValue) return null
+    try {
+      const storedValue = storage.getItem(name)
+      if (!storedValue) return null
 
-    if (shouldDiscardStoredMarkdown(storedValue)) {
-      storage.removeItem(name)
+      if (shouldDiscardStoredMarkdown(storedValue)) {
+        storage.removeItem(name)
+        return null
+      }
+
+      return storedValue
+    } catch {
       return null
     }
-
-    return storedValue
   },
   setItem: (name, value) => {
     const storage = getLocalStorage()
     if (!storage) return
 
-    storage.setItem(name, value)
+    try {
+      storage.setItem(name, value)
+    } catch {
+      // Keep editor updates working when storage is unavailable or quota-limited.
+    }
   },
   removeItem: (name) => {
     const storage = getLocalStorage()
     if (!storage) return
 
-    storage.removeItem(name)
+    try {
+      storage.removeItem(name)
+    } catch {
+      // Reset should still restore in-memory defaults even if storage removal fails.
+    }
   },
 }
 
