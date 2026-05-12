@@ -1,10 +1,10 @@
 import { type MutableRefObject, useCallback, useEffect, useRef } from 'react'
 import CodeMirror, { type BasicSetupOptions } from '@uiw/react-codemirror'
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown'
-import { languages } from '@codemirror/language-data'
 import { EditorView } from '@codemirror/view'
 
 import { editorTheme } from '@/lib/editor-theme'
+import { markdownCodeLanguages } from '@/lib/markdown-languages'
 
 interface MarkdownPaneProps {
   value: string
@@ -88,7 +88,7 @@ export function MarkdownPane({ value, onChange, onScroll, editorViewRef }: Markd
           onCreateEditor={handleCreateEditor}
           theme={editorTheme}
           extensions={[
-            markdown({ base: markdownLanguage, codeLanguages: languages }),
+            markdown({ base: markdownLanguage, codeLanguages: markdownCodeLanguages }),
             EditorView.lineWrapping,
           ]}
           placeholder="Start writing your markdown here..."
