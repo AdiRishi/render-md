@@ -1,0 +1,16 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "printWidth": 100,
+  "sortImports": {
+    "internalPattern": ["@/"]
+  },
+  "sortTailwindcss": {
+    "stylesheet": "./src/styles/app.css",
+    "functions": ["cn", "cva"]
+  },
+  "sortPackageJson": true,
+  "ignorePatterns": ["pnpm-lock.yaml", "**/*.gen.ts", ".output", ".tanstack", ".wrangler", "public"]
+}

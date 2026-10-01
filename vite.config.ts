@@ -1,15 +1,20 @@
-import { defineConfig } from 'vite'
-import { devtools } from '@tanstack/devtools-vite'
-import { visualizer } from 'rollup-plugin-visualizer'
-import { tanstackStart } from '@tanstack/react-start/plugin/vite'
-import viteReact from '@vitejs/plugin-react'
+import babel from '@rolldown/plugin-babel'
 import tailwindcss from '@tailwindcss/vite'
+import { devtools } from '@tanstack/devtools-vite'
+import { tanstackStart } from '@tanstack/react-start/plugin/vite'
+import viteReact, { reactCompilerPreset } from '@vitejs/plugin-react'
 import { nitro } from 'nitro/vite'
-import { sitemapPlugin } from './src/lib/vite-sitemap-plugin'
+import { visualizer } from 'rollup-plugin-visualizer'
+import { defineConfig } from 'vite'
 
-const config = defineConfig({
+import { sitemapPlugin } from './build/vite-sitemap-plugin.ts'
+
+export default defineConfig({
   resolve: {
     tsconfigPaths: true,
+  },
+  worker: {
+    format: 'es',
   },
   plugins: [
     devtools(),
@@ -17,12 +22,8 @@ const config = defineConfig({
     tailwindcss(),
     tanstackStart(),
     viteReact(),
-    visualizer(),
-    sitemapPlugin({
-      baseUrl: 'https://www.render-md.com',
-      verbose: true,
-    }),
+    babel({ presets: [reactCompilerPreset()] }),
+    visualizer({ filename: '.output/stats.html' }),
+    sitemapPlugin({ baseUrl: 'https://www.render-md.com' }),
   ],
 })
-
-export default config

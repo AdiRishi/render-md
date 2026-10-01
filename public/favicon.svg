@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 208 208">
+  <style>
+    .sheet { fill: #1c1915 } .m { fill: #fdfcfa } .arrow { fill: #e0452b }
+    @media (prefers-color-scheme: dark) { .sheet { fill: #ebe6dd } .m { fill: #1c1915 } .arrow { fill: #ef7656 } }
+  </style>
+  <rect class="sheet" width="208" height="208" rx="48"/>
+  <path class="m" d="M50 138V99l20 25 20-25v39h20V70H90L70 95 50 70H30v68z"/>
+  <path class="arrow" d="M184 104h-20V70h-20v34h-20l30 35z"/>
+</svg>
