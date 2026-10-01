@@ -55,7 +55,7 @@ export function Hero({ specimen }: { specimen: Root }) {
           examples you can edit and watch render. Nothing here is a mock-up: each one runs through
           the same renderer as the RenderMD editor.
         </p>
-        <div className="mt-9 flex max-w-xl animate-rise flex-col gap-3 [animation-delay:240ms] sm:flex-row print:hidden">
+        <div className="relative z-10 mt-9 flex max-w-xl animate-rise flex-col gap-3 [animation-delay:240ms] sm:flex-row print:hidden">
           <SearchBox className="flex-1" />
           <Link to="/" className={cn(buttonVariants({ size: 'lg' }), 'shrink-0')}>
             Open the editor <ArrowRight />

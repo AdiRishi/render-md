@@ -70,7 +70,7 @@ export function SearchBox({ className, hotkey = false }: { className?: string; h
         <ul
           id={listId}
           aria-label="Matching sections"
-          className="absolute inset-x-0 top-12 z-30 overflow-hidden rounded-xl bg-paper p-1.5 shadow-float"
+          className="absolute inset-x-0 top-12 z-30 overflow-hidden rounded-xl bg-popover p-1.5 shadow-float ring-1 ring-foreground/10"
         >
           {results.map((section, index) => (
             <li key={section.id}>
@@ -80,7 +80,7 @@ export function SearchBox({ className, hotkey = false }: { className?: string; h
                 onClick={() => go(section)}
                 className={cn(
                   'flex w-full items-center justify-between gap-3 rounded-md px-2.5 py-2 text-start text-[13px]',
-                  index === highlighted ? 'bg-desk-2 text-ink' : 'text-ink-2',
+                  index === highlighted ? 'bg-muted text-ink' : 'text-ink-2',
                 )}
               >
                 {section.title}
