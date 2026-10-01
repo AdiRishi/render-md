@@ -5,26 +5,16 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 import { ClientOnly, HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { type ReactNode } from 'react'
-import { Toaster } from 'sonner'
 
-import { ErrorBoundary } from '@/components/site/ErrorBoundary'
-import { ThemeProvider } from '@/components/theme-provider'
-import { TooltipProvider } from '@/components/ui/tooltip'
+import { ErrorBoundary } from '@/features/site/ErrorBoundary'
+import { GoogleAnalytics } from '@/features/site/GoogleAnalytics'
+import { getThemePreferenceServerFn, themeBootScript } from '@/features/theme/theme'
+import { ThemeProvider } from '@/features/theme/ThemeProvider'
 import { THEME_COLOR } from '@/lib/seo'
-import { getThemePreferenceServerFn, themeBootScript } from '@/lib/theme'
+import { Toaster } from '@/ui/Toaster'
+import { TooltipProvider } from '@/ui/Tooltip'
 
 import appCss from '@/styles/app.css?url'
-
-const GA_ID = 'G-BF428L3QLQ'
-
-function GoogleAnalytics() {
-  return (
-    <>
-      <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
-      <script async src="/ga-init.js" />
-    </>
-  )
-}
 
 const preloadFont = (href: string) => ({
   rel: 'preload',
@@ -80,20 +70,7 @@ function RootDocument({ children }: { children: ReactNode }) {
           <TooltipProvider delay={350}>
             <ErrorBoundary>{children}</ErrorBoundary>
           </TooltipProvider>
-          <Toaster
-            position="bottom-center"
-            offset={44}
-            toastOptions={{
-              classNames: {
-                toast:
-                  '!rounded-xl !border-0 !bg-ink !text-paper !shadow-float !font-sans !text-[13px] !gap-2.5 !py-3 !px-4',
-                description: '!text-paper/70 !text-[12px]',
-                actionButton:
-                  '!bg-paper !text-ink !rounded-md !font-medium !text-[12px] !h-7 !px-2.5',
-                icon: '!text-proof',
-              },
-            }}
-          />
+          <Toaster />
         </ThemeProvider>
         <TanStackDevtools
           config={{ position: 'bottom-left' }}

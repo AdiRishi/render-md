@@ -1,5 +1,5 @@
 {
-  "include": ["src", "*.ts"],
+  "include": ["src", "build", "*.ts"],
   "exclude": ["node_modules", ".output", ".wrangler", ".tanstack", "public"],
   "compilerOptions": {
     "target": "ES2023",

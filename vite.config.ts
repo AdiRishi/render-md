@@ -7,7 +7,7 @@ import { nitro } from 'nitro/vite'
 import { visualizer } from 'rollup-plugin-visualizer'
 import { defineConfig } from 'vite'
 
-import { sitemapPlugin } from './src/lib/vite-sitemap-plugin.ts'
+import { sitemapPlugin } from './build/vite-sitemap-plugin.ts'
 
 export default defineConfig({
   resolve: {

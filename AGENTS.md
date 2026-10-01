@@ -28,43 +28,113 @@ pnpm deploy       # Deploy .output/ with wrangler
 
 ## Architecture
 
+The code is organized **by feature**, on top of two shared layers. Each folder
+answers one question; if you're unsure where something goes, the layer rules
+below decide it.
+
 ```
-routes/index.tsx → Workspace (client-only; SSR shows WorkspaceSkeleton)
-  ├── TopBar            brand, document title, Write/Split/Read switch, Open/Export menus,
-  │                     ReaderSettings (typeset popover), ThemeToggle, Share
-  ├── EditorPane        CodeMirror 6 + formatting toolbar
-  ├── Divider           draggable split (ratio persisted in settings)
-  ├── <Activity>        React 19 Activity hides the preview in Write mode
-  │    └── PreviewPane  the "sheet" on the desk: folio, crop marks, Outline, DocumentView
-  ├── StatusBar         words/chars/lines, cursor, scroll-sync toggle
-  └── CommandPalette (cmdk), ShareDialog, OpenUrlDialog, DropOverlay
-routes/cheatsheet.tsx → SEO-critical reference; content in content/cheatsheet.ts, rendered
-                        server-side (createServerFn) so crawlers get full HTML
+src/
+├── routes/        Thin TanStack file routes: path, loader, <head>, which page to render.
+├── features/      Everything users can see or do, grouped by feature.
+│   ├── workspace/   The app at "/": layout, panes, chrome, dialogs, state, document I/O.
+│   ├── cheatsheet/  The /cheatsheet reference page (an SEO page — see below).
+│   ├── markdown/    The rendering engine and the React document renderer.
+│   ├── editor/      CodeMirror 6: editor component, toolbar, commands, theme.
+│   ├── theme/       Light/dark/system: provider, toggle, pre-paint boot script.
+│   └── site/        Site chrome shared by content pages: header, footer, 404, analytics.
+├── ui/            Design-system primitives (Button, Menu, Dialog, CropMarks, …). No app state.
+├── lib/           Framework-free helpers (cn, format, platform, download, seo, share-link).
+├── styles/        Global CSS: Tailwind entry (app.css) and color tokens (tokens.css).
+└── router.tsx
+build/             Build-time tooling (the sitemap Vite plugin) — never shipped.
 ```
 
-### Markdown pipeline (`src/lib/markdown/`)
+### Layers and dependency rules
 
-- `pipeline.ts` — `renderMarkdown(markdown, { baseUrl })` → `{ hast, headings, frontmatter, title, stats }`. Synchronous; runs in the worker, in tests, and on the server.
-  `remark-parse → frontmatter → gfm → math → gemoji → code meta → remark-rehype → rehype-raw → source lines → rehype-sanitize (GitHub schema) → KaTeX → GitHub alerts → slug → base URL → heading outline`
-- `plugins.ts` — the custom unified plugins. Block elements get `data-line` (source line) for scroll sync, double-click-to-locate and live task toggles.
-- `sanitize-schema.ts` — GitHub's schema, widened slightly. Anything our plugins add _before_ sanitize must be allow-listed here.
-- `render.worker.ts` / `client.ts` — the worker and its promise-based client (falls back to the main thread). `hooks/use-rendered-markdown.ts` coalesces requests so only the latest text is rendered.
-- `components/document/DocumentView.tsx` — HAST → React via `hast-util-to-jsx-runtime`, with components for code (`CodeBlock`, Shiki), Mermaid (`Diagram`), alerts, headings, links and task checkboxes.
+Imports only point **down** this list. The rules are enforced by
+`no-restricted-imports` overrides in `.oxlintrc.json`, so `pnpm check` fails if
+a boundary is crossed.
 
-### State (`src/stores/`, Zustand)
+| Layer                                                      | May import                                                                                                      |
+| ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `routes/`                                                  | anything below                                                                                                  |
+| product features: `workspace`, `cheatsheet`                | foundation features, `ui`, `lib` — not each other                                                               |
+| foundation features: `markdown`, `editor`, `theme`, `site` | each other, `ui`, `lib` — never product features                                                                |
+| `features/markdown/engine/`                                | `lib` and npm packages only — **no React**, no other features (it runs in a worker, on the server and in tests) |
+| `ui/`                                                      | `lib` — never features                                                                                          |
+| `lib/`                                                     | npm packages only — no React, no features, no UI                                                                |
 
-- `document-store.ts` — current document (`markdown`, `name`, `baseUrl`, `source`) and the _recents_ shelf. Replacing a document always archives the previous one, so actions can offer Undo. Persisted with debounced writes (`lib/storage.ts`).
-- `settings-store.ts` — view mode, typeset, measure, text size, diagram look, scroll sync, split ratio.
-- `ui-store.ts` — open dialog, drag state, cursor position; `previewArticle` holds the rendered `<article>` for export/copy.
+### Feature anatomy
 
-All document-level actions (open, save, share, export…) live in `hooks/use-document-actions.ts` as `documentActions`; the top bar, palette and shortcuts all call these.
+Features use the same sub-folder names when they need them:
+
+| Folder        | Holds                                                                                                                                     |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/` | React components private to the feature                                                                                                   |
+| `hooks/`      | `use-*` hooks                                                                                                                             |
+| `state/`      | Zustand stores and their persistence                                                                                                      |
+| `io/`         | Talking to the outside world: files, network, clipboard, export                                                                           |
+| `content/`    | Static content written as data                                                                                                            |
+| (root)        | The feature's entry components (e.g. `Workspace.tsx`, `CheatsheetPage.tsx`) and cross-cutting modules (`actions.ts`, `data.ts`, `seo.ts`) |
+
+Inside a feature, import siblings with relative paths (`./`, `../`). Across
+features or layers, use the `@/` alias. Tests sit next to the code they cover
+(`*.test.ts`).
+
+### `features/markdown` — the rendering engine
+
+```
+markdown/
+├── engine/      Pure, synchronous markdown → HAST. Runs in the worker, on the server and in tests.
+│   ├── pipeline.ts          renderMarkdown(): the unified pipeline, cached per base URL
+│   ├── plugins/             one remark/rehype plugin per file (alerts, math, frontmatter, …)
+│   ├── sanitize-schema.ts   GitHub's sanitize rules, widened slightly
+│   └── source.ts, links.ts, stats.ts, hast.ts, types.ts
+├── worker/      Off-main-thread rendering: render.worker.ts, client.ts, use-rendered-markdown.ts
+└── render/      HAST → React
+    ├── DocumentView.tsx     the document (<article class="doc">)
+    ├── elements/            one component per HTML element we customize (Link, Heading, TaskList, …)
+    ├── code/                Shiki code blocks
+    ├── diagram/             Mermaid diagrams + pan/zoom viewer
+    ├── document.css         the document's typography (also inlined into HTML exports)
+    └── typesets.ts, context.ts
+```
+
+Pipeline order: `remark-parse → frontmatter → gfm → math → gemoji → code meta →
+remark-rehype → rehype-raw → source lines → rehype-sanitize → KaTeX → alerts →
+slug → fragment links → base URL → heading outline`. Anything a plugin adds
+_before_ sanitizing must be allow-listed in `sanitize-schema.ts`. Block elements
+carry `data-line` (their source line) for scroll sync, double-click-to-locate
+and live task toggles.
+
+### `features/workspace` — the app
+
+```
+workspace/
+├── Workspace.tsx          layout: top bar, editor | divider | preview, status bar, dialogs
+├── actions.ts             documentActions — every document-level action (open, save, share, export…)
+├── chrome/                TopBar, ViewSwitch, DocumentTitle, Open/Export menu items, ReaderSettings, StatusBar
+├── panes/                 EditorPane, SplitDivider, preview/ (PreviewPane, Outline, EmptyState, …)
+├── scroll-sync/           line-accurate editor ↔ preview sync (pure math + hook)
+├── dialogs/               CommandPalette, ShareDialog, OpenUrlDialog, DropOverlay
+├── hooks/                 hotkeys, file drop, incoming documents (share links, ?url=, OS file opens)
+├── io/                    file-system, remote (URLs/GitHub), export (HTML, rich text)
+└── state/                 document-store (current doc + recents, cross-tab merge),
+                           settings-store, ui-store, debounced-storage, sample.md
+```
+
+Top bar, palette and shortcuts all call `documentActions`; new user-facing
+actions go there and should be reachable from the command palette. Replacing a
+document always archives the previous one to _recents_, so actions can offer
+Undo. The editor remounts per loaded document (`loadKey`), so undo history never
+crosses documents.
 
 ### Styling
 
-- `src/styles/app.css` — Tailwind 4 entry and design tokens. Fonts, shadows and easing live in a plain `@theme` block (emitted as CSS variables because CodeMirror's theme and `document.css` read them); colors live in `@theme inline`.
-- `src/styles/document.css` — the rendered document's typography as plain semantic CSS scoped to `.doc`. Three typesets via `data-typeset`: `sans` (Modern), `serif` (Editorial), `mono` (Technical). The same file is inlined into **Export → HTML**, so keep it free of Tailwind utilities.
-- `src/lib/editor/extensions.ts` — CodeMirror theme and highlight style, driven entirely by CSS variables.
-- `cn()` from `src/lib/utils.ts` merges classes; variants use CVA (`components/ui/button.tsx`).
+- `styles/app.css` — the Tailwind 4 entry. Fonts, shadows and easing live in a plain `@theme` block (emitted as CSS variables, because the CodeMirror theme and the document stylesheet read them); colors are mapped in `@theme inline`.
+- `styles/tokens.css` — the light and dark palettes.
+- `features/markdown/render/document.css` — the rendered document as plain semantic CSS scoped to `.doc`, with three typesets via `data-typeset`. It's inlined into **Export → HTML**, so keep it free of Tailwind utilities.
+- `cn()` (`lib/cn.ts`) merges classes; variants use CVA (see `ui/Button.tsx`).
 
 ## Design system — "Paper & Proof"
 
@@ -72,21 +142,24 @@ All document-level actions (open, save, share, export…) live in `hooks/use-doc
 - Ink scale: `ink` → `ink-2` → `ink-3` → `ink-4`. Rules: `rule`, `rule-strong`.
 - Type: **Instrument Serif** (display), **Instrument Sans** (UI, Modern typeset), **Newsreader** (Editorial body), **Geist Mono** (code, labels). Small mono uppercase labels use the `label-caps` utility.
 - Printer's details: crop marks around sheets, a `¶` folio line, `§` heading anchors, `⁂` for horizontal rules.
-- Light and dark themes are both first-class; theme preference is `light | dark | system`, resolved pre-paint by an inline script (`lib/theme.ts`) and switched with a View Transition.
+- Light and dark themes are both first-class; theme preference is `light | dark | system`, resolved pre-paint by an inline script (`features/theme/theme.ts`) and switched with a View Transition.
 
 ## Conventions
 
-- Path alias `@/*` → `./src/*`.
-- Prefer base-ui primitives (`@base-ui/react`) wrapped in `src/components/ui/`.
-- Keep the markdown pipeline pure and synchronous; add tests in `src/lib/markdown/pipeline.test.ts` for any syntax change.
-- New user-facing actions go in `documentActions` and should be reachable from the command palette.
+- **File names:** React components are `PascalCase.tsx`; hooks are `use-kebab-case.ts`; every other module is `kebab-case.ts`. Each file has one main export named after the file (`Outline.tsx` → `Outline`); small private helpers, or a tightly related pair (`BrandMark`/`Wordmark`), can live alongside it.
+- **Modules start with a doc comment** saying what they're for when it isn't obvious from the name.
+- **Path alias:** `@/*` → `./src/*`, used across features and layers; relative imports within a feature.
+- **No barrel files**, except where a folder is a single unit of data (`cheatsheet/content/index.ts`) or a registry (`markdown/render/elements/index.ts`). Barrels hide dependencies and defeat lazy loading.
+- **Heavy dependencies load lazily:** Shiki, Mermaid and the markdown pipeline are dynamic imports; keep them out of the initial bundle.
+- Prefer base-ui primitives (`@base-ui/react`), wrapped in `src/ui/`.
+- Keep the markdown engine pure and synchronous; add tests in `features/markdown/engine/pipeline.test.ts` for any syntax change.
 
 ## The cheat sheet (`/cheatsheet`) — an SEO page
 
 It is one of the site's biggest traffic sources, so treat changes to it with care:
 
-- Content lives in `src/content/cheatsheet.ts` (chapters → sections → examples, tips, quick reference, FAQ). Everything is markdown and is rendered by the real pipeline **on the server** in a `createServerFn`, so the HTML that crawlers receive is fully rendered and the browser never downloads the pipeline.
-- `src/content/cheatsheet.test.ts` asserts every example renders as its section claims — run `pnpm test` after editing content.
+- Content lives in `features/cheatsheet/content/`: one file per chapter (sections → examples and tips), plus the quick reference and FAQ. Everything is markdown and is rendered by the real pipeline **on the server** in a `createServerFn` (`data.ts`), so the HTML that crawlers receive is fully rendered and the browser never downloads the pipeline.
+- `content/content.test.ts` asserts every example renders as its section claims — run `pnpm test` after editing content.
 - Keep the H1 containing "Markdown cheat sheet", one H2 per chapter / quick reference / FAQ, and H3 per section. Section ids are public anchors (`/cheatsheet#tables`) — don't rename them.
-- Structured data (`TechArticle` with `dateModified`, `BreadcrumbList`, `FAQPage`) is generated from the same content in `src/lib/seo.ts`. Bump `CHEATSHEET_UPDATED` when the content changes meaningfully.
+- Structured data (`TechArticle` with `dateModified`, `BreadcrumbList`, `FAQPage`) is generated from the same content in `features/cheatsheet/seo.ts`. Bump `CHEATSHEET_UPDATED` when the content changes meaningfully.
 - Examples are editable in place and re-render through the worker; "Open in editor" uses a share link with `view=split`.

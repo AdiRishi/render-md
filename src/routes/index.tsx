@@ -1,8 +1,9 @@
 import { ClientOnly, createFileRoute } from '@tanstack/react-router'
 
-import { Workspace } from '@/components/app/Workspace'
-import { WorkspaceSkeleton } from '@/components/app/WorkspaceSkeleton'
-import { getHomeJsonLd, jsonLdScripts, seo, SITE_URL } from '@/lib/seo'
+import { getSiteJsonLd } from '@/features/site/structured-data'
+import { Workspace } from '@/features/workspace/Workspace'
+import { WorkspaceSkeleton } from '@/features/workspace/WorkspaceSkeleton'
+import { jsonLdScripts, seo, SITE_URL } from '@/lib/seo'
 
 type HomeSearch = { url?: string; new?: boolean }
 
@@ -19,7 +20,7 @@ export const Route = createFileRoute('/')({
       url: SITE_URL,
     }),
     links: [{ rel: 'canonical', href: SITE_URL }],
-    scripts: jsonLdScripts(getHomeJsonLd()),
+    scripts: jsonLdScripts(getSiteJsonLd()),
   }),
   component: Home,
 })
