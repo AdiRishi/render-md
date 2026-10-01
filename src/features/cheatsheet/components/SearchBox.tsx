@@ -1,8 +1,8 @@
 import { Search } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
-import { cn } from '@/lib/cn'
-import { Kbd } from '@/ui/Kbd'
+import { cn } from '@/lib/utils'
+import { Kbd } from '@/ui/kbd'
 
 import { type CheatsheetSection } from '../content'
 import { matchSections } from '../search'

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 import { SECTIONS } from '../content'
 import { NAV_IDS } from '../hooks/use-active-section'

@@ -12,7 +12,14 @@ import {
 import { guessTitle } from '@/features/markdown/engine/source'
 import { formatRelativeTime } from '@/lib/format'
 import { modKey } from '@/lib/platform'
-import { MenuContent, MenuItem, MenuSeparator, MenuSubmenu, MenuSubmenuTrigger } from '@/ui/Menu'
+import {
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+} from '@/ui/dropdown-menu'
 
 import { documentActions } from '../actions'
 import { useDocumentStore } from '../state/document-store'
@@ -30,7 +37,7 @@ function RecentItems() {
   return (
     <>
       {recents.map((recent) => (
-        <MenuItem
+        <DropdownMenuItem
           key={recent.id}
           onClick={() => restoreRecent(recent.id)}
           className="h-auto py-1.5"
@@ -42,13 +49,13 @@ function RecentItems() {
             </span>
             <span className="text-[11px] text-ink-3">{formatRelativeTime(recent.updatedAt)}</span>
           </span>
-        </MenuItem>
+        </DropdownMenuItem>
       ))}
-      <MenuSeparator />
-      <MenuItem onClick={clearRecents}>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem onClick={clearRecents}>
         <Trash2 />
         Clear history
-      </MenuItem>
+      </DropdownMenuItem>
     </>
   )
 }
@@ -58,37 +65,38 @@ export function OpenMenuItems() {
   const mod = modKey()
   return (
     <>
-      <MenuItem onClick={() => void documentActions.openFile()} hint={`${mod} O`}>
+      <DropdownMenuItem onClick={() => void documentActions.openFile()}>
         <FolderOpen />
         Open file…
-      </MenuItem>
-      <MenuItem onClick={() => openDialog('open-url')}>
+        <DropdownMenuShortcut>{`${mod} O`}</DropdownMenuShortcut>
+      </DropdownMenuItem>
+      <DropdownMenuItem onClick={() => openDialog('open-url')}>
         <Globe />
         Open from URL…
-      </MenuItem>
-      <MenuItem onClick={() => void documentActions.pasteFromClipboard()}>
+      </DropdownMenuItem>
+      <DropdownMenuItem onClick={() => void documentActions.pasteFromClipboard()}>
         <ClipboardPaste />
         Paste from clipboard
-      </MenuItem>
-      <MenuSeparator />
-      <MenuItem onClick={documentActions.newDocument}>
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem onClick={documentActions.newDocument}>
         <FilePlus2 />
         Blank page
-      </MenuItem>
-      <MenuItem onClick={documentActions.loadSample}>
+      </DropdownMenuItem>
+      <DropdownMenuItem onClick={documentActions.loadSample}>
         <Sparkles />
         Field guide
-      </MenuItem>
-      <MenuSeparator />
-      <MenuSubmenu>
-        <MenuSubmenuTrigger>
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuSub>
+        <DropdownMenuSubTrigger>
           <Clock />
           Recent
-        </MenuSubmenuTrigger>
-        <MenuContent side="left" align="start" sideOffset={4} className="w-64">
+        </DropdownMenuSubTrigger>
+        <DropdownMenuSubContent side="left" align="start" sideOffset={4} className="w-64">
           <RecentItems />
-        </MenuContent>
-      </MenuSubmenu>
+        </DropdownMenuSubContent>
+      </DropdownMenuSub>
     </>
   )
 }

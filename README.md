@@ -36,15 +36,15 @@ The **[markdown cheat sheet](https://www.render-md.com/cheatsheet)** covers ever
 
 Markdown is rendered off the main thread in a Web Worker by a [unified](https://unifiedjs.com) pipeline (remark → rehype, sanitized with GitHub's rules), then turned into React with `hast-util-to-jsx-runtime`. Code is highlighted lazily with [Shiki](https://shiki.style) (JS regex engine, per-language code splitting), math with [KaTeX](https://katex.org), diagrams with [Mermaid](https://mermaid.js.org). Documents live in `localStorage`; nothing about them ever reaches the server.
 
-| Layer     | Technology                                                                         |
-| --------- | ---------------------------------------------------------------------------------- |
-| Framework | [TanStack Start](https://tanstack.com/start) · React 19 (Activity, React Compiler) |
-| Build     | Vite 8 (Rolldown) · Nitro → Cloudflare Workers                                     |
-| Language  | TypeScript 7 (native compiler)                                                     |
-| Quality   | Oxlint (type-aware) · Oxfmt · Vitest 5                                             |
-| Styling   | Tailwind CSS 4 · base-ui · Instrument Serif/Sans, Newsreader, Geist Mono           |
-| Editor    | CodeMirror 6                                                                       |
-| Rendering | unified / remark / rehype in a Web Worker · Shiki · KaTeX · Mermaid                |
+| Layer     | Technology                                                                            |
+| --------- | ------------------------------------------------------------------------------------- |
+| Framework | [TanStack Start](https://tanstack.com/start) · React 19 (Activity, React Compiler)    |
+| Build     | Vite 8 (Rolldown) · Nitro → Cloudflare Workers                                        |
+| Language  | TypeScript 7 (native compiler)                                                        |
+| Quality   | Oxlint (type-aware) · Oxfmt · Vitest 5                                                |
+| Styling   | Tailwind CSS 4 · shadcn/ui on Base UI · Instrument Serif/Sans, Newsreader, Geist Mono |
+| Editor    | CodeMirror 6                                                                          |
+| Rendering | unified / remark / rehype in a Web Worker · Shiki · KaTeX · Mermaid                   |
 
 ## Development
 

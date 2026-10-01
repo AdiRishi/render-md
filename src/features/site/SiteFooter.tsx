@@ -1,4 +1,4 @@
-import { BrandMark } from '@/ui/Brand'
+import { BrandMark } from '@/ui/brand'
 
 export function SiteFooter() {
   return (

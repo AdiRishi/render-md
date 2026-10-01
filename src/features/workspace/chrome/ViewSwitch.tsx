@@ -1,6 +1,6 @@
 import { BookOpen, Columns2, PenLine } from 'lucide-react'
 
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 import { type ViewMode, useSettingsStore } from '../state/settings-store'
 

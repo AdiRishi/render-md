@@ -1,8 +1,9 @@
 import { ArrowRight, LoaderCircle } from 'lucide-react'
 import { useState } from 'react'
 
-import { Button } from '@/ui/Button'
-import { Dialog, DialogContent } from '@/ui/Dialog'
+import { Button } from '@/ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/ui/dialog'
+import { Input } from '@/ui/input'
 
 import { documentActions } from '../actions'
 import { useUiStore } from '../state/ui-store'
@@ -32,11 +33,17 @@ export function OpenUrlDialog() {
 
   return (
     <Dialog open={open} onOpenChange={(next) => !next && closeDialog()}>
-      <DialogContent
-        eyebrow="Open from the web"
-        title="Render any markdown URL"
-        description="Paste a link to a raw file, a GitHub repository, file or gist. Relative images and links keep working."
-      >
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <p className="label-caps text-proof">Open from the web</p>
+          <DialogTitle className="font-display text-[1.9rem] leading-tight font-normal tracking-[-0.01em]">
+            Render any markdown URL
+          </DialogTitle>
+          <DialogDescription>
+            Paste a link to a raw file, a GitHub repository, file or gist. Relative images and links
+            keep working.
+          </DialogDescription>
+        </DialogHeader>
         <form
           onSubmit={(event) => {
             event.preventDefault()
@@ -44,7 +51,7 @@ export function OpenUrlDialog() {
           }}
           className="flex gap-2"
         >
-          <input
+          <Input
             autoFocus
             type="text"
             inputMode="url"
@@ -53,14 +60,14 @@ export function OpenUrlDialog() {
             onChange={(event) => setValue(event.target.value)}
             placeholder="https://github.com/owner/repo"
             aria-label="Markdown URL"
-            className="h-10 min-w-0 flex-1 rounded-lg bg-paper-2 px-3 font-mono text-[13px] text-ink shadow-[inset_0_0_0_1px_var(--rule-strong)] outline-none placeholder:text-ink-4 focus:shadow-[inset_0_0_0_1.5px_var(--ink)]"
+            className="h-10 min-w-0 flex-1 font-mono text-[13px]"
           />
-          <Button type="submit" variant="primary" size="lg" disabled={!value.trim() || pending}>
+          <Button type="submit" size="lg" disabled={!value.trim() || pending}>
             {pending ? <LoaderCircle className="animate-spin" /> : <ArrowRight />}
             Open
           </Button>
         </form>
-        <div className="mt-4 flex flex-wrap items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-1.5">
           <span className="me-1 text-xs text-ink-3">Try</span>
           {EXAMPLES.map((example) => (
             <button
@@ -76,7 +83,7 @@ export function OpenUrlDialog() {
             </button>
           ))}
         </div>
-        <p className="mt-5 border-t border-rule pt-4 text-xs leading-relaxed text-ink-3">
+        <p className="border-t border-rule pt-4 text-xs leading-relaxed text-ink-3">
           Tip: link straight to a rendered page with{' '}
           <code className="rounded bg-paper-2 px-1 py-0.5 font-mono text-[11px] text-ink-2">
             render-md.com/?url=…

@@ -4,7 +4,7 @@ import { revealLine } from '@/features/editor/bridge'
 import { type RenderResult } from '@/features/markdown/engine/pipeline'
 import { DocumentView } from '@/features/markdown/render/DocumentView'
 import { formatNumber } from '@/lib/format'
-import { CropMarks } from '@/ui/CropMarks'
+import { CropMarks } from '@/ui/crop-marks'
 
 import { useDocumentStore } from '../../state/document-store'
 import { MEASURES, useSettingsStore } from '../../state/settings-store'

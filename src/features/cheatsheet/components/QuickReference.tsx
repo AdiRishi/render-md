@@ -1,9 +1,9 @@
 import { Printer } from 'lucide-react'
 
-import { cn } from '@/lib/cn'
-import { buttonVariants } from '@/ui/Button'
-import { CopyButton } from '@/ui/CopyButton'
-import { CropMarks } from '@/ui/CropMarks'
+import { cn } from '@/lib/utils'
+import { buttonVariants } from '@/ui/button'
+import { CopyButton } from '@/ui/copy-button'
+import { CropMarks } from '@/ui/crop-marks'
 
 import { QUICK_REFERENCE, SUPPORT_LABEL, type Support } from '../content'
 import { SupportBadge } from './SupportBadge'

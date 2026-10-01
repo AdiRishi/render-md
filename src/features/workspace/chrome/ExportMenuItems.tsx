@@ -1,7 +1,13 @@
 import { Code2, Copy, FileDown, FileText, Printer } from 'lucide-react'
 
 import { modKey } from '@/lib/platform'
-import { MenuGroup, MenuItem, MenuLabel, MenuSeparator } from '@/ui/Menu'
+import {
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+} from '@/ui/dropdown-menu'
 
 import { documentActions } from '../actions'
 
@@ -9,33 +15,35 @@ export function ExportMenuItems() {
   const mod = modKey()
   return (
     <>
-      <MenuGroup>
-        <MenuLabel>Copy</MenuLabel>
-        <MenuItem onClick={() => void documentActions.copyRichText()}>
+      <DropdownMenuGroup>
+        <DropdownMenuLabel className="label-caps text-ink-3">Copy</DropdownMenuLabel>
+        <DropdownMenuItem onClick={() => void documentActions.copyRichText()}>
           <Copy />
           Formatted text
-        </MenuItem>
-        <MenuItem onClick={() => void documentActions.copyMarkdown()}>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => void documentActions.copyMarkdown()}>
           <Code2 />
           Markdown
-        </MenuItem>
-      </MenuGroup>
-      <MenuSeparator />
-      <MenuGroup>
-        <MenuLabel>Download</MenuLabel>
-        <MenuItem onClick={() => void documentActions.save()} hint={`${mod} S`}>
+        </DropdownMenuItem>
+      </DropdownMenuGroup>
+      <DropdownMenuSeparator />
+      <DropdownMenuGroup>
+        <DropdownMenuLabel className="label-caps text-ink-3">Download</DropdownMenuLabel>
+        <DropdownMenuItem onClick={() => void documentActions.save()}>
           <FileDown />
           Markdown (.md)
-        </MenuItem>
-        <MenuItem onClick={documentActions.downloadHtml}>
+          <DropdownMenuShortcut>{`${mod} S`}</DropdownMenuShortcut>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={documentActions.downloadHtml}>
           <FileText />
           Web page (.html)
-        </MenuItem>
-        <MenuItem onClick={documentActions.print} hint={`${mod} P`}>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={documentActions.print}>
           <Printer />
           Print or save as PDF
-        </MenuItem>
-      </MenuGroup>
+          <DropdownMenuShortcut>{`${mod} P`}</DropdownMenuShortcut>
+        </DropdownMenuItem>
+      </DropdownMenuGroup>
     </>
   )
 }

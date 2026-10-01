@@ -2,7 +2,7 @@ import { ClientOnly } from '@tanstack/react-router'
 import { Activity, useRef, useState } from 'react'
 
 import { useRenderedMarkdown } from '@/features/markdown/worker/use-rendered-markdown'
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 import { documentActions } from './actions'
 import { StatusBar } from './chrome/StatusBar'

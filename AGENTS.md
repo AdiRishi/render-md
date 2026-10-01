@@ -42,8 +42,8 @@ src/
 │   ├── editor/      CodeMirror 6: editor component, toolbar, commands, theme.
 │   ├── theme/       Light/dark/system: provider, toggle, pre-paint boot script.
 │   └── site/        Site chrome shared by content pages: header, footer, 404, analytics.
-├── ui/            Design-system primitives (Button, Menu, Dialog, CropMarks, …). No app state.
-├── lib/           Framework-free helpers (cn, format, platform, download, seo, share-link).
+├── ui/            shadcn/ui components (button, dropdown-menu, dialog, …) + our own primitives. No app state.
+├── lib/           Framework-free helpers (utils → cn, format, platform, download, seo, share-link).
 ├── styles/        Global CSS: Tailwind entry (app.css) and color tokens (tokens.css).
 └── router.tsx
 build/             Build-time tooling (the sitemap Vite plugin) — never shipped.
@@ -134,7 +134,16 @@ crosses documents.
 - `styles/app.css` — the Tailwind 4 entry. Fonts, shadows and easing live in a plain `@theme` block (emitted as CSS variables, because the CodeMirror theme and the document stylesheet read them); colors are mapped in `@theme inline`.
 - `styles/tokens.css` — the light and dark palettes.
 - `features/markdown/render/document.css` — the rendered document as plain semantic CSS scoped to `.doc`, with three typesets via `data-typeset`. It's inlined into **Export → HTML**, so keep it free of Tailwind utilities.
-- `cn()` (`lib/cn.ts`) merges classes; variants use CVA (see `ui/Button.tsx`).
+- `cn()` (`lib/utils.ts`, re-exporting the [`cn`](https://www.npmjs.com/package/cn) package) merges classes; variants use CVA (see `ui/button.tsx`).
+
+### UI components — shadcn/ui
+
+`src/ui/` is a [shadcn/ui](https://ui.shadcn.com) setup (`components.json`: the `base-vega` style on [Base UI](https://base-ui.com), RTL-ready logical classes, Lucide icons).
+
+- Add or update components with the CLI — `pnpm dlx shadcn@latest add <name>` (add `--overwrite` to pull upstream changes) — then `pnpm fix` to apply our formatting.
+- Keep generated components close to stock. The look comes from the tokens: `styles/tokens.css` maps shadcn's semantic variables (`--background`, `--popover`, `--primary`, `--muted`, `--ring`, …) onto the Paper & Proof palette, so restyle there rather than editing component classes. Per-use tweaks go in `className` at the call site.
+- Deliberate deviations are commented in the file (e.g. `sonner.tsx` takes the theme from our provider instead of `next-themes`).
+- Our own primitives that shadcn doesn't ship (`brand`, `crop-marks`, `copy-button`) live alongside them with the same naming.
 
 ## Design system — "Paper & Proof"
 
@@ -146,12 +155,11 @@ crosses documents.
 
 ## Conventions
 
-- **File names:** React components are `PascalCase.tsx`; hooks are `use-kebab-case.ts`; every other module is `kebab-case.ts`. Each file has one main export named after the file (`Outline.tsx` → `Outline`); small private helpers, or a tightly related pair (`BrandMark`/`Wordmark`), can live alongside it.
+- **File names:** feature components are `PascalCase.tsx`; hooks are `use-kebab-case.ts`; every other module is `kebab-case.ts`. Each file has one main export named after the file (`Outline.tsx` → `Outline`); small private helpers, or a tightly related pair (`BrandMark`/`Wordmark`), can live alongside it. `ui/` follows shadcn's convention instead: kebab-case files exporting a family of parts (`dropdown-menu.tsx` → `DropdownMenu`, `DropdownMenuItem`, …).
 - **Modules start with a doc comment** saying what they're for when it isn't obvious from the name.
 - **Path alias:** `@/*` → `./src/*`, used across features and layers; relative imports within a feature.
 - **No barrel files**, except where a folder is a single unit of data (`cheatsheet/content/index.ts`) or a registry (`markdown/render/elements/index.ts`). Barrels hide dependencies and defeat lazy loading.
 - **Heavy dependencies load lazily:** Shiki, Mermaid and the markdown pipeline are dynamic imports; keep them out of the initial bundle.
-- Prefer base-ui primitives (`@base-ui/react`), wrapped in `src/ui/`.
 - Keep the markdown engine pure and synchronous; add tests in `features/markdown/engine/pipeline.test.ts` for any syntax change.
 
 ## The cheat sheet (`/cheatsheet`) — an SEO page

@@ -4,7 +4,7 @@ import { use, useEffect, useState } from 'react'
 
 import { useTheme } from '@/features/theme/ThemeProvider'
 import { downloadFile } from '@/lib/download'
-import { CopyButton } from '@/ui/CopyButton'
+import { CopyButton } from '@/ui/copy-button'
 
 import { DocumentContext } from '../context'
 import { renderMermaid } from './mermaid'

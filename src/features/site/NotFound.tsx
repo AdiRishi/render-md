@@ -1,8 +1,8 @@
 import { Link } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 
-import { cn } from '@/lib/cn'
-import { buttonVariants } from '@/ui/Button'
+import { cn } from '@/lib/utils'
+import { buttonVariants } from '@/ui/button'
 
 export function NotFound() {
   return (
@@ -17,7 +17,7 @@ export function NotFound() {
         <p className="mt-5 text-[15px] leading-relaxed text-ink-2">
           The link may be mistyped, or the page has moved. Your documents are safe.
         </p>
-        <Link to="/" className={cn(buttonVariants({ variant: 'primary', size: 'lg' }), 'mt-8')}>
+        <Link to="/" className={cn(buttonVariants({ size: 'lg' }), 'mt-8')}>
           <ArrowLeft /> Back to the editor
         </Link>
       </div>

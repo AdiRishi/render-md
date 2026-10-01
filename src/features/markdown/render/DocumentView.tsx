@@ -3,7 +3,7 @@ import { toJsxRuntime } from 'hast-util-to-jsx-runtime'
 import { type Ref, useMemo } from 'react'
 import { Fragment, jsx, jsxs } from 'react/jsx-runtime'
 
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 import { type Frontmatter } from '../engine/types'
 import { DocumentContext, type DocumentContextValue } from './context'

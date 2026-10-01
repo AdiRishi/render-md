@@ -1,4 +1,4 @@
-import { CropMarks } from '@/ui/CropMarks'
+import { CropMarks } from '@/ui/crop-marks'
 
 import { useUiStore } from '../state/ui-store'
 

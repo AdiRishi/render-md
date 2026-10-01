@@ -2,8 +2,8 @@ import { Link } from '@tanstack/react-router'
 import { type Root } from 'hast'
 import { ArrowRight } from 'lucide-react'
 
-import { cn } from '@/lib/cn'
-import { buttonVariants } from '@/ui/Button'
+import { cn } from '@/lib/utils'
+import { buttonVariants } from '@/ui/button'
 
 import { CHEATSHEET_UPDATED, EXAMPLE_COUNT, SECTIONS } from '../content'
 import { HeroSpecimen } from './HeroSpecimen'
@@ -57,10 +57,7 @@ export function Hero({ specimen }: { specimen: Root }) {
         </p>
         <div className="mt-9 flex max-w-xl animate-rise flex-col gap-3 [animation-delay:240ms] sm:flex-row print:hidden">
           <SearchBox className="flex-1" />
-          <Link
-            to="/"
-            className={cn(buttonVariants({ variant: 'primary', size: 'lg' }), 'shrink-0')}
-          >
+          <Link to="/" className={cn(buttonVariants({ size: 'lg' }), 'shrink-0')}>
             Open the editor <ArrowRight />
           </Link>
         </div>

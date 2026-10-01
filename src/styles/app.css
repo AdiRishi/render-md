@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
 
 @import '@fontsource/instrument-serif/400.css';
 @import '@fontsource/instrument-serif/400-italic.css';
@@ -13,9 +14,6 @@
 @import '../features/markdown/render/document.css';
 
 @custom-variant dark (&:where(.dark, .dark *));
-@custom-variant data-open (&:where([data-open]:not([data-open='false'])));
-@custom-variant data-closed (&:where([data-closed]:not([data-closed='false'])));
-@custom-variant data-checked (&:where([data-checked]:not([data-checked='false'])));
 @custom-variant data-highlighted (&:where([data-highlighted]));
 
 /* Emitted as real CSS variables — the editor theme and the document stylesheet read them. */
@@ -70,6 +68,8 @@
     --color-primary-foreground: var(--primary-foreground);
     --color-accent: var(--accent);
     --color-accent-foreground: var(--accent-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
     --color-destructive: var(--destructive);
 
     --radius-sm: calc(var(--radius) - 4px);

@@ -1,4 +1,3 @@
-import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import {
   ArrowDownUp,
   BookOpen,
@@ -19,7 +18,6 @@ import {
   PenLine,
   Printer,
   Save,
-  Search,
   Sparkles,
   Sun,
   Type,
@@ -36,12 +34,14 @@ import { formatRelativeTime } from '@/lib/format'
 import { modKey } from '@/lib/platform'
 import {
   Command,
+  CommandDialog,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/ui/Command'
+  CommandShortcut,
+} from '@/ui/command'
 
 import { documentActions } from '../actions'
 import { useDocumentStore } from '../state/document-store'
@@ -84,224 +84,202 @@ export function CommandPalette({ headings }: { headings: HeadingEntry[] }) {
   }
 
   return (
-    <DialogPrimitive.Root open={open} onOpenChange={(next) => !next && closeDialog()}>
-      <DialogPrimitive.Portal>
-        <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-ink/20 backdrop-blur-[2px] transition-opacity duration-150 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 dark:bg-black/50" />
-        <DialogPrimitive.Popup className="fixed top-[12vh] left-1/2 z-50 w-[min(38rem,calc(100vw-1.5rem))] -translate-x-1/2 overflow-hidden rounded-2xl bg-paper shadow-float transition-[opacity,scale] duration-150 outline-none data-[ending-style]:scale-[0.98] data-[ending-style]:opacity-0 data-[starting-style]:scale-[0.98] data-[starting-style]:opacity-0">
-          <DialogPrimitive.Title className="sr-only">Command palette</DialogPrimitive.Title>
-          <Command loop className="flex max-h-[min(34rem,70vh)] flex-col">
-            <div className="flex items-center gap-3 border-b border-rule px-4">
-              <Search className="size-4 shrink-0 text-ink-3" />
-              <CommandInput autoFocus placeholder="Type a command or search…" />
-              <kbd className="font-mono text-[10.5px] text-ink-4">ESC</kbd>
-            </div>
-            <CommandList>
-              <CommandEmpty>Nothing matches that.</CommandEmpty>
+    <CommandDialog
+      open={open}
+      onOpenChange={(next) => !next && closeDialog()}
+      title="Command palette"
+      description="Search for a command to run, a heading to jump to or a recent document."
+      className="top-[12vh] sm:max-w-xl"
+    >
+      <Command
+        loop
+        className="**:[[cmdk-group-heading]]:pt-3 **:[[cmdk-group-heading]]:label-caps **:[[cmdk-group-heading]]:text-ink-3"
+      >
+        <CommandInput autoFocus placeholder="Type a command or search…" />
+        <CommandList className="max-h-[min(28rem,60vh)]">
+          <CommandEmpty>Nothing matches that.</CommandEmpty>
 
-              <CommandGroup heading="Document">
-                <CommandItem
-                  icon={<FolderOpen />}
-                  hint={`${mod} O`}
-                  onSelect={run(documentActions.openFile)}
-                >
-                  Open file…
-                </CommandItem>
-                <CommandItem
-                  icon={<Globe />}
-                  keywords={['github', 'gist', 'web', 'link']}
-                  onSelect={run(() => openDialog('open-url'))}
-                >
-                  Open from URL…
-                </CommandItem>
-                <CommandItem
-                  icon={<ClipboardPaste />}
-                  onSelect={run(documentActions.pasteFromClipboard)}
-                >
-                  Paste from clipboard
-                </CommandItem>
-                <CommandItem
-                  icon={<FilePlus2 />}
-                  keywords={['new', 'clear', 'empty']}
-                  onSelect={run(documentActions.newDocument)}
-                >
-                  Blank page
-                </CommandItem>
-                <CommandItem
-                  icon={<Sparkles />}
-                  keywords={['sample', 'demo', 'example']}
-                  onSelect={run(documentActions.loadSample)}
-                >
-                  Load the field guide
-                </CommandItem>
-                <CommandItem icon={<Link2 />} onSelect={run(() => openDialog('share'))}>
-                  Share link…
-                </CommandItem>
-              </CommandGroup>
+          <CommandGroup heading="Document">
+            <CommandItem onSelect={run(documentActions.openFile)}>
+              <FolderOpen />
+              Open file…
+              <CommandShortcut>{`${mod} O`}</CommandShortcut>
+            </CommandItem>
+            <CommandItem
+              keywords={['github', 'gist', 'web', 'link']}
+              onSelect={run(() => openDialog('open-url'))}
+            >
+              <Globe />
+              Open from URL…
+            </CommandItem>
+            <CommandItem onSelect={run(documentActions.pasteFromClipboard)}>
+              <ClipboardPaste />
+              Paste from clipboard
+            </CommandItem>
+            <CommandItem
+              keywords={['new', 'clear', 'empty']}
+              onSelect={run(documentActions.newDocument)}
+            >
+              <FilePlus2 />
+              Blank page
+            </CommandItem>
+            <CommandItem
+              keywords={['sample', 'demo', 'example']}
+              onSelect={run(documentActions.loadSample)}
+            >
+              <Sparkles />
+              Load the field guide
+            </CommandItem>
+            <CommandItem onSelect={run(() => openDialog('share'))}>
+              <Link2 />
+              Share link…
+            </CommandItem>
+          </CommandGroup>
 
-              <CommandGroup heading="Export">
-                <CommandItem
-                  icon={<Copy />}
-                  keywords={['rich', 'html', 'docs', 'gmail']}
-                  onSelect={run(documentActions.copyRichText)}
-                >
-                  Copy formatted text
-                </CommandItem>
-                <CommandItem icon={<Code2 />} onSelect={run(documentActions.copyMarkdown)}>
-                  Copy markdown
-                </CommandItem>
-                <CommandItem icon={<Save />} hint={`${mod} S`} onSelect={run(documentActions.save)}>
-                  Save markdown file
-                </CommandItem>
-                <CommandItem icon={<FileDown />} onSelect={run(documentActions.downloadHtml)}>
-                  Download as web page (.html)
-                </CommandItem>
-                <CommandItem
-                  icon={<Printer />}
-                  keywords={['pdf']}
-                  hint={`${mod} P`}
-                  onSelect={run(documentActions.print)}
-                >
-                  Print or save as PDF
-                </CommandItem>
-              </CommandGroup>
+          <CommandGroup heading="Export">
+            <CommandItem
+              keywords={['rich', 'html', 'docs', 'gmail']}
+              onSelect={run(documentActions.copyRichText)}
+            >
+              <Copy />
+              Copy formatted text
+            </CommandItem>
+            <CommandItem onSelect={run(documentActions.copyMarkdown)}>
+              <Code2 />
+              Copy markdown
+            </CommandItem>
+            <CommandItem onSelect={run(documentActions.save)}>
+              <Save />
+              Save markdown file
+              <CommandShortcut>{`${mod} S`}</CommandShortcut>
+            </CommandItem>
+            <CommandItem onSelect={run(documentActions.downloadHtml)}>
+              <FileDown />
+              Download as web page (.html)
+            </CommandItem>
+            <CommandItem keywords={['pdf']} onSelect={run(documentActions.print)}>
+              <Printer />
+              Print or save as PDF
+              <CommandShortcut>{`${mod} P`}</CommandShortcut>
+            </CommandItem>
+          </CommandGroup>
 
-              {headings.length > 0 ? (
-                <CommandGroup heading="Jump to">
-                  {headings.map((heading) => (
-                    <CommandItem
-                      key={heading.id}
-                      icon={<Hash />}
-                      keywords={['heading', 'section']}
-                      onSelect={run(() => jumpTo(heading))}
-                    >
-                      <span style={{ paddingInlineStart: `${(heading.depth - 1) * 0.75}rem` }}>
-                        {heading.text}
-                      </span>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              ) : null}
+          {headings.length > 0 ? (
+            <CommandGroup heading="Jump to">
+              {headings.map((heading) => (
+                <CommandItem
+                  key={heading.id}
+                  keywords={['heading', 'section']}
+                  onSelect={run(() => jumpTo(heading))}
+                >
+                  <Hash />
+                  <span style={{ paddingInlineStart: `${(heading.depth - 1) * 0.75}rem` }}>
+                    {heading.text}
+                  </span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          ) : null}
 
-              <CommandGroup heading="View">
-                <CommandItem
-                  icon={<PenLine />}
-                  onSelect={run(() => settings.set('viewMode', 'write'))}
-                >
-                  Write mode
-                </CommandItem>
-                <CommandItem
-                  icon={<Columns2 />}
-                  onSelect={run(() => settings.set('viewMode', 'split'))}
-                >
-                  Split mode
-                </CommandItem>
-                <CommandItem
-                  icon={<BookOpen />}
-                  keywords={['preview', 'reader']}
-                  onSelect={run(() => settings.set('viewMode', 'read'))}
-                >
-                  Read mode
-                </CommandItem>
-                <CommandItem
-                  icon={<ListTree />}
-                  keywords={['toc', 'contents']}
-                  onSelect={run(() => settings.set('showOutline', !settings.showOutline))}
-                >
-                  {settings.showOutline ? 'Hide' : 'Show'} outline when reading
-                </CommandItem>
-                <CommandItem
-                  icon={<ArrowDownUp />}
-                  onSelect={run(() => settings.set('syncScroll', !settings.syncScroll))}
-                >
-                  Turn scroll sync {settings.syncScroll ? 'off' : 'on'}
-                </CommandItem>
-              </CommandGroup>
+          <CommandGroup heading="View">
+            <CommandItem onSelect={run(() => settings.set('viewMode', 'write'))}>
+              <PenLine />
+              Write mode
+            </CommandItem>
+            <CommandItem onSelect={run(() => settings.set('viewMode', 'split'))}>
+              <Columns2 />
+              Split mode
+            </CommandItem>
+            <CommandItem
+              keywords={['preview', 'reader']}
+              onSelect={run(() => settings.set('viewMode', 'read'))}
+            >
+              <BookOpen />
+              Read mode
+            </CommandItem>
+            <CommandItem
+              keywords={['toc', 'contents']}
+              onSelect={run(() => settings.set('showOutline', !settings.showOutline))}
+            >
+              <ListTree />
+              {settings.showOutline ? 'Hide' : 'Show'} outline when reading
+            </CommandItem>
+            <CommandItem onSelect={run(() => settings.set('syncScroll', !settings.syncScroll))}>
+              <ArrowDownUp />
+              Turn scroll sync {settings.syncScroll ? 'off' : 'on'}
+            </CommandItem>
+          </CommandGroup>
 
-              <CommandGroup heading="Typeset">
-                {TYPESETS.map((typeset) => (
-                  <CommandItem
-                    key={typeset.value}
-                    icon={<Type />}
-                    keywords={['font', typeset.hint]}
-                    hint={settings.typeset === typeset.value ? 'current' : undefined}
-                    onSelect={run(() => settings.set('typeset', typeset.value))}
-                  >
-                    {typeset.label} <span className="text-ink-3">— {typeset.hint}</span>
-                  </CommandItem>
-                ))}
-                <CommandItem
-                  icon={<Workflow />}
-                  keywords={['mermaid', 'hand drawn', 'sketch']}
-                  onSelect={run(() =>
-                    settings.set(
-                      'diagramLook',
-                      settings.diagramLook === 'clean' ? 'sketch' : 'clean',
-                    ),
-                  )}
-                >
-                  Diagrams: use {settings.diagramLook === 'clean' ? 'sketch' : 'clean'} look
-                </CommandItem>
-              </CommandGroup>
+          <CommandGroup heading="Typeset">
+            {TYPESETS.map((typeset) => (
+              <CommandItem
+                key={typeset.value}
+                keywords={['font', typeset.hint]}
+                onSelect={run(() => settings.set('typeset', typeset.value))}
+              >
+                <Type />
+                {typeset.label} <span className="text-ink-3">— {typeset.hint}</span>
+                {settings.typeset === typeset.value ? (
+                  <CommandShortcut>'current'</CommandShortcut>
+                ) : null}
+              </CommandItem>
+            ))}
+            <CommandItem
+              keywords={['mermaid', 'hand drawn', 'sketch']}
+              onSelect={run(() =>
+                settings.set('diagramLook', settings.diagramLook === 'clean' ? 'sketch' : 'clean'),
+              )}
+            >
+              <Workflow />
+              Diagrams: use {settings.diagramLook === 'clean' ? 'sketch' : 'clean'} look
+            </CommandItem>
+          </CommandGroup>
 
-              <CommandGroup heading="Appearance">
-                <CommandItem
-                  icon={<Sun />}
-                  keywords={['theme']}
-                  onSelect={run(() => setPreference('light'))}
-                >
-                  Light theme
-                </CommandItem>
-                <CommandItem
-                  icon={<Moon />}
-                  keywords={['theme']}
-                  onSelect={run(() => setPreference('dark'))}
-                >
-                  Dark theme
-                </CommandItem>
-                <CommandItem
-                  icon={<Laptop />}
-                  keywords={['theme', 'auto']}
-                  onSelect={run(() => setPreference('system'))}
-                >
-                  Match system theme
-                </CommandItem>
-              </CommandGroup>
+          <CommandGroup heading="Appearance">
+            <CommandItem keywords={['theme']} onSelect={run(() => setPreference('light'))}>
+              <Sun />
+              Light theme
+            </CommandItem>
+            <CommandItem keywords={['theme']} onSelect={run(() => setPreference('dark'))}>
+              <Moon />
+              Dark theme
+            </CommandItem>
+            <CommandItem keywords={['theme', 'auto']} onSelect={run(() => setPreference('system'))}>
+              <Laptop />
+              Match system theme
+            </CommandItem>
+          </CommandGroup>
 
-              {settings.viewMode !== 'read' ? (
-                <CommandGroup heading="Insert">
-                  {INSERTS.map((insert) => (
-                    <CommandItem
-                      key={insert.command}
-                      icon={<PenLine />}
-                      onSelect={run(() => {
-                        const view = getEditorView()
-                        if (view) formatting[insert.command](view)
-                      })}
-                    >
-                      {insert.label}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              ) : null}
+          {settings.viewMode !== 'read' ? (
+            <CommandGroup heading="Insert">
+              {INSERTS.map((insert) => (
+                <CommandItem
+                  key={insert.command}
+                  onSelect={run(() => {
+                    const view = getEditorView()
+                    if (view) formatting[insert.command](view)
+                  })}
+                >
+                  <PenLine />
+                  {insert.label}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          ) : null}
 
-              {recents.length > 0 ? (
-                <CommandGroup heading="Recent">
-                  {recents.map((recent) => (
-                    <CommandItem
-                      key={recent.id}
-                      icon={<FileText />}
-                      hint={formatRelativeTime(recent.updatedAt)}
-                      onSelect={run(() => restoreRecent(recent.id))}
-                    >
-                      {recent.name ?? guessTitle(recent.markdown) ?? 'Untitled'}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              ) : null}
-            </CommandList>
-          </Command>
-        </DialogPrimitive.Popup>
-      </DialogPrimitive.Portal>
-    </DialogPrimitive.Root>
+          {recents.length > 0 ? (
+            <CommandGroup heading="Recent">
+              {recents.map((recent) => (
+                <CommandItem key={recent.id} onSelect={run(() => restoreRecent(recent.id))}>
+                  <FileText />
+                  {recent.name ?? guessTitle(recent.markdown) ?? 'Untitled'}
+                  <CommandShortcut>{formatRelativeTime(recent.updatedAt)}</CommandShortcut>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          ) : null}
+        </CommandList>
+      </Command>
+    </CommandDialog>
   )
 }

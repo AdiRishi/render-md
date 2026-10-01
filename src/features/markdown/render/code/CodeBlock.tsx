@@ -1,7 +1,7 @@
 import { type CSSProperties, Fragment, useEffect, useState } from 'react'
 
-import { cn } from '@/lib/cn'
-import { CopyButton } from '@/ui/CopyButton'
+import { cn } from '@/lib/utils'
+import { CopyButton } from '@/ui/copy-button'
 
 import { type HighlightedLine, highlightCode, peekLanguageLabel } from './highlighter'
 

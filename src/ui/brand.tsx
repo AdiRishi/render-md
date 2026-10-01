@@ -1,4 +1,4 @@
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 /** The markdown mark, re-set: an ink sheet, a paper "M", a proof-red arrow. */
 export function BrandMark({ className }: { className?: string }) {

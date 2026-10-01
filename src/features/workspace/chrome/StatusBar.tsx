@@ -1,8 +1,8 @@
 import { ArrowDownUp } from 'lucide-react'
 
 import { type DocumentStats } from '@/features/markdown/engine/stats'
-import { cn } from '@/lib/cn'
 import { formatNumber } from '@/lib/format'
+import { cn } from '@/lib/utils'
 
 import { useDocumentStore, usePersistStatus } from '../state/document-store'
 import { useSettingsStore } from '../state/settings-store'

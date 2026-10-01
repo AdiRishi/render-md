@@ -1,6 +1,6 @@
 import { ClipboardPaste, FolderOpen, Globe, Sparkles } from 'lucide-react'
 
-import { Button } from '@/ui/Button'
+import { Button } from '@/ui/button'
 
 import { documentActions } from '../../actions'
 import { useUiStore } from '../../state/ui-store'

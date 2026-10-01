@@ -3,11 +3,16 @@ import { Download, FolderOpen, Link2, MoreHorizontal, Search } from 'lucide-reac
 
 import { ThemeToggle } from '@/features/theme/ThemeToggle'
 import { modKey } from '@/lib/platform'
-import { BrandMark, Wordmark } from '@/ui/Brand'
-import { Button } from '@/ui/Button'
-import { Kbd } from '@/ui/Kbd'
-import { Menu, MenuContent, MenuSeparator, MenuTrigger } from '@/ui/Menu'
-import { Tooltip } from '@/ui/Tooltip'
+import { BrandMark, Wordmark } from '@/ui/brand'
+import { Button } from '@/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/ui/dropdown-menu'
+import { Kbd, KbdGroup } from '@/ui/kbd'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/ui/tooltip'
 
 import { useUiStore } from '../state/ui-store'
 import { DocumentTitle } from './DocumentTitle'
@@ -38,63 +43,74 @@ export function TopBar() {
 
       <div className="flex flex-1 items-center justify-end gap-1">
         <div className="flex items-center gap-1 max-md:hidden">
-          <Menu>
-            <MenuTrigger render={<Button className="gap-1.5 px-2.5" />}>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={<Button variant="ghost" size="sm" className="gap-1.5 px-2.5" />}
+            >
               <FolderOpen />
               <span className="max-xl:hidden">Open</span>
-            </MenuTrigger>
-            <MenuContent align="end">
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-60">
               <OpenMenuItems />
-            </MenuContent>
-          </Menu>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          <Menu>
-            <MenuTrigger render={<Button className="gap-1.5 px-2.5" />}>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={<Button variant="ghost" size="sm" className="gap-1.5 px-2.5" />}
+            >
               <Download />
               <span className="max-xl:hidden">Export</span>
-            </MenuTrigger>
-            <MenuContent align="end">
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-60">
               <ExportMenuItems />
-            </MenuContent>
-          </Menu>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <ReaderSettings />
         <ThemeToggle />
 
-        <Menu>
-          <MenuTrigger render={<Button size="icon" aria-label="More" className="md:hidden" />}>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <Button variant="ghost" size="icon-sm" aria-label="More" className="md:hidden" />
+            }
+          >
             <MoreHorizontal />
-          </MenuTrigger>
-          <MenuContent align="end" className="w-64">
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-64">
             <OpenMenuItems />
-            <MenuSeparator />
+            <DropdownMenuSeparator />
             <ExportMenuItems />
-          </MenuContent>
-        </Menu>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-        <Tooltip
-          label="Command palette"
-          shortcut={
-            <>
-              <Kbd>{mod}</Kbd>
-              <Kbd>K</Kbd>
-            </>
-          }
-        >
-          <Button
-            size="icon"
-            aria-label="Command palette"
-            onClick={() => openDialog('palette')}
-            className="max-sm:hidden"
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                aria-label="Command palette"
+                onClick={() => openDialog('palette')}
+                className="max-sm:hidden"
+              />
+            }
           >
             <Search />
-          </Button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">
+            Command palette
+            <KbdGroup>
+              <Kbd>{mod}</Kbd>
+              <Kbd>K</Kbd>
+            </KbdGroup>
+          </TooltipContent>
         </Tooltip>
 
         <Button
-          variant="primary"
-          size="md"
+          size="sm"
           className="ms-1.5 gap-1.5 max-sm:px-2.5"
           onClick={() => openDialog('share')}
         >

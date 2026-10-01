@@ -1,7 +1,7 @@
 import { type RefObject, useEffect, useState } from 'react'
 
 import { type HeadingEntry } from '@/features/markdown/engine/pipeline'
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 /** Outline (read mode) */
 export function Outline({

@@ -1,7 +1,7 @@
 import { type Root } from 'hast'
 
 import { DocumentView } from '@/features/markdown/render/DocumentView'
-import { CropMarks } from '@/ui/CropMarks'
+import { CropMarks } from '@/ui/crop-marks'
 
 import { HERO_SOURCE } from '../data'
 

@@ -1,4 +1,4 @@
-import { BrandMark, Wordmark } from '@/ui/Brand'
+import { BrandMark, Wordmark } from '@/ui/brand'
 
 /** Server-rendered first paint: the shape of the workspace with a real intro. */
 export function WorkspaceSkeleton() {

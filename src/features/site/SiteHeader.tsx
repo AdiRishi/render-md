@@ -2,9 +2,9 @@ import { Link } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
 
 import { ThemeToggle } from '@/features/theme/ThemeToggle'
-import { cn } from '@/lib/cn'
-import { BrandMark, Wordmark } from '@/ui/Brand'
-import { buttonVariants } from '@/ui/Button'
+import { cn } from '@/lib/utils'
+import { BrandMark, Wordmark } from '@/ui/brand'
+import { buttonVariants } from '@/ui/button'
 
 export function SiteHeader() {
   return (
@@ -22,7 +22,7 @@ export function SiteHeader() {
             Cheatsheet
           </Link>
           <ThemeToggle />
-          <Link to="/" className={cn(buttonVariants({ variant: 'primary' }), 'ms-1')}>
+          <Link to="/" className={cn(buttonVariants({ size: 'sm' }), 'ms-1')}>
             <span className="max-sm:hidden">Open editor</span>
             <span className="sm:hidden">Editor</span>
             <ArrowRight />

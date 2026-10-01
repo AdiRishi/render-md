@@ -1,6 +1,6 @@
 import { type CSSProperties } from 'react'
 
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 const CORNERS: Array<{ position: CSSProperties; borders: string }> = [
   {

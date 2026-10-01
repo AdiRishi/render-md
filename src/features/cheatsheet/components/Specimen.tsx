@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 
 import { stripHeadingIds } from '@/features/markdown/engine/hast'
 import { DocumentView } from '@/features/markdown/render/DocumentView'
-import { CopyButton } from '@/ui/CopyButton'
-import { Tooltip } from '@/ui/Tooltip'
+import { CopyButton } from '@/ui/copy-button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/ui/tooltip'
 
 import { type CheatsheetEntry } from '../content'
 
@@ -63,30 +63,40 @@ export function Specimen({ entry, hast }: { entry: CheatsheetEntry; hast: Root }
             )}
             <span className="ms-auto flex items-center print:hidden">
               {edited ? (
-                <Tooltip label="Reset example">
-                  <button
-                    type="button"
-                    aria-label="Reset example"
-                    className={iconButton}
-                    onClick={() => {
-                      setSource(entry.source)
-                      setRendered(hast)
-                    }}
+                <Tooltip>
+                  <TooltipTrigger
+                    render={
+                      <button
+                        type="button"
+                        aria-label="Reset example"
+                        className={iconButton}
+                        onClick={() => {
+                          setSource(entry.source)
+                          setRendered(hast)
+                        }}
+                      />
+                    }
                   >
                     <RotateCcw className="size-3.5" />
-                  </button>
+                  </TooltipTrigger>
+                  <TooltipContent>Reset example</TooltipContent>
                 </Tooltip>
               ) : null}
               <CopyButton value={source} label="Copy markdown" />
-              <Tooltip label="Open in the editor">
-                <button
-                  type="button"
-                  aria-label="Open in the editor"
-                  className={iconButton}
-                  onClick={() => void openInEditor(source)}
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <button
+                      type="button"
+                      aria-label="Open in the editor"
+                      className={iconButton}
+                      onClick={() => void openInEditor(source)}
+                    />
+                  }
                 >
                   <ArrowUpRight className="size-4" />
-                </button>
+                </TooltipTrigger>
+                <TooltipContent>Open in the editor</TooltipContent>
               </Tooltip>
             </span>
           </div>
