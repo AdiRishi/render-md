@@ -9,7 +9,7 @@ export function NotFound() {
     <div className="grid min-h-screen place-items-center desk-grid p-6">
       <div className="relative w-full max-w-lg rounded-[3px] bg-paper px-10 py-14 shadow-paper">
         <p className="label-caps text-proof">Error 404 · Page not found</p>
-        <h1 className="mt-4 font-display text-6xl leading-[0.95] tracking-tight text-ink">
+        <h1 className="mt-4 font-display text-6xl leading-[1.02] tracking-tight text-ink">
           This page was
           <br />
           <em className="text-ink-3 line-through decoration-proof decoration-2">never written.</em>

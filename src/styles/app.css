@@ -2,10 +2,8 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
-@import '@fontsource/instrument-serif/400.css';
-@import '@fontsource/instrument-serif/400-italic.css';
-@import '@fontsource-variable/instrument-sans/wght.css';
-@import '@fontsource-variable/instrument-sans/wght-italic.css';
+@import '@fontsource-variable/hanken-grotesk/wght.css';
+@import '@fontsource-variable/hanken-grotesk/wght-italic.css';
 @import '@fontsource-variable/newsreader/standard.css';
 @import '@fontsource-variable/newsreader/standard-italic.css';
 @import '@fontsource-variable/geist-mono/wght.css';
@@ -18,8 +16,9 @@
 
 /* Emitted as real CSS variables — the editor theme and the document stylesheet read them. */
 @theme {
-    --font-sans: 'Instrument Sans Variable', ui-sans-serif, system-ui, sans-serif;
-    --font-display: 'Instrument Serif', ui-serif, Georgia, serif;
+    --font-sans: 'Hanken Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+    /* Newsreader's optical-size axis gives headings its display cut automatically. */
+    --font-display: 'Newsreader Variable', ui-serif, Georgia, serif;
     --font-serif: 'Newsreader Variable', ui-serif, Georgia, serif;
     --font-mono:
         'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono',
@@ -108,7 +107,6 @@
     body {
         background: var(--desk);
         color: var(--ink);
-        font-feature-settings: 'ss01', 'cv11';
     }
 
     ::selection {

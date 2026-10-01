@@ -11,7 +11,7 @@ export function EmptyState() {
   return (
     <div className="flex flex-col items-start py-6">
       <p className="mb-5 label-caps text-proof">Nothing to render — yet</p>
-      <h2 className="font-display text-[clamp(2.4rem,5vw,3.4rem)] leading-[0.95] tracking-[-0.015em] text-ink">
+      <h2 className="font-display text-[clamp(2.4rem,5vw,3.4rem)] leading-[1.02] tracking-[-0.015em] text-ink">
         A blank page,
         <br />
         <em className="text-ink-3">full of promise.</em>

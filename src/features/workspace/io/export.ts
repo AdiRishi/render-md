@@ -31,7 +31,7 @@ const TOKENS = [
 const KATEX_VERSION = '0.18.10'
 
 const FONTS_HREF =
-  'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap'
+  'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap'
 
 function escapeHtml(value: string) {
   return value.replace(/[&<>"]/g, (char) => `&#${char.charCodeAt(0)};`)
@@ -84,7 +84,7 @@ export function buildStandaloneHtml(article: HTMLElement, title: string) {
 <link rel="stylesheet" href="${FONTS_HREF}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@${KATEX_VERSION}/dist/katex.min.css" crossorigin="anonymous">
 <style>
-:root{${tokens}--font-sans:'Instrument Sans',system-ui,sans-serif;--font-display:'Instrument Serif',Georgia,serif;--font-serif:'Newsreader',Georgia,serif;--font-mono:'Geist Mono',ui-monospace,monospace;color-scheme:${isDark ? 'dark' : 'light'}}
+:root{${tokens}--font-sans:'Hanken Grotesk',system-ui,sans-serif;--font-display:'Newsreader',Georgia,serif;--font-serif:'Newsreader',Georgia,serif;--font-mono:'Geist Mono',ui-monospace,monospace;color-scheme:${isDark ? 'dark' : 'light'}}
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 body{margin:0;background:var(--paper);color:var(--ink)}

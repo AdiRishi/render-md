@@ -46,7 +46,7 @@ export function Hero({ specimen }: { specimen: Root }) {
         <p className="mt-14 animate-rise label-caps text-proof [animation-delay:60ms] md:mt-20">
           The complete reference · {SECTIONS.length} topics · {EXAMPLE_COUNT} live examples
         </p>
-        <h1 className="mt-5 max-w-3xl animate-rise font-display text-[clamp(3.4rem,10vw,8rem)] leading-[0.86] tracking-[-0.03em] text-ink [animation-delay:120ms]">
+        <h1 className="mt-5 max-w-3xl animate-rise font-display text-[clamp(3.4rem,10vw,8rem)] leading-[0.88] tracking-[-0.02em] text-ink [animation-delay:120ms]">
           Markdown <br />
           <em className="text-ink-3">cheat sheet</em>
         </h1>

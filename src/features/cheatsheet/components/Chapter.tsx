@@ -14,7 +14,7 @@ export function Chapter({ chapter, data }: { chapter: CheatsheetChapter; data: C
         <div>
           <h2
             id={`${chapter.id}-title`}
-            className="font-display text-[clamp(2.4rem,5vw,3.6rem)] leading-[0.95] tracking-[-0.015em] text-ink"
+            className="font-display text-[clamp(2.4rem,5vw,3.6rem)] leading-none tracking-[-0.015em] text-ink"
           >
             {chapter.title}
           </h2>

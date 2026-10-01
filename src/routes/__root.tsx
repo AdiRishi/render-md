@@ -1,6 +1,6 @@
 import geistMonoWoff2 from '@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2?url'
-import instrumentSansWoff2 from '@fontsource-variable/instrument-sans/files/instrument-sans-latin-wght-normal.woff2?url'
-import instrumentSerifWoff2 from '@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2?url'
+import hankenGroteskWoff2 from '@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2?url'
+import newsreaderWoff2 from '@fontsource-variable/newsreader/files/newsreader-latin-standard-normal.woff2?url'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { ClientOnly, HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
@@ -33,9 +33,9 @@ export const Route = createRootRoute({
       { name: 'theme-color', content: THEME_COLOR },
     ],
     links: [
-      preloadFont(instrumentSansWoff2),
+      preloadFont(hankenGroteskWoff2),
       preloadFont(geistMonoWoff2),
-      preloadFont(instrumentSerifWoff2),
+      preloadFont(newsreaderWoff2),
       { rel: 'stylesheet', href: appCss },
       { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
       { rel: 'icon', type: 'image/png', sizes: '48x48', href: '/favicon-48.png' },

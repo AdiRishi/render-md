@@ -82,7 +82,7 @@ export function renderMermaid(code: string, theme: ResolvedTheme, look: DiagramL
       theme: 'base',
       look: look === 'sketch' ? 'handDrawn' : 'classic',
       handDrawnSeed: 7,
-      fontFamily: 'Instrument Sans Variable, ui-sans-serif, sans-serif',
+      fontFamily: 'Hanken Grotesk Variable, ui-sans-serif, sans-serif',
       themeVariables: { ...PALETTES[theme], fontSize: '15px' },
       flowchart: { curve: 'basis', padding: 14 },
       suppressErrorRendering: true,

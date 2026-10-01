@@ -149,7 +149,7 @@ crosses documents.
 
 - The **desk** (warm grey with a faint dot grid) is where you work; **paper** is what you make; **proof red** (`--proof`) marks intent — the color of a proofreader's pencil. Use it sparingly: active states, the caret, the brand arrow.
 - Ink scale: `ink` → `ink-2` → `ink-3` → `ink-4`. Rules: `rule`, `rule-strong`.
-- Type: **Instrument Serif** (display), **Instrument Sans** (UI, Modern typeset), **Newsreader** (Editorial body), **Geist Mono** (code, labels). Small mono uppercase labels use the `label-caps` utility.
+- Type: **Newsreader** (display headings, at its optical display size, and the Editorial body), **Hanken Grotesk** (UI, Modern typeset), **Geist Mono** (code, labels). Small mono uppercase labels use the `label-caps` utility.
 - Printer's details: crop marks around sheets, a `¶` folio line, `§` heading anchors, `⁂` for horizontal rules.
 - Light and dark themes are both first-class; theme preference is `light | dark | system`, resolved pre-paint by an inline script (`features/theme/theme.ts`) and switched with a View Transition.
 
