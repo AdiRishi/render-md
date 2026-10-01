@@ -88,7 +88,22 @@ describe('renderMarkdown', () => {
     const out = html('Party :tada:[^1]\n\n[^1]: A note.')
     expect(out).toContain('🎉')
     expect(out).toContain('data-footnotes')
-    expect(out).toContain('href="#fn-1"')
+    // Footnote links must point at ids that exist (also in exported HTML).
+    const href = /href="#([^"]+)"[^>]*data-footnote-ref/.exec(out)?.[1]
+    expect(href).toBeTruthy()
+    expect(out).toContain(`id="${href}"`)
+  })
+
+  it('keeps the footnote label out of the outline and title', () => {
+    const result = renderMarkdown('Text[^1]\n\n[^1]: Note.')
+    expect(result.headings).toEqual([])
+    expect(result.title).toBeNull()
+  })
+
+  it('survives cyclic YAML frontmatter', () => {
+    const result = renderMarkdown('---\na: &x\n  b: *x\n---\n\n# Doc')
+    expect(() => JSON.stringify(result.frontmatter)).not.toThrow()
+    expect(result.title).toBe('Doc')
   })
 
   it('counts words across scripts', () => {

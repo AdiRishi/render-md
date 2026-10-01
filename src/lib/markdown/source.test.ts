@@ -25,5 +25,7 @@ describe('guessTitle', () => {
     expect(guessTitle('intro\n\n## The **Real** [Title](x)')).toBe('The Real Title')
     expect(guessTitle('Just some *text* here')).toBe('Just some text here')
     expect(guessTitle('   \n\n')).toBeNull()
+    // A later `---` block is not frontmatter.
+    expect(guessTitle('Intro\n\n---\ntitle: Wrong\n\n---')).toBe('Intro')
   })
 })

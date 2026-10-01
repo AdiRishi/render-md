@@ -2,7 +2,7 @@ import { ArrowDownUp } from 'lucide-react'
 
 import { type DocumentStats } from '@/lib/markdown/stats'
 import { cn, formatNumber } from '@/lib/utils'
-import { useDocumentStore } from '@/stores/document-store'
+import { useDocumentStore, usePersistStatus } from '@/stores/document-store'
 import { useSettingsStore } from '@/stores/settings-store'
 import { useUiStore } from '@/stores/ui-store'
 
@@ -11,6 +11,7 @@ const Dot = () => <span className="text-ink-4">·</span>
 export function StatusBar({ stats }: { stats: DocumentStats | null }) {
   const cursor = useUiStore((state) => state.cursor)
   const source = useDocumentStore((state) => state.source)
+  const saved = usePersistStatus((state) => state.saved)
   const viewMode = useSettingsStore((state) => state.viewMode)
   const syncScroll = useSettingsStore((state) => state.syncScroll)
   const setSetting = useSettingsStore((state) => state.set)
@@ -51,13 +52,23 @@ export function StatusBar({ stats }: { stats: DocumentStats | null }) {
           </button>
         ) : null}
 
-        <span
-          className="flex items-center gap-1.5"
-          title="Your document is stored in this browser only"
-        >
-          <span className="size-1.5 rounded-full bg-[color:var(--alert-tip)]" />
-          {source === 'shared' ? 'Shared copy · saved on this device' : 'Saved on this device'}
-        </span>
+        {saved ? (
+          <span
+            className="flex items-center gap-1.5"
+            title="Your document is stored in this browser only"
+          >
+            <span className="size-1.5 rounded-full bg-[color:var(--alert-tip)]" />
+            {source === 'shared' ? 'Shared copy · saved on this device' : 'Saved on this device'}
+          </span>
+        ) : (
+          <span
+            className="flex items-center gap-1.5 text-[color:var(--alert-caution)]"
+            title="Browser storage is full or unavailable. Save the file to disk to keep it."
+          >
+            <span className="size-1.5 rounded-full bg-current" />
+            Not saved — too large for browser storage
+          </span>
+        )}
       </span>
     </footer>
   )

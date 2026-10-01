@@ -21,6 +21,15 @@ describe('parseRemoteInput', () => {
     )
   })
 
+  it('treats raw, edit and blame pages as single files', () => {
+    for (const kind of ['raw', 'edit', 'blame']) {
+      expect(parseRemoteInput(`https://github.com/o/r/${kind}/main/docs/a.md`).candidates).toEqual([
+        'https://raw.githubusercontent.com/o/r/main/docs/a.md',
+      ])
+    }
+    expect(parseRemoteInput('https://example.com/100%zz.md').name).toBe('100%zz.md')
+  })
+
   it('handles gists and GitLab', () => {
     expect(parseRemoteInput('https://gist.github.com/alice/abc123').candidates).toEqual([
       'https://gist.githubusercontent.com/alice/abc123/raw',

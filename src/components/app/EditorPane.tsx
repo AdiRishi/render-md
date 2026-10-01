@@ -144,6 +144,8 @@ function Toolbar() {
 
 export function EditorPane() {
   const markdown = useDocumentStore((state) => state.markdown)
+  // A fresh editor per loaded document: undo history must never cross files.
+  const loadKey = useDocumentStore((state) => state.loadKey)
   const setMarkdown = useDocumentStore((state) => state.setMarkdown)
   const setCursor = useUiStore((state) => state.setCursor)
 
@@ -168,6 +170,7 @@ export function EditorPane() {
       <Toolbar />
       <div className="min-h-0 flex-1">
         <CodeMirror
+          key={loadKey}
           value={markdown}
           onChange={setMarkdown}
           onUpdate={onUpdate}

@@ -8,7 +8,7 @@ import { useHotkeys } from '@/hooks/use-hotkeys'
 import { useRenderedMarkdown } from '@/hooks/use-rendered-markdown'
 import { useScrollSync } from '@/hooks/use-scroll-sync'
 import { rememberFileHandle } from '@/lib/file-system'
-import { decodeShareFragment, readSharePayload } from '@/lib/share'
+import { decodeShareFragment, readSharePayload, readShareView } from '@/lib/share'
 import { cn } from '@/lib/utils'
 import { useDocumentStore } from '@/stores/document-store'
 import { useSettingsStore } from '@/stores/settings-store'
@@ -32,30 +32,38 @@ type LaunchQueueWindow = Window & {
 /** Incoming documents are consumed once per page load (StrictMode re-runs effects). */
 let incomingHandled = false
 
+const cleanUrl = () => window.history.replaceState(null, '', window.location.pathname)
+
+/** Open the share link in the current URL fragment, if there is one. */
+function openSharedFromHash() {
+  const payload = readSharePayload(window.location.hash)
+  if (!payload) return false
+  const view = readShareView(window.location.hash)
+  decodeShareFragment(payload).then(
+    (markdown) => {
+      documentActions.openShared(markdown, view)
+      cleanUrl()
+    },
+    () =>
+      toast.error('That share link looks damaged', {
+        description: 'It may have been cut off when copied.',
+      }),
+  )
+  return true
+}
+
 function useIncomingDocuments(initialUrl: string | undefined, startBlank: boolean | undefined) {
   useEffect(() => {
     if (incomingHandled) return
     incomingHandled = true
 
-    const payload = readSharePayload(window.location.hash)
-    const clean = () => window.history.replaceState(null, '', window.location.pathname)
-
-    if (payload) {
-      decodeShareFragment(payload).then(
-        (markdown) => {
-          documentActions.openShared(markdown)
-          clean()
-        },
-        () =>
-          toast.error('That share link looks damaged', {
-            description: 'It may have been cut off when copied.',
-          }),
-      )
+    if (openSharedFromHash()) {
+      // Handled.
     } else if (initialUrl) {
-      void documentActions.openUrl(initialUrl).then(clean)
+      void documentActions.openUrl(initialUrl).then(cleanUrl)
     } else if (startBlank) {
       documentActions.newDocument()
-      clean()
+      cleanUrl()
     }
 
     // Installed as an app: "Open with RenderMD" from the OS file manager.
@@ -72,6 +80,13 @@ function useIncomingDocuments(initialUrl: string | undefined, startBlank: boolea
       })()
     })
   }, [initialUrl, startBlank])
+
+  // A share link pasted into the address bar of an open tab only changes the hash.
+  useEffect(() => {
+    const onHashChange = () => void openSharedFromHash()
+    window.addEventListener('hashchange', onHashChange)
+    return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
 }
 
 /* -- Draggable divider --------------------------------------------------- */
@@ -149,7 +164,7 @@ export function Workspace({
   const containerRef = useRef<HTMLDivElement>(null)
   const previewRef = useRef<HTMLDivElement>(null)
 
-  const { result } = useRenderedMarkdown(markdown, baseUrl)
+  const { result, error } = useRenderedMarkdown(markdown, baseUrl)
 
   useHotkeys()
   useFileDrop(openDroppedFile)
@@ -189,7 +204,7 @@ export function Workspace({
             aria-label="Preview"
             className={cn('min-w-0 flex-1', viewMode === 'split' && 'max-md:hidden')}
           >
-            <PreviewPane result={result} scrollRef={previewRef} />
+            <PreviewPane result={result} error={error} scrollRef={previewRef} />
           </section>
         </Activity>
       </main>

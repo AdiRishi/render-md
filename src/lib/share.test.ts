@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
-import { createShareUrl, decodeShareFragment, encodeShareFragment, readSharePayload } from './share'
+import {
+  createShareUrl,
+  decodeShareFragment,
+  encodeShareFragment,
+  readSharePayload,
+  readShareView,
+} from './share'
 
 describe('share links', () => {
   it('round-trips markdown through a compressed fragment', async () => {
@@ -19,6 +25,13 @@ describe('share links', () => {
     const payload = readSharePayload(new URL(url).hash)
     expect(payload).not.toBeNull()
     await expect(decodeShareFragment(payload!)).resolves.toBe('# Hi')
+  })
+
+  it('carries an optional view', async () => {
+    const url = new URL(await createShareUrl('# Hi', 'https://x.dev', { view: 'split' }))
+    expect(readShareView(url.hash)).toBe('split')
+    await expect(decodeShareFragment(readSharePayload(url.hash)!)).resolves.toBe('# Hi')
+    expect(readShareView('#md=abc')).toBe('read')
   })
 
   it('ignores unrelated fragments', () => {

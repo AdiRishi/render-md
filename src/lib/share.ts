@@ -56,12 +56,24 @@ export async function decodeShareFragment(payload: string) {
   }
 }
 
+export type ShareView = 'read' | 'split' | 'write'
+
 export function readSharePayload(hash: string) {
   const params = new URLSearchParams(hash.replace(/^#/, ''))
   return params.get(SHARE_PARAM)
 }
 
-export async function createShareUrl(markdown: string, origin: string) {
+/** The view a share link asks to open in (defaults to reading). */
+export function readShareView(hash: string): ShareView {
+  const view = new URLSearchParams(hash.replace(/^#/, '')).get('view')
+  return view === 'split' || view === 'write' ? view : 'read'
+}
+
+export async function createShareUrl(
+  markdown: string,
+  origin: string,
+  { view = 'read' }: { view?: ShareView } = {},
+) {
   const payload = await encodeShareFragment(markdown)
-  return `${origin}/#${SHARE_PARAM}=${payload}`
+  return `${origin}/#${SHARE_PARAM}=${payload}${view === 'read' ? '' : `&view=${view}`}`
 }

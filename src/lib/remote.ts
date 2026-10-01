@@ -21,7 +21,12 @@ const README_NAMES = ['README.md', 'readme.md', 'Readme.md', 'README.markdown', 
 
 function fileName(pathname: string) {
   const last = pathname.split('/').findLast(Boolean)
-  return last ? decodeURIComponent(last) : 'document.md'
+  if (!last) return 'document.md'
+  try {
+    return decodeURIComponent(last)
+  } catch {
+    return last
+  }
 }
 
 export function parseRemoteInput(input: string): RemoteTarget {
@@ -46,7 +51,8 @@ export function parseRemoteInput(input: string): RemoteTarget {
     const [owner, repo, kind, ref, ...path] = parts
     const raw = `https://raw.githubusercontent.com/${owner}/${repo}`
 
-    if (kind === 'blob' && ref && path.length > 0) {
+    // blob, raw, edit and blame pages all point at a single file.
+    if (['blob', 'raw', 'edit', 'blame'].includes(kind) && ref && path.length > 0) {
       return { candidates: [`${raw}/${ref}/${path.join('/')}`], name: fileName(url.pathname) }
     }
     const base = kind === 'tree' && ref ? `${raw}/${[ref, ...path].join('/')}` : `${raw}/HEAD`

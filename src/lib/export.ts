@@ -48,6 +48,19 @@ export function cleanArticle(article: HTMLElement) {
     .forEach((node) => node.setAttribute('disabled', ''))
   clone.querySelectorAll('[data-line]').forEach((node) => node.removeAttribute('data-line'))
   clone.querySelectorAll('pre[tabindex]').forEach((node) => node.removeAttribute('tabindex'))
+  // Links must work outside the app: unwrap "open in RenderMD" links and make
+  // every other non-fragment link absolute.
+  clone.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((anchor) => {
+    const href = anchor.getAttribute('href') ?? ''
+    if (href.startsWith('#')) return
+    try {
+      const url = new URL(href, window.location.href)
+      const original = url.origin === window.location.origin ? url.searchParams.get('url') : null
+      anchor.setAttribute('href', original ?? url.href)
+    } catch {
+      // Leave unparsable links alone.
+    }
+  })
   return clone
 }
 

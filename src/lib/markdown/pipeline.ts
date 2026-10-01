@@ -19,6 +19,7 @@ import {
   rehypeBaseUrl,
   rehypeCollectHeadings,
   rehypeMath,
+  rehypeResolveFragmentLinks,
   rehypeSourceLines,
   rehypeStripPositions,
   remarkCodeMeta,
@@ -68,6 +69,7 @@ function getProcessor({ baseUrl = null, stripPositions = false }: RenderOptions)
     .use(rehypeMath)
     .use(rehypeAlerts)
     .use(rehypeSlug)
+    .use(rehypeResolveFragmentLinks)
     .use(rehypeBaseUrl, baseUrl)
     .use(rehypeCollectHeadings)
 

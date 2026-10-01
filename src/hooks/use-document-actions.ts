@@ -13,7 +13,7 @@ import { guessTitle } from '@/lib/markdown/source'
 import { fetchRemoteMarkdown } from '@/lib/remote'
 import { toFileSlug } from '@/lib/utils'
 import { SAMPLE_MARKDOWN, useDocumentStore } from '@/stores/document-store'
-import { useSettingsStore } from '@/stores/settings-store'
+import { type ViewMode, useSettingsStore } from '@/stores/settings-store'
 import { previewArticle } from '@/stores/ui-store'
 
 function errorMessage(error: unknown) {
@@ -113,12 +113,12 @@ export const documentActions = {
     }
   },
 
-  openShared: (markdown: string) => {
+  openShared: (markdown: string, view: ViewMode = 'read') => {
     replaceDocument(
       () => useDocumentStore.getState().openDocument({ markdown, source: 'shared' }),
       'Opened a shared document',
     )
-    useSettingsStore.getState().set('viewMode', 'read')
+    useSettingsStore.getState().set('viewMode', view)
   },
 
   newDocument: () => {

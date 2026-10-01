@@ -32,18 +32,21 @@ export function useFileDrop(onFile: (file: File) => void) {
       depth = 0
       setDragging(false)
       const file = findMarkdownFile(event.dataTransfer?.files)
-      if (file) onFile(file)
+      if (!file) return
+      // Capture phase: stop CodeMirror from also inserting the file's text.
+      event.stopPropagation()
+      onFile(file)
     }
 
     window.addEventListener('dragenter', onEnter)
     window.addEventListener('dragover', onOver)
     window.addEventListener('dragleave', onLeave)
-    window.addEventListener('drop', onDrop)
+    window.addEventListener('drop', onDrop, { capture: true })
     return () => {
       window.removeEventListener('dragenter', onEnter)
       window.removeEventListener('dragover', onOver)
       window.removeEventListener('dragleave', onLeave)
-      window.removeEventListener('drop', onDrop)
+      window.removeEventListener('drop', onDrop, { capture: true })
     }
   }, [onFile])
 }

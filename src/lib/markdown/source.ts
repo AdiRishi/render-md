@@ -19,7 +19,9 @@ export function toggleTaskAtLine(markdown: string, line: number) {
 
 /** A cheap title guess for lists (recent documents) without a full render. */
 export function guessTitle(markdown: string) {
-  const frontmatterTitle = /^---\n[\s\S]*?^title:\s*["']?(.+?)["']?\s*$[\s\S]*?^---/m.exec(markdown)
+  // Frontmatter only counts at the very start of the document.
+  const frontmatter = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(markdown)
+  const frontmatterTitle = frontmatter && /^title:\s*["']?(.+?)["']?\s*$/m.exec(frontmatter[1])
   if (frontmatterTitle) return frontmatterTitle[1].trim()
 
   const heading = /^#{1,2}\s+(.+?)\s*#*\s*$/m.exec(markdown)

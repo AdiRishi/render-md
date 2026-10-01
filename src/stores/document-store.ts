@@ -25,6 +25,8 @@ export type OpenDocumentInput = Pick<DocumentRecord, 'markdown' | 'source'> &
 
 type DocumentStore = DocumentRecord & {
   recents: DocumentRecord[]
+  /** Bumped whenever a different document is loaded (not persisted). */
+  loadKey: number
   setMarkdown: (markdown: string) => void
   openDocument: (input: OpenDocumentInput) => void
   restoreRecent: (id: string) => void
@@ -33,8 +35,10 @@ type DocumentStore = DocumentRecord & {
   toggleTask: (line: number) => void
 }
 
+const STORAGE_KEY = 'render-md:document'
 const MAX_RECENTS = 8
-const MAX_RECENT_SIZE = 400_000
+/** Rough localStorage budget (UTF-16 chars) shared by the recents shelf. */
+const PERSIST_BUDGET = 2_000_000
 
 const createId = () =>
   typeof crypto !== 'undefined' && 'randomUUID' in crypto
@@ -60,26 +64,52 @@ function snapshot(state: DocumentRecord): DocumentRecord {
 /** Put the current document on top of the recents shelf (deduped, capped). */
 export function archiveDocument(recents: DocumentRecord[], current: DocumentRecord) {
   const isPristineSample = current.source === 'sample' && current.markdown === SAMPLE_MARKDOWN
-  if (isPristineSample || !current.markdown.trim() || current.markdown.length > MAX_RECENT_SIZE) {
-    return recents
-  }
+  if (isPristineSample || !current.markdown.trim()) return recents
   const rest = recents.filter(
     (recent) => recent.id !== current.id && recent.markdown !== current.markdown,
   )
   return [snapshot(current), ...rest].slice(0, MAX_RECENTS)
 }
 
+/** Merge another tab's documents into our shelf (union, newest first). */
+export function mergeRecents(ours: DocumentRecord[], theirs: DocumentRecord[], currentId: string) {
+  const merged: DocumentRecord[] = []
+  for (const record of [...ours, ...theirs].sort((a, b) => b.updatedAt - a.updatedAt)) {
+    if (record.id === currentId || !record.markdown.trim()) continue
+    if (record.source === 'sample' && record.markdown === SAMPLE_MARKDOWN) continue
+    if (merged.some((entry) => entry.id === record.id || entry.markdown === record.markdown))
+      continue
+    merged.push(snapshot(record))
+  }
+  return merged.slice(0, MAX_RECENTS)
+}
+
+/** Recents that fit in the storage budget alongside the current document. */
+function recentsWithinBudget(recents: DocumentRecord[], currentSize: number) {
+  let budget = PERSIST_BUDGET - currentSize
+  return recents.filter((recent) => {
+    budget -= recent.markdown.length
+    return budget >= 0
+  })
+}
+
+/** Whether the last write to browser storage succeeded. */
+export const usePersistStatus = create<{ saved: boolean }>()(() => ({ saved: true }))
+
 export const useDocumentStore = create<DocumentStore>()(
   persist(
     (set, get) => ({
       ...createSampleDocument(),
       recents: [],
+      loadKey: 0,
 
       setMarkdown: (markdown) => {
         if (markdown === get().markdown) return
         set((state) => ({
           markdown,
           updatedAt: Date.now(),
+          // An edited sample becomes its own document.
+          id: state.id === 'sample' ? createId() : state.id,
           source: state.source === 'sample' || state.source === 'shared' ? 'local' : state.source,
         }))
       },
@@ -94,6 +124,7 @@ export const useDocumentStore = create<DocumentStore>()(
           baseUrl,
           source,
           updatedAt: Date.now(),
+          loadKey: current.loadKey + 1,
         })
       },
 
@@ -103,6 +134,7 @@ export const useDocumentStore = create<DocumentStore>()(
         if (!recent) return
         set({
           ...recent,
+          loadKey: current.loadKey + 1,
           recents: archiveDocument(
             current.recents.filter((entry) => entry.id !== id),
             current,
@@ -121,9 +153,11 @@ export const useDocumentStore = create<DocumentStore>()(
       },
     }),
     {
-      name: 'render-md:document',
+      name: STORAGE_KEY,
       version: 2,
-      storage: createJSONStorage(() => createDebouncedStorage()),
+      storage: createJSONStorage(() =>
+        createDebouncedStorage(400, (_, ok) => usePersistStatus.setState({ saved: ok })),
+      ),
       partialize: ({ id, markdown, name, baseUrl, source, updatedAt, recents }) => ({
         id,
         markdown,
@@ -131,7 +165,7 @@ export const useDocumentStore = create<DocumentStore>()(
         baseUrl,
         source,
         updatedAt,
-        recents,
+        recents: recentsWithinBudget(recents, markdown.length),
       }),
       migrate: () => ({ ...createSampleDocument(), recents: [] }),
       // The sample evolves between releases; never pin an old copy of it.
@@ -142,6 +176,45 @@ export const useDocumentStore = create<DocumentStore>()(
     },
   ),
 )
+
+/*
+ * Several tabs share one storage slot. When another tab writes, keep our own
+ * document and fold theirs into the recents shelf, so nothing is ever lost.
+ * Edits to the same document simply sync.
+ */
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (event) => {
+    if (event.key !== STORAGE_KEY || !event.newValue) return
+    try {
+      const incoming = (JSON.parse(event.newValue) as { state?: DocumentStore }).state
+      if (!incoming || typeof incoming.markdown !== 'string') return
+      const current = useDocumentStore.getState()
+
+      if (incoming.id === current.id) {
+        if (incoming.markdown !== current.markdown && incoming.updatedAt > current.updatedAt) {
+          useDocumentStore.setState({ markdown: incoming.markdown, updatedAt: incoming.updatedAt })
+        }
+        return
+      }
+
+      const recents = mergeRecents(
+        current.recents,
+        [incoming, ...(incoming.recents ?? [])],
+        current.id,
+      )
+      const unchanged =
+        recents.length === current.recents.length &&
+        recents.every(
+          (entry, index) =>
+            entry.id === current.recents[index].id &&
+            entry.markdown === current.recents[index].markdown,
+        )
+      if (!unchanged) useDocumentStore.setState({ recents })
+    } catch {
+      // Ignore malformed writes.
+    }
+  })
+}
 
 /* Migrate content saved by the previous version of the app (pre-rebuild). */
 if (typeof window !== 'undefined') {

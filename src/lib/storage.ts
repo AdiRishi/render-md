@@ -14,7 +14,11 @@ function getLocalStorage() {
  * every keystroke would serialize megabytes per character typed; instead we
  * write at most every `delay` ms and flush when the page is hidden.
  */
-export function createDebouncedStorage(delay = 400): StateStorage {
+export function createDebouncedStorage(
+  delay = 400,
+  /** Told whether each write landed — quota errors must not be silent. */
+  onWrite?: (name: string, ok: boolean) => void,
+): StateStorage {
   const queued = new Map<string, string>()
   let timer: ReturnType<typeof setTimeout> | null = null
 
@@ -26,8 +30,10 @@ export function createDebouncedStorage(delay = 400): StateStorage {
     for (const [name, value] of queued) {
       try {
         storage.setItem(name, value)
+        onWrite?.(name, true)
       } catch {
         // Quota exceeded or storage disabled — keep working in memory.
+        onWrite?.(name, false)
       }
     }
     queued.clear()

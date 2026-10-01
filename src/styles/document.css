@@ -293,7 +293,7 @@
     margin-bottom: 0.5em;
 }
 .doc ul > li::marker {
-    color: var(--ink-4);
+    color: var(--ink-3);
 }
 .doc ul ul > li::marker {
     content: '–  ';

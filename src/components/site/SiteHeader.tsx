@@ -17,13 +17,15 @@ export function SiteHeader() {
         <nav className="ms-auto flex items-center gap-1">
           <Link
             to="/cheatsheet"
-            className="rounded-md px-3 py-1.5 text-[13px] font-medium text-ink-3 transition-colors hover:text-ink data-[status=active]:text-ink"
+            className="rounded-md px-3 py-1.5 text-[13px] font-medium text-ink-3 transition-colors hover:text-ink data-[status=active]:text-ink max-sm:hidden"
           >
             Cheatsheet
           </Link>
           <ThemeToggle />
           <Link to="/" className={cn(buttonVariants({ variant: 'primary' }), 'ms-1')}>
-            Open editor <ArrowRight />
+            <span className="max-sm:hidden">Open editor</span>
+            <span className="sm:hidden">Editor</span>
+            <ArrowRight />
           </Link>
         </nav>
       </div>

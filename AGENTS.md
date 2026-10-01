@@ -38,7 +38,8 @@ routes/index.tsx → Workspace (client-only; SSR shows WorkspaceSkeleton)
   │    └── PreviewPane  the "sheet" on the desk: folio, crop marks, Outline, DocumentView
   ├── StatusBar         words/chars/lines, cursor, scroll-sync toggle
   └── CommandPalette (cmdk), ShareDialog, OpenUrlDialog, DropOverlay
-routes/cheatsheet.tsx → examples rendered by the real pipeline in a server function
+routes/cheatsheet.tsx → SEO-critical reference; content in content/cheatsheet.ts, rendered
+                        server-side (createServerFn) so crawlers get full HTML
 ```
 
 ### Markdown pipeline (`src/lib/markdown/`)
@@ -79,3 +80,13 @@ All document-level actions (open, save, share, export…) live in `hooks/use-doc
 - Prefer base-ui primitives (`@base-ui/react`) wrapped in `src/components/ui/`.
 - Keep the markdown pipeline pure and synchronous; add tests in `src/lib/markdown/pipeline.test.ts` for any syntax change.
 - New user-facing actions go in `documentActions` and should be reachable from the command palette.
+
+## The cheat sheet (`/cheatsheet`) — an SEO page
+
+It is one of the site's biggest traffic sources, so treat changes to it with care:
+
+- Content lives in `src/content/cheatsheet.ts` (chapters → sections → examples, tips, quick reference, FAQ). Everything is markdown and is rendered by the real pipeline **on the server** in a `createServerFn`, so the HTML that crawlers receive is fully rendered and the browser never downloads the pipeline.
+- `src/content/cheatsheet.test.ts` asserts every example renders as its section claims — run `pnpm test` after editing content.
+- Keep the H1 containing "Markdown cheat sheet", one H2 per chapter / quick reference / FAQ, and H3 per section. Section ids are public anchors (`/cheatsheet#tables`) — don't rename them.
+- Structured data (`TechArticle` with `dateModified`, `BreadcrumbList`, `FAQPage`) is generated from the same content in `src/lib/seo.ts`. Bump `CHEATSHEET_UPDATED` when the content changes meaningfully.
+- Examples are editable in place and re-render through the worker; "Open in editor" uses a share link with `view=split`.

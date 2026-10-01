@@ -28,6 +28,10 @@ The web is full of "markdown preview" sites wrapped in ads and cookie banners. R
 
 ![Reading mode with the Editorial typeset in dark mode](.github/assets/read-dark.jpg)
 
+The **[markdown cheat sheet](https://www.render-md.com/cheatsheet)** covers every syntax — CommonMark, GFM and beyond — with live examples you can edit in place, compatibility notes, a printable quick reference and an FAQ. Every example is rendered by the same engine as the editor.
+
+![The markdown cheat sheet](.github/assets/cheatsheet.jpg)
+
 ## How it works
 
 Markdown is rendered off the main thread in a Web Worker by a [unified](https://unifiedjs.com) pipeline (remark → rehype, sanitized with GitHub's rules), then turned into React with `hast-util-to-jsx-runtime`. Code is highlighted lazily with [Shiki](https://shiki.style) (JS regex engine, per-language code splitting), math with [KaTeX](https://katex.org), diagrams with [Mermaid](https://mermaid.js.org). Documents live in `localStorage`; nothing about them ever reaches the server.

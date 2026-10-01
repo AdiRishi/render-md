@@ -1,4 +1,4 @@
-import { CHEATSHEET } from '@/content/cheatsheet'
+import { CHEATSHEET_UPDATED, FAQ, SECTIONS } from '@/content/cheatsheet'
 
 type SeoParams = {
   title: string
@@ -6,6 +6,7 @@ type SeoParams = {
   image?: string
   url?: string
   imageAlt?: string
+  type?: 'website' | 'article'
 }
 
 type JsonLdSchema = Record<string, unknown>
@@ -35,6 +36,7 @@ export const seo = ({
   image = OG_IMAGE,
   url = SITE_URL,
   imageAlt = DEFAULT_IMAGE_ALT,
+  type = 'website',
 }: SeoParams) => [
   { title },
   { name: 'description', content: description },
@@ -47,7 +49,7 @@ export const seo = ({
   { property: 'og:image', content: image },
   { property: 'og:image:alt', content: imageAlt },
   { property: 'og:url', content: url },
-  { property: 'og:type', content: 'website' },
+  { property: 'og:type', content: type },
   { property: 'og:site_name', content: SITE_NAME },
   // Twitter Card
   { name: 'twitter:card', content: 'summary_large_image' },
@@ -114,54 +116,59 @@ export const getHomeJsonLd = () => [
   },
 ]
 
+/** Markdown → plain text, good enough for structured-data answers. */
+const toPlainText = (markdown: string) =>
+  markdown
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/`{1,3}([^`]+)`{1,3}/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+
+export const CHEATSHEET_URL = `${SITE_URL}/cheatsheet`
+
 /**
- * Generate JSON-LD structured data for the Cheatsheet page
- * Includes Article and BreadcrumbList schemas for rich search results
+ * Structured data for the cheat sheet: a TechArticle (with freshness), the
+ * breadcrumb trail, and the FAQ — all derived from the content the page shows.
  */
 export const getCheatsheetJsonLd = () => [
   {
     '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: 'Markdown, set in type — the RenderMD cheatsheet',
+    '@type': 'TechArticle',
+    headline: 'Markdown Cheat Sheet',
+    alternativeHeadline: 'Every markdown syntax with live, editable examples',
     description:
-      'Every markdown syntax RenderMD understands, with live rendered examples: GFM, alerts, footnotes, LaTeX math and Mermaid diagrams.',
+      'A complete markdown reference: CommonMark basics, GitHub Flavored Markdown, alerts, footnotes, LaTeX math and Mermaid diagrams, each with live rendered examples.',
     image: `${SITE_URL}/og-cheatsheet.png`,
-    author: {
-      '@type': 'Organization',
-      name: SITE_NAME,
-      url: SITE_URL,
-    },
+    url: CHEATSHEET_URL,
+    inLanguage: 'en',
+    dateModified: CHEATSHEET_UPDATED,
+    proficiencyLevel: 'Beginner',
+    about: { '@type': 'Thing', name: 'Markdown', sameAs: 'https://en.wikipedia.org/wiki/Markdown' },
+    articleSection: SECTIONS.map((section) => section.title),
+    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,
       url: SITE_URL,
-      logo: {
-        '@type': 'ImageObject',
-        url: `${SITE_URL}/logo512.png`,
-      },
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo512.png` },
     },
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': `${SITE_URL}/cheatsheet`,
-    },
-    articleSection: CHEATSHEET.map((section) => section.title),
+    mainEntityOfPage: { '@type': 'WebPage', '@id': CHEATSHEET_URL },
   },
   {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: SITE_URL,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Markdown Cheatsheet',
-        item: `${SITE_URL}/cheatsheet`,
-      },
+      { '@type': 'ListItem', position: 1, name: 'RenderMD', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Markdown cheat sheet', item: CHEATSHEET_URL },
     ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQ.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: toPlainText(item.answer) },
+    })),
   },
 ]

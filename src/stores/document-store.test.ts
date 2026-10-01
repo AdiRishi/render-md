@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { type DocumentRecord, SAMPLE_MARKDOWN, archiveDocument } from './document-store'
+import {
+  type DocumentRecord,
+  SAMPLE_MARKDOWN,
+  archiveDocument,
+  mergeRecents,
+} from './document-store'
 
 const doc = (overrides: Partial<DocumentRecord>): DocumentRecord => ({
   id: 'a',
@@ -31,5 +36,24 @@ describe('archiveDocument', () => {
     expect(recents[0].id).toBe('new')
     expect(recents.some((entry) => entry.id === 'd3')).toBe(false)
     expect(recents.length).toBe(8)
+  })
+})
+
+describe('mergeRecents', () => {
+  it('folds another tab’s documents in without duplicating or including the current one', () => {
+    const ours = [doc({ id: 'x', markdown: '# X', updatedAt: 5 })]
+    const theirs = [
+      doc({ id: 'cur', markdown: '# Current', updatedAt: 9 }),
+      doc({ id: 'y', markdown: '# Y', updatedAt: 7 }),
+      doc({ id: 'x', markdown: '# X', updatedAt: 5 }),
+    ]
+    expect(mergeRecents(ours, theirs, 'cur').map((entry) => entry.id)).toEqual(['y', 'x'])
+  })
+})
+
+describe('archiveDocument size', () => {
+  it('archives large documents too (never silently dropped)', () => {
+    const big = doc({ id: 'big', markdown: 'x'.repeat(600_000) })
+    expect(archiveDocument([], big)[0].id).toBe('big')
   })
 })

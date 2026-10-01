@@ -68,7 +68,9 @@ export function remarkExtractFrontmatter() {
     try {
       const parsed: unknown = parseYaml(first.value)
       if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-        file.data.frontmatter = parsed as Frontmatter
+        // A JSON round-trip makes it plain data: YAML anchors can create cycles,
+        // which would crash rendering and can't cross the worker boundary.
+        file.data.frontmatter = JSON.parse(JSON.stringify(parsed)) as Frontmatter
       }
     } catch {
       // Malformed frontmatter is kept out of the document but otherwise ignored.
@@ -243,6 +245,37 @@ export function rehypeBaseUrl(baseUrl?: string | null) {
 }
 
 /* -----------------------------------------------------------------------------
+ * rehype: point `#fragment` links at ids that exist. Sanitizing prefixes ids
+ * from markdown/HTML with `user-content-` (against DOM clobbering), so links
+ * like footnote refs are rewritten to match — statically, so they also work in
+ * exported HTML.
+ * -------------------------------------------------------------------------- */
+const CLOBBER_PREFIX = 'user-content-'
+
+export function rehypeResolveFragmentLinks() {
+  return (tree: Root) => {
+    const ids = new Set<string>()
+    visit(tree, 'element', (node) => {
+      if (typeof node.properties.id === 'string') ids.add(node.properties.id)
+    })
+
+    visit(tree, 'element', (node) => {
+      const href = node.tagName === 'a' ? node.properties.href : undefined
+      if (typeof href !== 'string' || !href.startsWith('#') || href.length < 2) return
+      let fragment = href.slice(1)
+      try {
+        fragment = decodeURIComponent(fragment)
+      } catch {
+        // Keep the raw fragment.
+      }
+      if (!ids.has(fragment) && ids.has(CLOBBER_PREFIX + fragment)) {
+        node.properties.href = `#${CLOBBER_PREFIX}${fragment}`
+      }
+    })
+  }
+}
+
+/* -----------------------------------------------------------------------------
  * rehype: collect the heading outline (after rehype-slug has assigned ids).
  * -------------------------------------------------------------------------- */
 const HEADING_PATTERN = /^h([1-6])$/
@@ -256,6 +289,9 @@ export function rehypeCollectHeadings() {
       if (!match) return
       const id = node.properties.id
       if (typeof id !== 'string') return
+      // Skip the visually hidden "Footnotes" label GFM adds.
+      const className = node.properties.className
+      if (Array.isArray(className) && className.includes('sr-only')) return
 
       const line = node.properties.dataLine
       headings.push({
