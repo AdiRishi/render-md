@@ -1,45 +1,34 @@
 {
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "id": "/",
-  "short_name": "RenderMD",
   "name": "RenderMD",
-  "description": "Real-time markdown editing with instant preview, Mermaid diagrams, LaTeX math, and syntax highlighting.",
-  "icons": [
-    {
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-192-maskable.png",
-      "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "maskable"
-    },
-    {
-      "src": "apple-touch-icon.png",
-      "type": "image/png",
-      "sizes": "180x180",
-      "purpose": "any"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-512-maskable.png",
-      "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "maskable"
-    }
-  ],
+  "short_name": "RenderMD",
+  "description": "Paste, drop or link any markdown and read it beautifully typeset. Private, free, no ads.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "theme_color": "#1a68ff",
-  "background_color": "#081428",
-  "categories": ["productivity", "utilities", "developer tools"]
+  "display_override": ["window-controls-overlay", "standalone"],
+  "theme_color": "#1c1915",
+  "background_color": "#f3f1ec",
+  "categories": ["productivity", "utilities", "developer tools"],
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" },
+    { "src": "/logo192.png", "type": "image/png", "sizes": "192x192", "purpose": "any" },
+    { "src": "/logo512.png", "type": "image/png", "sizes": "512x512", "purpose": "any" },
+    { "src": "/icon-192-maskable.png", "type": "image/png", "sizes": "192x192", "purpose": "maskable" },
+    { "src": "/icon-512-maskable.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
+  ],
+  "file_handlers": [
+    {
+      "action": "/",
+      "accept": {
+        "text/markdown": [".md", ".markdown", ".mdx", ".mdown", ".mkd"]
+      }
+    }
+  ],
+  "launch_handler": { "client_mode": "focus-existing" },
+  "shortcuts": [
+    { "name": "Blank page", "url": "/?new" },
+    { "name": "Markdown cheatsheet", "url": "/cheatsheet" }
+  ]
 }

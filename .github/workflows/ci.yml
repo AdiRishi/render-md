@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check:
     name: Check correctness
@@ -18,12 +22,8 @@ jobs:
           node-version-file: '.node-version'
           cache: 'pnpm'
 
-      - run: pnpm install
-        env:
-          NODE_ENV: development
+      - run: pnpm install --frozen-lockfile
+      # Format (oxfmt), lint (oxlint, type-aware) and typecheck (TypeScript 7).
       - run: pnpm check
+      - run: pnpm test
       - run: pnpm build
-
-      # Add coverage report later
-      # - name: Coveralls Coverage Report
-      #   uses: coverallsapp/github-action@v2

@@ -1,9 +1,9 @@
-import { getCfImageUrl } from './cf-image'
+import { CHEATSHEET } from '@/content/cheatsheet'
 
 type SeoParams = {
   title: string
   description: string
-  image: string
+  image?: string
   url?: string
   imageAlt?: string
 }
@@ -13,8 +13,10 @@ type JsonLdSchema = Record<string, unknown>
 export const SITE_NAME = 'RenderMD'
 export const SITE_URL = 'https://www.render-md.com'
 export const SITE_DESCRIPTION =
-  'A real-time markdown editor with instant preview, Mermaid diagrams, LaTeX math, GitHub Flavored Markdown, and syntax highlighting.'
-const DEFAULT_IMAGE_ALT = 'RenderMD editor interface with live markdown preview'
+  'Paste, drop or link any markdown and read it beautifully typeset. GitHub Flavored Markdown, Mermaid diagrams, LaTeX math and 200+ languages — private, free, no ads.'
+export const OG_IMAGE = `${SITE_URL}/og.png`
+export const THEME_COLOR = '#1c1915'
+const DEFAULT_IMAGE_ALT = 'RenderMD — markdown on the left, a beautifully typeset page on the right'
 
 /**
  * Convert JSON-LD schema objects to script tags for TanStack head
@@ -30,7 +32,7 @@ export const jsonLdScripts = (schemas: JsonLdSchema | JsonLdSchema[]) => {
 export const seo = ({
   title,
   description,
-  image,
+  image = OG_IMAGE,
   url = SITE_URL,
   imageAlt = DEFAULT_IMAGE_ALT,
 }: SeoParams) => [
@@ -54,7 +56,7 @@ export const seo = ({
   { name: 'twitter:image', content: image },
   { name: 'twitter:image:alt', content: imageAlt },
   // Additional
-  { name: 'theme-color', content: '#1a68ff' },
+  { name: 'theme-color', content: THEME_COLOR },
   { name: 'author', content: SITE_NAME },
 ]
 
@@ -94,13 +96,16 @@ export const getHomeJsonLd = () => [
     },
     featureList: [
       'Real-time markdown preview',
+      'Open files, URLs and GitHub READMEs',
+      'Private share links with no upload',
+      'Export to HTML, PDF and rich text',
       'GitHub Flavored Markdown',
       'Mermaid diagrams',
       'LaTeX math support with KaTeX',
-      'Syntax highlighting for 150+ languages',
+      'Syntax highlighting for 200+ languages',
       'Dark and light themes',
     ],
-    screenshot: getCfImageUrl('editorOg'),
+    screenshot: OG_IMAGE,
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,
@@ -117,10 +122,10 @@ export const getCheatsheetJsonLd = () => [
   {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: 'The Ultimate Markdown Cheatsheet',
+    headline: 'Markdown, set in type — the RenderMD cheatsheet',
     description:
-      'Complete markdown syntax reference with examples for headers, emphasis, lists, links, images, code blocks, tables, and LaTeX math.',
-    image: getCfImageUrl('cheatsheetOg'),
+      'Every markdown syntax RenderMD understands, with live rendered examples: GFM, alerts, footnotes, LaTeX math and Mermaid diagrams.',
+    image: `${SITE_URL}/og-cheatsheet.png`,
     author: {
       '@type': 'Organization',
       name: SITE_NAME,
@@ -139,17 +144,7 @@ export const getCheatsheetJsonLd = () => [
       '@type': 'WebPage',
       '@id': `${SITE_URL}/cheatsheet`,
     },
-    articleSection: [
-      'Headers',
-      'Emphasis',
-      'Lists',
-      'Links & Images',
-      'Code',
-      'Blockquotes',
-      'Tables',
-      'Math (LaTeX)',
-      'Horizontal Rules',
-    ],
+    articleSection: CHEATSHEET.map((section) => section.title),
   },
   {
     '@context': 'https://schema.org',

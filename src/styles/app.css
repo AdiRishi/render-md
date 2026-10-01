@@ -1,0 +1,267 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@import '@fontsource/instrument-serif/400.css';
+@import '@fontsource/instrument-serif/400-italic.css';
+@import '@fontsource-variable/instrument-sans/wght.css';
+@import '@fontsource-variable/instrument-sans/wght-italic.css';
+@import '@fontsource-variable/newsreader/standard.css';
+@import '@fontsource-variable/newsreader/standard-italic.css';
+@import '@fontsource-variable/geist-mono/wght.css';
+@import 'katex/dist/katex-swap.min.css';
+@import './document.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant data-open (&:where([data-open]:not([data-open='false'])));
+@custom-variant data-closed (&:where([data-closed]:not([data-closed='false'])));
+@custom-variant data-checked (&:where([data-checked]:not([data-checked='false'])));
+@custom-variant data-highlighted (&:where([data-highlighted]));
+
+/* =============================================================================
+   Tokens — "Paper & Proof"
+   The desk is where you work; paper is what you make; proof red marks intent.
+   ============================================================================= */
+
+:root {
+    color-scheme: light;
+
+    --desk: oklch(0.958 0.006 84);
+    --desk-2: oklch(0.932 0.008 82);
+    --desk-dot: oklch(0.21 0.012 60 / 0.07);
+    --paper: oklch(0.994 0.003 90);
+    --paper-2: oklch(0.973 0.005 85);
+    --paper-3: oklch(0.951 0.007 82);
+    --ink: oklch(0.215 0.012 60);
+    --ink-2: oklch(0.415 0.012 60);
+    --ink-3: oklch(0.575 0.01 65);
+    --ink-4: oklch(0.72 0.008 70);
+    --rule: oklch(0.89 0.008 80);
+    --rule-strong: oklch(0.82 0.01 78);
+    --proof: oklch(0.605 0.205 33);
+    --proof-ink: oklch(0.985 0.01 60);
+    --proof-soft: oklch(0.605 0.205 33 / 0.1);
+    --marker: oklch(0.92 0.13 98);
+    --shadow-ink: 35 25 15;
+
+    --alert-note: oklch(0.55 0.16 255);
+    --alert-tip: oklch(0.56 0.14 152);
+    --alert-important: oklch(0.55 0.19 300);
+    --alert-warning: oklch(0.62 0.14 70);
+    --alert-caution: oklch(0.58 0.2 28);
+
+    /* shadcn-compatible aliases used by UI primitives */
+    --background: var(--desk);
+    --foreground: var(--ink);
+    --popover: var(--paper);
+    --popover-foreground: var(--ink);
+    --muted: var(--desk-2);
+    --muted-foreground: var(--ink-3);
+    --border: var(--rule);
+    --input: var(--rule-strong);
+    --ring: var(--proof);
+    --primary: var(--ink);
+    --primary-foreground: var(--paper);
+    --accent: var(--desk-2);
+    --accent-foreground: var(--ink);
+    --destructive: var(--alert-caution);
+
+    --radius: 0.625rem;
+}
+
+.dark {
+    color-scheme: dark;
+
+    --desk: oklch(0.163 0.005 60);
+    --desk-2: oklch(0.205 0.006 60);
+    --desk-dot: oklch(0.92 0.01 80 / 0.06);
+    --paper: oklch(0.198 0.006 62);
+    --paper-2: oklch(0.228 0.007 62);
+    --paper-3: oklch(0.262 0.008 62);
+    --ink: oklch(0.925 0.01 82);
+    --ink-2: oklch(0.775 0.01 78);
+    --ink-3: oklch(0.6 0.01 72);
+    --ink-4: oklch(0.45 0.008 68);
+    --rule: oklch(0.29 0.008 62);
+    --rule-strong: oklch(0.37 0.01 62);
+    --proof: oklch(0.7 0.17 38);
+    --proof-ink: oklch(0.17 0.01 40);
+    --proof-soft: oklch(0.7 0.17 38 / 0.14);
+    --marker: oklch(0.55 0.11 95 / 0.55);
+    --shadow-ink: 0 0 0;
+
+    --alert-note: oklch(0.72 0.12 250);
+    --alert-tip: oklch(0.74 0.13 155);
+    --alert-important: oklch(0.73 0.14 300);
+    --alert-warning: oklch(0.8 0.13 80);
+    --alert-caution: oklch(0.72 0.16 28);
+}
+
+/* Emitted as real CSS variables — the editor theme and document.css read them. */
+@theme {
+    --font-sans: 'Instrument Sans Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Instrument Serif', ui-serif, Georgia, serif;
+    --font-serif: 'Newsreader Variable', ui-serif, Georgia, serif;
+    --font-mono:
+        'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono',
+        monospace;
+
+    --shadow-paper:
+        0 0 0 1px rgb(var(--shadow-ink) / 0.05), 0 1px 1px rgb(var(--shadow-ink) / 0.04),
+        0 12px 24px -12px rgb(var(--shadow-ink) / 0.12),
+        0 32px 64px -32px rgb(var(--shadow-ink) / 0.18);
+    --shadow-float:
+        0 0 0 1px rgb(var(--shadow-ink) / 0.06), 0 8px 16px -8px rgb(var(--shadow-ink) / 0.16),
+        0 24px 48px -16px rgb(var(--shadow-ink) / 0.2);
+
+    --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+
+    --animate-rise: rise 0.6s var(--ease-out-quint) both;
+}
+
+@theme inline {
+    --color-desk: var(--desk);
+    --color-desk-2: var(--desk-2);
+    --color-paper: var(--paper);
+    --color-paper-2: var(--paper-2);
+    --color-paper-3: var(--paper-3);
+    --color-ink: var(--ink);
+    --color-ink-2: var(--ink-2);
+    --color-ink-3: var(--ink-3);
+    --color-ink-4: var(--ink-4);
+    --color-rule: var(--rule);
+    --color-rule-strong: var(--rule-strong);
+    --color-proof: var(--proof);
+    --color-proof-ink: var(--proof-ink);
+    --color-proof-soft: var(--proof-soft);
+    --color-marker: var(--marker);
+
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+    --radius-2xl: calc(var(--radius) + 8px);
+
+    @keyframes rise {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+    }
+}
+
+/* =============================================================================
+   Base
+   ============================================================================= */
+
+@layer base {
+    *,
+    ::before,
+    ::after {
+        border-color: var(--rule);
+    }
+
+    html {
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+        background: var(--desk);
+        color: var(--ink);
+        font-feature-settings: 'ss01', 'cv11';
+    }
+
+    ::selection {
+        background: var(--proof-soft);
+        color: inherit;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--proof);
+        outline-offset: 2px;
+    }
+
+    button:not(:disabled),
+    [role='button']:not(:disabled) {
+        cursor: pointer;
+    }
+}
+
+/* =============================================================================
+   Utilities
+   ============================================================================= */
+
+@utility label-caps {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+/* The cutting-mat desk: a whisper of a dot grid. */
+@utility desk-grid {
+    background-color: var(--desk);
+    background-image: radial-gradient(var(--desk-dot) 1px, transparent 1.2px);
+    background-size: 22px 22px;
+    background-position: -11px -11px;
+}
+
+@utility scrollbar-quiet {
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule-strong) transparent;
+}
+
+/* =============================================================================
+   View transitions — the theme toggle wipes in from where you clicked.
+   ============================================================================= */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+    animation: theme-reveal 0.55s var(--ease-out-quint);
+}
+
+@keyframes theme-reveal {
+    from {
+        clip-path: circle(0 at var(--reveal-x, 50%) var(--reveal-y, 0%));
+    }
+    to {
+        clip-path: circle(var(--reveal-r, 150vmax) at var(--reveal-x, 50%) var(--reveal-y, 0%));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-new(root) {
+        animation: none;
+    }
+
+    *,
+    ::before,
+    ::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}

@@ -1,613 +1,237 @@
-import { useEffect, useState } from 'react'
 import { Link, createFileRoute } from '@tanstack/react-router'
-import {
-  ArrowRight,
-  Bold,
-  Code,
-  GraduationCap,
-  Heading1,
-  Link as LinkIcon,
-  List,
-  Minus,
-  PenSquare,
-  Quote,
-  Sigma,
-  Table,
-} from 'lucide-react'
+import { createServerFn } from '@tanstack/react-start'
+import { type Root } from 'hast'
+import { ArrowRight } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
-import { CheatsheetSection } from '@/components/cheatsheet/CheatsheetSection'
-import { SiteFooter } from '@/components/cheatsheet/SiteFooter'
-import { SiteHeader } from '@/components/cheatsheet/SiteHeader'
-import { Button } from '@/components/ui/button'
-import { getCfImageUrl } from '@/lib/cf-image'
+import { CopyButton } from '@/components/document/CopyButton'
+import { DocumentView } from '@/components/document/DocumentView'
+import { SiteFooter, SiteHeader } from '@/components/site/SiteHeader'
+import { buttonVariants } from '@/components/ui/button'
+import { CHEATSHEET } from '@/content/cheatsheet'
+import { getCheatsheetJsonLd, jsonLdScripts, seo, SITE_URL } from '@/lib/seo'
 import { cn } from '@/lib/utils'
-import { getCheatsheetJsonLd, jsonLdScripts, seo } from '@/lib/seo'
 
-const SECTION_IDS = [
-  'headers',
-  'emphasis',
-  'lists',
-  'links',
-  'code',
-  'blockquotes',
-  'tables',
-  'math',
-  'horizontal-rules',
-] as const
+const HERO_SOURCE = `## Proof, not *promise*
+
+- [x] Typeset in your browser
+- [ ] Ads, trackers, sign-ups
+
+> Write like nobody's rendering.`
+
+/**
+ * Every example runs through the real pipeline — on the server, so the page
+ * ships rendered trees instead of the markdown engine itself.
+ */
+const renderCheatsheet = createServerFn().handler(async () => {
+  const { renderMarkdown } = await import('@/lib/markdown/pipeline')
+  const render = (source: string) => renderMarkdown(source, { stripPositions: true }).hast
+  const data: CheatsheetData = {
+    hero: render(HERO_SOURCE),
+    examples: Object.fromEntries(
+      CHEATSHEET.flatMap((section) => section.entries).map((entry) => [
+        entry.source,
+        render(entry.source),
+      ]),
+    ),
+  }
+  // HAST is plain JSON; a string keeps the server-function contract simple.
+  return JSON.stringify(data)
+})
+
+type CheatsheetData = { hero: Root; examples: Record<string, Root> }
 
 export const Route = createFileRoute('/cheatsheet')({
+  loader: async () => JSON.parse(await renderCheatsheet()) as CheatsheetData,
+  staleTime: Infinity,
   head: () => ({
-    meta: [
-      ...seo({
-        title: 'Markdown Cheatsheet - Complete Syntax Reference | RenderMD',
-        description:
-          'A complete markdown syntax reference with examples for headers, emphasis, lists, links, code blocks, tables, Mermaid, and LaTeX math.',
-        url: 'https://www.render-md.com/cheatsheet',
-        image: getCfImageUrl('cheatsheetOg'),
-        imageAlt: 'RenderMD markdown cheatsheet page with live formatting examples',
-      }),
-    ],
-    links: [
-      {
-        rel: 'canonical',
-        href: 'https://www.render-md.com/cheatsheet',
-      },
-    ],
+    meta: seo({
+      title: 'Markdown Cheatsheet — every syntax, rendered live | RenderMD',
+      description:
+        'A complete markdown reference with live, rendered examples: headings, emphasis, lists, task lists, links, images, code, tables, GitHub alerts, LaTeX math, Mermaid diagrams and footnotes.',
+      url: `${SITE_URL}/cheatsheet`,
+      image: `${SITE_URL}/og-cheatsheet.png`,
+      imageAlt: 'The RenderMD markdown cheatsheet',
+    }),
+    links: [{ rel: 'canonical', href: `${SITE_URL}/cheatsheet` }],
     scripts: jsonLdScripts(getCheatsheetJsonLd()),
   }),
   component: CheatsheetPage,
 })
 
-function CheatsheetPage() {
-  const [activeSectionId, setActiveSectionId] = useState<string>('headers')
+function Specimen({ source, hast }: { source: string; hast: Root }) {
+  return (
+    <div className="grid overflow-hidden rounded-xl bg-paper shadow-paper md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+      <div className="relative border-rule bg-paper-2 max-md:border-b md:border-e">
+        <div className="flex h-9 items-center justify-between ps-4 pe-1.5">
+          <span className="label-caps text-ink-3">Markdown</span>
+          <CopyButton value={source} label="Copy markdown" />
+        </div>
+        <pre className="scrollbar-quiet overflow-x-auto px-4 pt-1 pb-5 font-mono text-[12.5px] leading-[1.75] whitespace-pre-wrap text-ink-2">
+          {source}
+        </pre>
+      </div>
+      <div className="min-w-0">
+        <div className="flex h-9 items-center px-5">
+          <span className="label-caps text-ink-3">Result</span>
+        </div>
+        <div className="px-5 pt-1 pb-6 md:px-7">
+          <DocumentView hast={hast} textSize="s" />
+        </div>
+      </div>
+    </div>
+  )
+}
 
+/** The hero's specimen: the same text as source and as the set page. */
+function HeroSpecimen({ hast }: { hast: Root }) {
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute top-1/2 right-[max(1.25rem,calc(50%-36rem))] hidden w-[25rem] -translate-y-1/2 lg:block"
+    >
+      <pre className="ms-10 -rotate-2 animate-rise rounded-lg bg-ink px-5 py-4 font-mono text-[12px] leading-[1.75] whitespace-pre-wrap text-paper/80 shadow-float [animation-delay:200ms]">
+        {HERO_SOURCE}
+      </pre>
+      <div className="relative me-4 -mt-6 rotate-[1.5deg] animate-rise rounded-[3px] bg-paper px-8 py-7 shadow-paper [animation-delay:320ms]">
+        {(
+          [
+            '-top-4 -left-4 border-r border-b',
+            '-top-4 -right-4 border-b border-l',
+            '-bottom-4 -left-4 border-t border-r',
+            '-right-4 -bottom-4 border-t border-l',
+          ] as const
+        ).map((position) => (
+          <span key={position} className={`absolute size-3 border-ink-4 ${position}`} />
+        ))}
+        <DocumentView hast={hast} typeset="serif" textSize="s" />
+      </div>
+    </div>
+  )
+}
+
+function useActiveSection() {
+  const [active, setActive] = useState(CHEATSHEET[0].id)
   useEffect(() => {
-    const visibleSections = new Set<string>()
-
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            visibleSections.add(entry.target.id)
-          } else {
-            visibleSections.delete(entry.target.id)
-          }
-        })
-
-        // Pick the first visible section in document order
-        const topSection = SECTION_IDS.find((id) => visibleSections.has(id))
-        if (topSection) {
-          setActiveSectionId(topSection)
-        }
+        const visible = entries.find((entry) => entry.isIntersecting)
+        if (visible) setActive(visible.target.id)
       },
-      { rootMargin: '-20% 0px -70% 0px', threshold: 0 },
+      { rootMargin: '-15% 0px -75% 0px' },
     )
-
-    SECTION_IDS.forEach((id) => {
-      const element = document.getElementById(id)
+    for (const section of CHEATSHEET) {
+      const element = document.getElementById(section.id)
       if (element) observer.observe(element)
-    })
-
+    }
     return () => observer.disconnect()
   }, [])
+  return active
+}
+
+function CheatsheetPage() {
+  const { hero, examples } = Route.useLoaderData()
+  const active = useActiveSection()
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col bg-muted/30">
+    <div className="min-h-screen bg-desk">
       <SiteHeader />
 
-      <div className="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8 lg:p-12">
-        <div className="flex flex-col lg:flex-row gap-12">
-          {/* Main Content */}
-          <main className="flex-1 flex flex-col gap-8 min-w-0">
-            {/* Hero Section */}
-            <div className="flex flex-col gap-6 py-8 md:py-12">
-              <div className="inline-flex items-center gap-2 text-primary font-bold text-xs tracking-wider uppercase bg-primary/10 px-3 py-1.5 rounded-full w-fit">
-                <GraduationCap className="size-4" />
-                Documentation
-              </div>
-
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight max-w-4xl">
-                The Ultimate{' '}
-                <span className="text-primary relative inline-block">
-                  Markdown
-                  <span className="absolute bottom-2 left-0 w-full h-3 bg-primary/20 -z-10 rounded-sm" />
-                </span>{' '}
-                Cheatsheet
-              </h1>
-
-              <p className="text-muted-foreground text-lg md:text-xl font-normal leading-relaxed max-w-2xl">
-                Your go-to reference for styling text on the web. Browse the syntax below, copy
-                examples, and instantly preview your formatting.
-              </p>
-
-              <div className="mt-4">
-                <Button
-                  render={<Link to="/" />}
-                  nativeButton={false}
-                  size="lg"
-                  className="h-12 px-8 rounded-xl shadow-lg shadow-primary/20"
-                >
-                  <PenSquare className="size-5" />
-                  Try the Editor
-                </Button>
-              </div>
-            </div>
-
-            {/* Cheatsheet Sections */}
-            <div className="flex flex-col gap-4">
-              {/* Headers */}
-              <CheatsheetSection
-                id="headers"
-                icon={<Heading1 className="size-5" />}
-                iconBgClass="bg-blue-50 dark:bg-blue-900/20"
-                iconColorClass="text-blue-600 dark:text-blue-400"
-                title="Headers"
-                description="H1 through H6 titles"
-                defaultOpen
-                syntaxContent={
-                  <div className="flex flex-col gap-1">
-                    <p>
-                      <span className="text-primary">#</span> Heading 1
-                    </p>
-                    <p>
-                      <span className="text-primary">##</span> Heading 2
-                    </p>
-                    <p>
-                      <span className="text-primary">###</span> Heading 3
-                    </p>
-                    <p>
-                      <span className="text-primary">####</span> Heading 4
-                    </p>
-                    <p>
-                      <span className="text-primary">#####</span> Heading 5
-                    </p>
-                    <p>
-                      <span className="text-primary">######</span> Heading 6
-                    </p>
-                  </div>
-                }
-                renderedContent={
-                  <div className="flex flex-col gap-3">
-                    <h1 className="text-2xl font-bold border-b pb-1 border-border">Heading 1</h1>
-                    <h2 className="text-xl font-bold border-b pb-1 border-border">Heading 2</h2>
-                    <h3 className="text-lg font-bold">Heading 3</h3>
-                    <h4 className="text-base font-bold">Heading 4</h4>
-                    <h5 className="text-sm font-bold">Heading 5</h5>
-                    <h6 className="text-xs font-bold">Heading 6</h6>
-                  </div>
-                }
-              />
-
-              {/* Emphasis */}
-              <CheatsheetSection
-                id="emphasis"
-                icon={<Bold className="size-5" />}
-                iconBgClass="bg-purple-50 dark:bg-purple-900/20"
-                iconColorClass="text-purple-600 dark:text-purple-400"
-                title="Emphasis"
-                description="Bold, Italic, Strikethrough"
-                defaultOpen
-                syntaxContent={
-                  <div className="flex flex-col gap-2">
-                    <p>**Bold text**</p>
-                    <p>*Italic text*</p>
-                    <p>***Bold and italic***</p>
-                    <p>~~Strikethrough~~</p>
-                  </div>
-                }
-                renderedContent={
-                  <div className="flex flex-col gap-2">
-                    <p>
-                      <strong>Bold text</strong>
-                    </p>
-                    <p>
-                      <em>Italic text</em>
-                    </p>
-                    <p>
-                      <strong>
-                        <em>Bold and italic</em>
-                      </strong>
-                    </p>
-                    <p>
-                      <del className="text-muted-foreground">Strikethrough</del>
-                    </p>
-                  </div>
-                }
-              />
-
-              {/* Lists */}
-              <CheatsheetSection
-                id="lists"
-                icon={<List className="size-5" />}
-                iconBgClass="bg-green-50 dark:bg-green-900/20"
-                iconColorClass="text-green-600 dark:text-green-400"
-                title="Lists"
-                description="Ordered, Unordered, Tasks"
-                defaultOpen
-                syntaxContent={
-                  <div className="flex flex-col gap-1">
-                    <p>1. First item</p>
-                    <p>2. Second item</p>
-                    <p>3. Third item</p>
-                    <br />
-                    <p>- Bullet item</p>
-                    <p>- Another bullet</p>
-                    <p>&nbsp;&nbsp;- Nested item</p>
-                    <br />
-                    <p>- [x] Completed task</p>
-                    <p>- [ ] Todo task</p>
-                  </div>
-                }
-                renderedContent={
-                  <div className="flex flex-col gap-4 text-sm">
-                    <ol className="list-decimal list-inside pl-1 space-y-1">
-                      <li>First item</li>
-                      <li>Second item</li>
-                      <li>Third item</li>
-                    </ol>
-                    <ul className="list-disc list-inside pl-1 space-y-1">
-                      <li>Bullet item</li>
-                      <li>
-                        Another bullet
-                        <ul className="list-disc list-inside pl-4 mt-1">
-                          <li>Nested item</li>
-                        </ul>
-                      </li>
-                    </ul>
-                    <ul className="list-none pl-0 space-y-1">
-                      <li className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked
-                          readOnly
-                          className="rounded text-primary size-4"
-                        />
-                        <span>Completed task</span>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <input type="checkbox" readOnly className="rounded text-primary size-4" />
-                        <span>Todo task</span>
-                      </li>
-                    </ul>
-                  </div>
-                }
-              />
-
-              {/* Links & Images */}
-              <CheatsheetSection
-                id="links"
-                icon={<LinkIcon className="size-5" />}
-                iconBgClass="bg-orange-50 dark:bg-orange-900/20"
-                iconColorClass="text-orange-600 dark:text-orange-400"
-                title="Links & Images"
-                description="Hyperlinks and image embedding"
-                defaultOpen
-                syntaxContent={
-                  <div className="flex flex-col gap-2">
-                    <p>[Link Text](https://example.com)</p>
-                    <p>[Link with title](https://example.com &quot;Title&quot;)</p>
-                    <br />
-                    <p>![Alt text](image.jpg)</p>
-                    <p>![Alt text](image.jpg &quot;Image title&quot;)</p>
-                  </div>
-                }
-                renderedContent={
-                  <div className="flex flex-col gap-4">
-                    <div>
-                      <a href="#" className="text-primary hover:underline font-medium">
-                        Link Text
-                      </a>
-                    </div>
-                    <div>
-                      <a
-                        href="#"
-                        className="text-primary hover:underline font-medium"
-                        title="Title"
-                      >
-                        Link with title
-                      </a>
-                    </div>
-                    <div className="h-20 w-full bg-muted rounded-lg border border-dashed border-border flex flex-col items-center justify-center text-xs text-muted-foreground">
-                      <LinkIcon className="size-4 mb-1" />
-                      <span>Image Preview</span>
-                    </div>
-                  </div>
-                }
-              />
-
-              {/* Code */}
-              <CheatsheetSection
-                id="code"
-                icon={<Code className="size-5" />}
-                iconBgClass="bg-slate-100 dark:bg-slate-700"
-                iconColorClass="text-slate-600 dark:text-slate-300"
-                title="Code"
-                description="Inline code and code blocks"
-                defaultOpen
-                syntaxContent={
-                  <div className="flex flex-col gap-2">
-                    <p>`Inline code`</p>
-                    <br />
-                    <p>```javascript</p>
-                    <p>const greeting = &quot;Hello&quot;;</p>
-                    <p>console.log(greeting);</p>
-                    <p>```</p>
-                  </div>
-                }
-                renderedContent={
-                  <div className="flex flex-col gap-4 text-sm">
-                    <p>
-                      This is{' '}
-                      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono border border-border">
-                        Inline code
-                      </code>{' '}
-                      example.
-                    </p>
-                    <div className="bg-[#282c34] text-[#abb2bf] p-3 rounded-lg font-mono text-xs overflow-x-auto shadow-inner">
-                      <span className="text-[#c678dd]">const</span>{' '}
-                      <span className="text-[#e06c75]">greeting</span>{' '}
-                      <span className="text-[#56b6c2]">=</span>{' '}
-                      <span className="text-[#98c379]">&quot;Hello&quot;</span>;
-                      <br />
-                      <span className="text-[#61afef]">console</span>.
-                      <span className="text-[#e5c07b]">log</span>(
-                      <span className="text-[#e06c75]">greeting</span>);
-                    </div>
-                  </div>
-                }
-              />
-
-              {/* Blockquotes */}
-              <CheatsheetSection
-                id="blockquotes"
-                icon={<Quote className="size-5" />}
-                iconBgClass="bg-yellow-50 dark:bg-yellow-900/20"
-                iconColorClass="text-yellow-600 dark:text-yellow-400"
-                title="Blockquotes"
-                description="Highlighting quotes"
-                defaultOpen
-                syntaxContent={
-                  <div className="flex flex-col gap-1">
-                    <p>&gt; This is a blockquote.</p>
-                    <p>&gt; It can span multiple lines.</p>
-                    <br />
-                    <p>&gt; Nested blockquotes:</p>
-                    <p>&gt;&gt; Are also supported.</p>
-                  </div>
-                }
-                renderedContent={
-                  <div className="flex flex-col gap-4">
-                    <blockquote className="border-l-4 border-muted-foreground/30 pl-4 py-1 italic text-muted-foreground bg-muted/30 rounded-r-lg">
-                      This is a blockquote.
-                      <br />
-                      It can span multiple lines.
-                    </blockquote>
-                    <blockquote className="border-l-4 border-muted-foreground/30 pl-4 py-1 italic text-muted-foreground bg-muted/30 rounded-r-lg">
-                      Nested blockquotes:
-                      <blockquote className="border-l-4 border-muted-foreground/30 pl-4 py-1 mt-2">
-                        Are also supported.
-                      </blockquote>
-                    </blockquote>
-                  </div>
-                }
-              />
-
-              {/* Tables */}
-              <CheatsheetSection
-                id="tables"
-                icon={<Table className="size-5" />}
-                iconBgClass="bg-cyan-50 dark:bg-cyan-900/20"
-                iconColorClass="text-cyan-600 dark:text-cyan-400"
-                title="Tables"
-                description="GFM tables with alignment"
-                defaultOpen
-                syntaxContent={
-                  <div className="flex flex-col gap-1 text-xs">
-                    <p>| Header 1 | Header 2 | Header 3 |</p>
-                    <p>|:---------|:--------:|---------:|</p>
-                    <p>| Left | Center | Right |</p>
-                    <p>| aligned | aligned | aligned |</p>
-                  </div>
-                }
-                renderedContent={
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm border-collapse">
-                      <thead>
-                        <tr className="border-b border-border">
-                          <th className="text-left p-2 font-semibold">Header 1</th>
-                          <th className="text-center p-2 font-semibold">Header 2</th>
-                          <th className="text-right p-2 font-semibold">Header 3</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr className="border-b border-border">
-                          <td className="text-left p-2">Left</td>
-                          <td className="text-center p-2">Center</td>
-                          <td className="text-right p-2">Right</td>
-                        </tr>
-                        <tr>
-                          <td className="text-left p-2">aligned</td>
-                          <td className="text-center p-2">aligned</td>
-                          <td className="text-right p-2">aligned</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                }
-              />
-
-              {/* Math / LaTeX */}
-              <CheatsheetSection
-                id="math"
-                icon={<Sigma className="size-5" />}
-                iconBgClass="bg-pink-50 dark:bg-pink-900/20"
-                iconColorClass="text-pink-600 dark:text-pink-400"
-                title="Math (LaTeX)"
-                description="Inline and block equations via KaTeX"
-                defaultOpen
-                syntaxContent={
-                  <div className="flex flex-col gap-2">
-                    <p>Inline: $E = mc^2$</p>
-                    <br />
-                    <p>Block equation:</p>
-                    <p>$$</p>
-                    <p>
-                      \int_0^\infty e^{'{-x^2}'} dx = \frac{'{\\sqrt{\\pi}}{2}'}
-                    </p>
-                    <p>$$</p>
-                    <br />
-                    <p>Euler&apos;s identity:</p>
-                    <p>$$e^{'{i\\pi}'} + 1 = 0$$</p>
-                  </div>
-                }
-                renderedContent={
-                  <div className="flex flex-col gap-4">
-                    <p>
-                      Inline:{' '}
-                      <span className="font-serif italic">
-                        E = mc<sup>2</sup>
-                      </span>
-                    </p>
-                    <div className="bg-muted/50 p-4 rounded-lg text-center font-serif text-lg">
-                      <span className="italic">
-                        ∫<sub>0</sub>
-                        <sup>∞</sup> e<sup>-x²</sup> dx = √π/2
-                      </span>
-                    </div>
-                    <div className="bg-muted/50 p-4 rounded-lg text-center font-serif text-lg">
-                      <span className="italic">
-                        e<sup>iπ</sup> + 1 = 0
-                      </span>
-                    </div>
-                  </div>
-                }
-              />
-
-              {/* Horizontal Rules */}
-              <CheatsheetSection
-                id="horizontal-rules"
-                icon={<Minus className="size-5" />}
-                iconBgClass="bg-gray-100 dark:bg-gray-700"
-                iconColorClass="text-gray-600 dark:text-gray-400"
-                title="Horizontal Rules"
-                description="Section dividers"
-                defaultOpen
-                syntaxContent={
-                  <div className="flex flex-col gap-2">
-                    <p>Three or more:</p>
-                    <br />
-                    <p>---</p>
-                    <p>***</p>
-                    <p>___</p>
-                  </div>
-                }
-                renderedContent={
-                  <div className="flex flex-col gap-4">
-                    <p className="text-sm text-muted-foreground">All render the same:</p>
-                    <hr className="border-t border-border" />
-                    <p className="text-xs text-muted-foreground">
-                      (Use to separate content sections)
-                    </p>
-                  </div>
-                }
-              />
-            </div>
-
-            {/* Mobile CTA */}
-            <div className="lg:hidden mt-8 rounded-2xl bg-linear-to-br from-primary to-blue-600 p-6 md:p-10 text-center text-white relative overflow-hidden shadow-lg shadow-primary/20">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl" />
-              <div className="absolute bottom-0 left-0 w-48 h-48 bg-black/10 rounded-full -ml-10 -mb-10 blur-xl" />
-              <div className="relative z-10 flex flex-col gap-4 items-center">
-                <h2 className="text-2xl font-bold">Ready to practice?</h2>
-                <p className="text-white/90 max-w-md text-sm md:text-base">
-                  Try our advanced editor with live preview, syntax highlighting, and export
-                  features.
-                </p>
-                <Button
-                  render={<Link to="/" />}
-                  nativeButton={false}
-                  variant="secondary"
-                  className="mt-2 bg-white text-primary hover:bg-gray-50 px-8 py-3 rounded-xl font-bold text-sm shadow-xl"
-                >
-                  Launch Editor
-                </Button>
-              </div>
-            </div>
-          </main>
-
-          {/* Sidebar */}
-          <aside className="hidden lg:block w-72 xl:w-80 shrink-0">
-            <div className="sticky top-28 flex flex-col gap-6">
-              {/* CTA Card */}
-              <div className="rounded-xl border border-primary/20 bg-linear-to-br from-card to-primary/5 p-6 shadow-sm relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-linear-to-br from-primary/10 to-primary/20 rounded-bl-full -mr-4 -mt-4 opacity-50 group-hover:scale-110 transition-transform duration-500" />
-                <div className="relative z-10 flex flex-col gap-4">
-                  <div className="size-12 rounded-xl bg-card shadow-sm border border-primary/20 flex items-center justify-center text-primary mb-1">
-                    <PenSquare className="size-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold">Try the Editor</h3>
-                    <p className="text-muted-foreground text-xs mt-2 leading-relaxed">
-                      Don&apos;t just read about it. Practice your markdown skills in our real-time
-                      editor.
-                    </p>
-                  </div>
-                  <Button
-                    render={<Link to="/" />}
-                    nativeButton={false}
-                    className="w-full rounded-lg shadow-md shadow-primary/20"
-                  >
-                    Open Live Editor
-                    <ArrowRight className="size-4" />
-                  </Button>
-                </div>
-              </div>
-
-              {/* Quick Nav */}
-              <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
-                <h4 className="text-xs font-bold uppercase tracking-wider mb-4 flex items-center gap-2 text-muted-foreground">
-                  <List className="size-4" />
-                  Quick Nav
-                </h4>
-                <nav className="flex flex-col gap-1">
-                  {[
-                    { id: 'headers', label: 'Headers' },
-                    { id: 'emphasis', label: 'Emphasis' },
-                    { id: 'lists', label: 'Lists' },
-                    { id: 'links', label: 'Links & Images' },
-                    { id: 'code', label: 'Code' },
-                    { id: 'blockquotes', label: 'Blockquotes' },
-                    { id: 'tables', label: 'Tables' },
-                    { id: 'math', label: 'Math (LaTeX)' },
-                    { id: 'horizontal-rules', label: 'Horizontal Rules' },
-                  ].map((item) => (
-                    <a
-                      key={item.id}
-                      href={`#${item.id}`}
-                      className={cn(
-                        'flex items-center justify-between py-2 text-sm transition-colors border-l-2 pl-3 -ml-3 group/nav',
-                        activeSectionId === item.id
-                          ? 'text-primary border-primary font-medium'
-                          : 'text-muted-foreground border-transparent hover:text-primary hover:border-primary',
-                      )}
-                    >
-                      <span
-                        className={cn(
-                          'transition-transform',
-                          activeSectionId === item.id
-                            ? 'translate-x-1'
-                            : 'group-hover/nav:translate-x-1',
-                        )}
-                      >
-                        {item.label}
-                      </span>
-                    </a>
-                  ))}
-                </nav>
-              </div>
-            </div>
-          </aside>
+      <section className="relative overflow-hidden border-b border-rule desk-grid">
+        <HeroSpecimen hast={hero} />
+        <div className="mx-auto max-w-6xl px-5 pt-20 pb-16 md:pt-28 md:pb-24">
+          <p className="animate-rise label-caps text-proof">
+            Reference · {CHEATSHEET.length} sections · Rendered live
+          </p>
+          <h1 className="mt-6 max-w-4xl animate-rise font-display text-[clamp(3.2rem,9vw,7.5rem)] leading-[0.88] tracking-[-0.025em] text-ink [animation-delay:80ms]">
+            Markdown,
+            <br />
+            <em className="text-ink-3">set in type.</em>
+          </h1>
+          <p className="mt-8 max-w-xl animate-rise text-lg leading-relaxed text-ink-2 [animation-delay:160ms]">
+            Every piece of syntax RenderMD understands, with the exact output it produces. Nothing
+            here is a mock-up — each example runs through the same renderer as the editor.
+          </p>
+          <div className="mt-9 flex animate-rise flex-wrap gap-2 [animation-delay:240ms]">
+            <Link to="/" className={cn(buttonVariants({ variant: 'primary', size: 'lg' }))}>
+              Try it in the editor <ArrowRight />
+            </Link>
+            <a href="#headings" className={cn(buttonVariants({ variant: 'outline', size: 'lg' }))}>
+              Start reading
+            </a>
+          </div>
         </div>
+      </section>
+
+      <div className="mx-auto flex max-w-6xl gap-14 px-5 py-16 md:py-20">
+        <nav
+          aria-label="Sections"
+          className="sticky top-24 hidden w-48 shrink-0 self-start lg:block"
+        >
+          <ol className="space-y-0.5">
+            {CHEATSHEET.map((section, index) => (
+              <li key={section.id}>
+                <a
+                  href={`#${section.id}`}
+                  className={cn(
+                    'group flex items-baseline gap-3 rounded-md py-1.5 text-[13.5px] transition-colors',
+                    active === section.id ? 'text-ink' : 'text-ink-3 hover:text-ink',
+                  )}
+                >
+                  <span
+                    className={cn(
+                      'font-mono text-[10.5px] tabular-nums transition-colors',
+                      active === section.id ? 'text-proof' : 'text-ink-4',
+                    )}
+                  >
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  {section.title}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+
+        <main className="min-w-0 flex-1 space-y-20">
+          {CHEATSHEET.map((section, index) => (
+            <section key={section.id} id={section.id} className="scroll-mt-24">
+              <header className="mb-6 flex items-baseline gap-4 border-b border-rule pb-4">
+                <span className="font-mono text-xs text-proof tabular-nums">
+                  §{String(index + 1).padStart(2, '0')}
+                </span>
+                <div>
+                  <h2 className="font-display text-4xl leading-none tracking-[-0.01em] text-ink">
+                    {section.title}
+                  </h2>
+                  <p className="mt-2 text-[15px] text-ink-2">{section.summary}</p>
+                </div>
+              </header>
+              <div className="space-y-4">
+                {section.entries.map((entry) => (
+                  <Specimen
+                    key={entry.source}
+                    source={entry.source}
+                    hast={examples[entry.source]}
+                  />
+                ))}
+              </div>
+            </section>
+          ))}
+
+          <aside className="relative overflow-hidden rounded-2xl bg-ink px-8 py-12 text-paper md:px-14">
+            <p className="label-caps text-proof">Now you know the marks</p>
+            <p className="mt-4 max-w-lg font-display text-5xl leading-[0.95] tracking-tight">
+              Go write something worth reading.
+            </p>
+            <Link
+              to="/"
+              className="mt-8 inline-flex h-10 items-center gap-2 rounded-lg bg-paper px-4 text-sm font-medium text-ink transition-transform active:translate-y-px"
+            >
+              Open the editor <ArrowRight className="size-4" />
+            </Link>
+          </aside>
+        </main>
       </div>
 
       <SiteFooter />
