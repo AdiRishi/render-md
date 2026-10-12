@@ -1,5 +1,10 @@
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown'
-import { HighlightStyle, syntaxHighlighting } from '@codemirror/language'
+import {
+  HighlightStyle,
+  LanguageDescription,
+  LanguageSupport,
+  syntaxHighlighting,
+} from '@codemirror/language'
 import { languages } from '@codemirror/language-data'
 import { EditorSelection, type Extension } from '@codemirror/state'
 import { EditorView, keymap } from '@codemirror/view'
@@ -127,10 +132,19 @@ const highlight = HighlightStyle.define([
   { tag: [t.number, t.bool, t.null, t.atom], color: 'oklch(0.6 0.15 50)' },
   { tag: [t.function(t.variableName), t.function(t.propertyName)], color: 'oklch(0.52 0.13 250)' },
   { tag: [t.typeName, t.className, t.namespace], color: 'oklch(0.58 0.12 75)' },
+  { tag: t.special(t.operator), color: 'var(--proof)' },
   { tag: [t.tagName, t.angleBracket], color: 'oklch(0.58 0.17 30)' },
   { tag: [t.attributeName, t.propertyName], color: 'oklch(0.55 0.1 210)' },
   { tag: t.invalid, color: 'var(--alert-caution)' },
 ])
+
+/** `@codemirror/language-data` has no Mermaid; ours loads with the first ```mermaid fence. */
+const mermaid = LanguageDescription.of({
+  name: 'Mermaid',
+  alias: ['mmd'],
+  extensions: ['mmd', 'mermaid'],
+  load: () => import('./mermaid').then((m) => new LanguageSupport(m.mermaidLanguage)),
+})
 
 /** Paste a URL over a selection → turn the selection into a link. */
 const pasteLinks = EditorView.domEventHandlers({
@@ -159,7 +173,7 @@ const pasteLinks = EditorView.domEventHandlers({
 
 export function createEditorExtensions(): Extension[] {
   return [
-    markdown({ base: markdownLanguage, codeLanguages: languages, addKeymap: true }),
+    markdown({ base: markdownLanguage, codeLanguages: [mermaid, ...languages], addKeymap: true }),
     EditorView.lineWrapping,
     EditorView.contentAttributes.of({
       spellcheck: 'true',
