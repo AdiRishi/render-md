@@ -5,7 +5,10 @@ type Transform = { x: number; y: number; scale: number }
 const IDENTITY: Transform = { x: 0, y: 0, scale: 1 }
 const clamp = (value: number) => Math.min(8, Math.max(0.2, value))
 
-/** Drag to pan, wheel/pinch to zoom around the pointer. */
+/**
+ * Drag to pan, wheel/pinch to zoom around the pointer. 100% is "fit": the SVG is
+ * stretched to the viewer and its viewBox scales the drawing to fill it.
+ */
 export function PanZoom({ svg }: { svg: string }) {
   const [transform, setTransform] = useState(IDENTITY)
   const drag = useRef<{ x: number; y: number; origin: Transform } | null>(null)
@@ -48,7 +51,7 @@ export function PanZoom({ svg }: { svg: string }) {
     <div className="relative h-full overflow-hidden">
       <div
         ref={surface}
-        className="grid h-full cursor-grab touch-none place-items-center desk-grid active:cursor-grabbing"
+        className="relative h-full cursor-grab touch-none desk-grid active:cursor-grabbing"
         onWheel={onWheel}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
@@ -57,7 +60,9 @@ export function PanZoom({ svg }: { svg: string }) {
         onDoubleClick={() => setTransform(IDENTITY)}
       >
         <div
-          className="[&_svg]:h-auto [&_svg]:max-h-[78vh] [&_svg]:max-w-[86vw]"
+          // Mermaid sets an inline `max-width` at the diagram's natural size; lift it so the
+          // SVG fills the box and its viewBox (preserveAspectRatio: meet) does the fitting.
+          className="absolute inset-x-6 inset-y-20 md:inset-x-16 [&_svg]:size-full [&_svg]:max-w-none!"
           style={{
             transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.scale})`,
             transformOrigin: 'center',
