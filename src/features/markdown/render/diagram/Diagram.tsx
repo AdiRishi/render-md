@@ -1,14 +1,22 @@
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
-import { Download, Maximize2, TriangleAlert, X } from 'lucide-react'
+import { Download, FileCode2, FileImage, Maximize2, TriangleAlert, X } from 'lucide-react'
 import { use, useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 import { useTheme } from '@/features/theme/ThemeProvider'
 import { downloadFile } from '@/lib/download'
 import { CopyButton } from '@/ui/copy-button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/ui/dropdown-menu'
 
 import { DocumentContext } from '../context'
-import { renderMermaid } from './mermaid'
+import { diagramBackground, renderMermaid } from './mermaid'
 import { PanZoom } from './PanZoom'
+import { svgToPng } from './png'
 
 type DiagramState =
   | { status: 'loading'; svg: string | null }
@@ -47,6 +55,15 @@ export function Diagram({ code, line }: { code: string; line?: number }) {
 
   const svg = state.svg
 
+  async function downloadPng() {
+    try {
+      const flat = await renderMermaid(code, resolved, look, { htmlLabels: false })
+      downloadFile('diagram.png', await svgToPng(flat, diagramBackground(resolved)))
+    } catch {
+      toast.error('This diagram could not be exported as PNG.')
+    }
+  }
+
   return (
     <figure className="diagram" data-line={line}>
       <figcaption className="code-block-header">
@@ -67,16 +84,33 @@ export function Diagram({ code, line }: { code: string; line?: number }) {
           >
             <Maximize2 className="size-3.5" />
           </button>
-          <button
-            type="button"
-            className={actionClass}
-            disabled={!svg}
-            onClick={() => svg && downloadFile('diagram.svg', svg, 'image/svg+xml')}
-            aria-label="Download SVG"
-            title="Download SVG"
-          >
-            <Download className="size-3.5" />
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <button
+                  type="button"
+                  className={actionClass}
+                  disabled={!svg}
+                  aria-label="Download diagram"
+                  title="Download"
+                />
+              }
+            >
+              <Download className="size-3.5" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-44">
+              <DropdownMenuItem onClick={() => void downloadPng()}>
+                <FileImage />
+                Image (.png)
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => svg && downloadFile('diagram.svg', svg, 'image/svg+xml')}
+              >
+                <FileCode2 />
+                Vector (.svg)
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <CopyButton value={code} label="Copy source" />
         </span>
       </figcaption>

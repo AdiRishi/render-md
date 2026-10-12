@@ -69,8 +69,20 @@ function enqueue<T>(task: () => Promise<T>) {
   return run
 }
 
-export function renderMermaid(code: string, theme: ResolvedTheme, look: DiagramLook) {
-  const key = `${theme}|${look}|${code}`
+/** The page color behind a diagram, for exports that need an opaque background. */
+export const diagramBackground = (theme: ResolvedTheme) => PALETTES[theme].background
+
+/**
+ * Renders a diagram to an SVG string. `htmlLabels: false` draws labels as SVG text
+ * instead of `foreignObject` HTML, which images and canvases can rasterize safely.
+ */
+export function renderMermaid(
+  code: string,
+  theme: ResolvedTheme,
+  look: DiagramLook,
+  { htmlLabels = true } = {},
+) {
+  const key = `${theme}|${look}|${htmlLabels}|${code}`
   const cached = cache.get(key)
   if (cached) return cached
 
@@ -84,6 +96,7 @@ export function renderMermaid(code: string, theme: ResolvedTheme, look: DiagramL
       handDrawnSeed: 7,
       fontFamily: 'Hanken Grotesk Variable, ui-sans-serif, sans-serif',
       themeVariables: { ...PALETTES[theme], fontSize: '15px' },
+      htmlLabels,
       flowchart: { curve: 'basis', padding: 14 },
       suppressErrorRendering: true,
     })
