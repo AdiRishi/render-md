@@ -3,7 +3,7 @@
   "id": "/",
   "name": "RenderMD",
   "short_name": "RenderMD",
-  "description": "Paste, drop or link any markdown and read it beautifully typeset. Private, free, no ads.",
+  "description": "Paste, drop or link a markdown file and read it as a typeset page. Free and private, with no ads.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

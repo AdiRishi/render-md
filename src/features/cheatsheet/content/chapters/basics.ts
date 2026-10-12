@@ -5,8 +5,7 @@ export const basics: CheatsheetChapter = {
   id: 'basics',
   numeral: 'I',
   title: 'The basics',
-  intro:
-    'Everything in this chapter is CommonMark, the standard behind almost every markdown renderer. Learn these and you can write markdown anywhere.',
+  intro: 'CommonMark: the core syntax that works in nearly every markdown renderer.',
   sections: [
     {
       id: 'headings',
@@ -32,7 +31,6 @@ export const basics: CheatsheetChapter = {
       ],
       tips: [
         'Always put a space after the hashes: `#Heading` is just text in most renderers.',
-        'Leave a blank line before and after a heading for maximum compatibility.',
         'Every heading gets an anchor you can link to: `[Jump](#headings)` scrolls to a heading called “Headings”.',
       ],
     },
@@ -41,7 +39,7 @@ export const basics: CheatsheetChapter = {
       title: 'Paragraphs & line breaks',
       support: 'commonmark',
       summary:
-        'Separate paragraphs with a blank line. A single newline is treated as a space — end a line with a backslash (or two spaces) to force a line break.',
+        'Separate paragraphs with a blank line. A single newline is treated as a space. To force a line break, end the line with a backslash (or two spaces).',
       entries: [
         {
           source: lines(
@@ -62,7 +60,7 @@ export const basics: CheatsheetChapter = {
         },
       ],
       tips: [
-        'Prefer the trailing backslash `\\` over two trailing spaces — spaces are invisible and editors often strip them.',
+        'Prefer the trailing backslash `\\` over two trailing spaces. Spaces are invisible, and editors often strip them.',
         'Don’t indent paragraphs: four leading spaces turn a line into a code block.',
       ],
     },
@@ -87,7 +85,7 @@ export const basics: CheatsheetChapter = {
       ],
       tips: [
         'Use asterisks inside words: `un*frigging*believable` works, while underscores inside words are ignored so `snake_case_names` stay intact.',
-        'There’s no underline in markdown — use `<ins>underline</ins>` if you really need it.',
+        'Markdown has no underline. If you need one, use `<ins>underline</ins>`.',
       ],
     },
     {
@@ -149,7 +147,7 @@ export const basics: CheatsheetChapter = {
         },
       ],
       tips: [
-        'The actual numbers don’t matter after the first: `1.` `1.` `1.` renders as 1, 2, 3 — handy for reordering.',
+        'The actual numbers don’t matter after the first: `1.` `1.` `1.` renders as 1, 2, 3, so you can reorder items without renumbering.',
         'Nested items must line up with the *text* of their parent, not the bullet: two spaces after `-`, three after `1.`.',
         'Pick one bullet character per list; switching characters starts a new list.',
       ],
@@ -194,7 +192,6 @@ export const basics: CheatsheetChapter = {
         'To show a backtick inside inline code, wrap it in double backticks: ``` `` a ` b `` ```.',
         'To show a code fence inside a code block, use four backticks for the outer fence.',
         'Common language names: `js`, `ts`, `tsx`, `python`, `bash`, `json`, `yaml`, `sql`, `rust`, `go`, `html`, `css`, `diff`.',
-        'Four spaces of indentation also make a code block, but fences are clearer and support highlighting.',
       ],
     },
     {
@@ -230,7 +227,7 @@ export const basics: CheatsheetChapter = {
         { label: 'Section links', source: 'Jump back to [Headings](#headings).' },
       ],
       tips: [
-        'Spaces in URLs break links — encode them as `%20`, or wrap the URL in angle brackets: `[a](<my file.md>)`.',
+        'Spaces in URLs break links. Encode them as `%20`, or wrap the URL in angle brackets: `[a](<my file.md>)`.',
         'Reference definitions can live anywhere in the document and never render.',
       ],
     },
@@ -252,7 +249,7 @@ export const basics: CheatsheetChapter = {
         },
       ],
       tips: [
-        'Markdown has no syntax for size — use HTML: `<img src="logo.png" width="120" alt="Logo">`.',
+        'Markdown has no syntax for image size, so use HTML: `<img src="logo.png" width="120" alt="Logo">`.',
         'Center an image with `<p align="center"><img src="…"></p>`, as many READMEs do.',
       ],
     },

@@ -7,10 +7,9 @@ import { FAQ } from '../content'
 export function Faq({ answers }: { answers: Root[] }) {
   return (
     <section id="faq" aria-labelledby="faq-title" className="scroll-mt-24">
-      <p className="label-caps text-proof">Questions</p>
       <h2
         id="faq-title"
-        className="mt-2 mb-10 font-display text-[clamp(2.2rem,4.5vw,3.2rem)] leading-none tracking-[-0.015em] text-ink"
+        className="mb-10 font-display text-[clamp(2.2rem,4.5vw,3.2rem)] leading-none tracking-[-0.015em] text-ink"
       >
         Frequently asked
       </h2>

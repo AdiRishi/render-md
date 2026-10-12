@@ -6,7 +6,7 @@ export const gfm: CheatsheetChapter = {
   numeral: 'II',
   title: 'GitHub Flavored Markdown',
   intro:
-    'GFM adds tables, task lists, strikethrough, autolinks and footnotes to CommonMark. It’s supported by GitHub, GitLab, VS Code, Obsidian, Reddit and RenderMD.',
+    'GitHub’s additions to CommonMark, also supported by GitLab, VS Code, Obsidian and Reddit.',
   sections: [
     {
       id: 'tables',
@@ -36,7 +36,7 @@ export const gfm: CheatsheetChapter = {
         },
       ],
       tips: [
-        'The pipes don’t need to line up — but aligned tables are easier to read in source. RenderMD’s Table button inserts a starter.',
+        'The pipes don’t need to line up, though aligned tables are easier to read in source.',
         'Escape a literal pipe inside a cell with `\\|`.',
         'Cells can only hold inline content. Use `<br>` for line breaks; lists and code blocks aren’t allowed.',
       ],
@@ -57,7 +57,7 @@ export const gfm: CheatsheetChapter = {
         },
       ],
       tips: [
-        'In the RenderMD editor you can tick the boxes right in the preview — the markdown updates itself.',
+        'In the RenderMD editor you can tick the boxes in the preview, and the markdown updates to match.',
       ],
     },
     {

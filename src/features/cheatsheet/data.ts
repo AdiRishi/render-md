@@ -11,12 +11,12 @@ import { stripHeadingIds } from '@/features/markdown/engine/hast'
 import { FAQ, SECTIONS } from './content'
 
 /** The hero's specimen, shown as source and as the typeset page. */
-export const HERO_SOURCE = `## Proof, not *promise*
+export const HERO_SOURCE = `## Weekly *notes*
 
-- [x] Typeset in your browser
-- [ ] Ads, trackers, sign-ups
+- [x] Ship the share dialog
+- [ ] Write the changelog
 
-> Write like nobody's rendering.`
+> Review on Friday.`
 
 export type CheatsheetData = {
   hero: Root
