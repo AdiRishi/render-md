@@ -51,7 +51,7 @@ export function PanZoom({ svg }: { svg: string }) {
     <div className="relative h-full overflow-hidden">
       <div
         ref={surface}
-        className="relative h-full cursor-grab touch-none desk-grid active:cursor-grabbing"
+        className="relative h-full cursor-grab touch-none desk-grid select-none active:cursor-grabbing"
         onWheel={onWheel}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
