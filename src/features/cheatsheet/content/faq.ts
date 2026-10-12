@@ -3,7 +3,7 @@ export const FAQ: Array<{ question: string; answer: string }> = [
   {
     question: 'What is markdown?',
     answer:
-      'Markdown is a lightweight way to format plain text. You write `**bold**` or `# Heading` and a renderer turns it into formatted text. John Gruber created it in 2004. Today it’s used in GitHub READMEs, notes apps, chat tools and documentation sites.',
+      'Markdown is a lightweight way to format plain text. You write `**bold**` or `# Heading` and a renderer turns it into formatted text. John Gruber created it in 2004.',
   },
   {
     question: 'What’s the difference between CommonMark and GitHub Flavored Markdown?',

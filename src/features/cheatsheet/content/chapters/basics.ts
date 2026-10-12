@@ -5,8 +5,7 @@ export const basics: CheatsheetChapter = {
   id: 'basics',
   numeral: 'I',
   title: 'The basics',
-  intro:
-    'Everything in this chapter is CommonMark, the standard that almost every markdown renderer follows, so it works nearly everywhere.',
+  intro: 'CommonMark: the core syntax that works in nearly every markdown renderer.',
   sections: [
     {
       id: 'headings',
@@ -32,7 +31,6 @@ export const basics: CheatsheetChapter = {
       ],
       tips: [
         'Always put a space after the hashes: `#Heading` is just text in most renderers.',
-        'Put a blank line before and after a heading. Some renderers need it.',
         'Every heading gets an anchor you can link to: `[Jump](#headings)` scrolls to a heading called “Headings”.',
       ],
     },
@@ -194,7 +192,6 @@ export const basics: CheatsheetChapter = {
         'To show a backtick inside inline code, wrap it in double backticks: ``` `` a ` b `` ```.',
         'To show a code fence inside a code block, use four backticks for the outer fence.',
         'Common language names: `js`, `ts`, `tsx`, `python`, `bash`, `json`, `yaml`, `sql`, `rust`, `go`, `html`, `css`, `diff`.',
-        'Four spaces of indentation also make a code block, but fences are clearer and support highlighting.',
       ],
     },
     {

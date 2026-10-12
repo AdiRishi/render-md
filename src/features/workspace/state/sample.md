@@ -6,7 +6,7 @@ tags: [markdown, typography, sample]
 
 # A field guide to RenderMD
 
-This page shows what RenderMD can render. Edit it, or replace it with your own markdown by pasting, dropping a file or typing. There are no ads or sign-ups, and nothing leaves your browser unless you share it.
+This page shows what RenderMD can render. Nothing leaves your browser unless you share it.
 
 > [!TIP]
 > Drag a `.md` file anywhere onto this page, paste a GitHub link with <kbd>⌘</kbd> <kbd>K</kbd> → _Open from URL_, or just start typing in the editor. Everything is saved locally as you go.
@@ -53,15 +53,6 @@ self.onmessage = ({ data }: MessageEvent<RenderRequest>) => {
 + const html = renderInYourBrowser(markdown)
 ```
 
-```sql
-SELECT author, COUNT(*) AS books
-FROM library
-WHERE published >= 2000
-GROUP BY author
-ORDER BY books DESC
-LIMIT 5;
-```
-
 ## Diagrams
 
 Any [Mermaid](https://mermaid.js.org) diagram renders inline. Try the _Sketch_ look in the <kbd>Aa</kbd> menu for a hand-drawn style.
@@ -105,12 +96,10 @@ $$
 <details>
 <summary>Raw HTML works too (safely sanitized)</summary>
 
-READMEs often use `<details>`, `<kbd>`, centered images and badges. RenderMD keeps the useful parts of HTML and strips anything that could run code.
+RenderMD keeps the useful parts of HTML and strips anything that could run code.
 
 </details>
 
 ---
-
-_Clear this page to start your own document._
 
 [^aside]: Footnotes are collected at the end of the document.

@@ -51,8 +51,7 @@ export function Hero({ specimen }: { specimen: Root }) {
           <em className="text-ink-3">cheat sheet</em>
         </h1>
         <p className="mt-8 max-w-[34rem] animate-rise text-lg leading-relaxed text-ink-2 [animation-delay:180ms]">
-          Markdown syntax from CommonMark and GitHub Flavored Markdown, plus math and diagrams. Edit
-          any example to see it re-render. They all use the same renderer as the RenderMD editor.
+          CommonMark, GitHub Flavored Markdown, math and diagrams. Every example is editable.
         </p>
         <div className="relative z-10 mt-9 flex max-w-xl animate-rise flex-col gap-3 [animation-delay:240ms] sm:flex-row print:hidden">
           <SearchBox className="flex-1" />

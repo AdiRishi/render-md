@@ -5,8 +5,7 @@ export const beyond: CheatsheetChapter = {
   id: 'beyond',
   numeral: 'III',
   title: 'Beyond the spec',
-  intro:
-    'Math, diagrams, emoji and HTML aren’t part of any markdown standard, but GitHub, GitLab, Obsidian and RenderMD all support them.',
+  intro: 'Not part of any markdown standard, but supported by GitHub, GitLab and Obsidian.',
   sections: [
     {
       id: 'math',

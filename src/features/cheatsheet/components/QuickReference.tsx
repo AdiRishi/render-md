@@ -16,10 +16,9 @@ export function QuickReference() {
     <section id="quick-reference" aria-labelledby="quick-reference-title" className="scroll-mt-24">
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="label-caps text-proof">At a glance</p>
           <h2
             id="quick-reference-title"
-            className="mt-2 font-display text-[clamp(2.2rem,4.5vw,3.2rem)] leading-none tracking-[-0.015em] text-ink"
+            className="font-display text-[clamp(2.2rem,4.5vw,3.2rem)] leading-none tracking-[-0.015em] text-ink"
           >
             Markdown syntax, quick reference
           </h2>
