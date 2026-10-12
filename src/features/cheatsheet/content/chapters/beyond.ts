@@ -6,7 +6,7 @@ export const beyond: CheatsheetChapter = {
   numeral: 'III',
   title: 'Beyond the spec',
   intro:
-    'Math, diagrams, emoji and HTML aren’t part of any markdown standard, but they’re supported by GitHub, GitLab, Obsidian and RenderMD — and they make documents far more expressive.',
+    'Math, diagrams, emoji and HTML aren’t part of any markdown standard, but GitHub, GitLab, Obsidian and RenderMD all support them.',
   sections: [
     {
       id: 'math',
@@ -99,7 +99,9 @@ export const beyond: CheatsheetChapter = {
       title: 'Emoji',
       support: 'extended',
       summary: 'Type an emoji shortcode between colons, or paste the emoji itself.',
-      entries: [{ source: 'Ship it :rocket: — great work :tada: :sparkles: :white_check_mark:' }],
+      entries: [
+        { source: 'Ship it :rocket: Tests pass :white_check_mark: Time to celebrate :tada:' },
+      ],
       tips: ['Shortcodes follow GitHub’s names, the same ones used in GitHub issues and Slack.'],
     },
     {
@@ -131,7 +133,7 @@ export const beyond: CheatsheetChapter = {
         },
       ],
       tips: [
-        'Scripts, styles, event handlers and iframes are removed for safety — on GitHub and in RenderMD alike.',
+        'Scripts, styles, event handlers and iframes are removed for safety, both on GitHub and in RenderMD.',
         '`<mark>` highlights work in RenderMD but are stripped on GitHub.',
       ],
     },
@@ -140,7 +142,7 @@ export const beyond: CheatsheetChapter = {
       title: 'Comments',
       support: 'commonmark',
       summary:
-        'HTML comments are hidden from the rendered page — perfect for notes to yourself or other authors.',
+        'HTML comments don’t appear on the rendered page. Use them for notes to yourself or other authors.',
       entries: [
         {
           source: lines(

@@ -13,17 +13,17 @@ export function WorkspaceSkeleton() {
           <div className="h-10 border-b border-rule" />
           <div className="space-y-3 p-8 font-mono text-[13px] text-ink-4">
             <p># A field guide to RenderMD</p>
-            <p>Paste it, drop it, or type it…</p>
+            <p>This page shows what RenderMD can render…</p>
           </div>
         </div>
         <div className="flex-1 overflow-hidden desk-grid px-4 pt-12 md:px-10">
           <div className="mx-auto max-w-[54rem] rounded-[3px] bg-paper px-6 py-12 shadow-paper md:px-16 md:py-16">
             <div className="doc" data-typeset="sans">
-              <h1>Beautiful markdown, rendered instantly.</h1>
+              <h1>Read and write markdown in your browser.</h1>
               <p>
-                Paste it, drop it, or link it — RenderMD typesets any markdown file in your browser.
-                GitHub Flavored Markdown, Mermaid diagrams, LaTeX math, syntax highlighting for 200+
-                languages, private share links and clean PDF export. No ads, no sign-up.
+                Paste, drop or link a markdown file and RenderMD typesets it in your browser. It
+                supports GitHub Flavored Markdown, Mermaid diagrams, LaTeX math, syntax highlighting
+                for 200+ languages, private share links and PDF export. No ads, no sign-up.
               </p>
               <div className="animate-pulse space-y-3 pt-4">
                 <div className="h-4 w-full rounded bg-paper-3" />

@@ -21,9 +21,9 @@ export const getCheatsheetJsonLd = () => [
     '@context': 'https://schema.org',
     '@type': 'TechArticle',
     headline: 'Markdown Cheat Sheet',
-    alternativeHeadline: 'Every markdown syntax with live, editable examples',
+    alternativeHeadline: 'Markdown syntax with live, editable examples',
     description:
-      'A complete markdown reference: CommonMark basics, GitHub Flavored Markdown, alerts, footnotes, LaTeX math and Mermaid diagrams, each with live rendered examples.',
+      'A markdown reference covering CommonMark basics, GitHub Flavored Markdown, alerts, footnotes, LaTeX math and Mermaid diagrams, each with live rendered examples.',
     image: `${SITE_URL}/og-cheatsheet.png`,
     url: CHEATSHEET_URL,
     inLanguage: 'en',
@@ -63,8 +63,8 @@ export const getCheatsheetJsonLd = () => [
 export const cheatsheetHead = () => ({
   meta: [
     ...seo({
-      title: 'Markdown Cheat Sheet — Complete Syntax Guide with Live Examples | RenderMD',
-      description: `Every markdown syntax in one place: headings, lists, links, images, code, tables, task lists, footnotes, alerts, LaTeX math and Mermaid diagrams — ${EXAMPLE_COUNT} live, editable examples.`,
+      title: 'Markdown Cheat Sheet: Syntax Guide with Live Examples | RenderMD',
+      description: `Markdown syntax in one place: headings, lists, links, images, code, tables, task lists, footnotes, alerts, LaTeX math and Mermaid diagrams, with ${EXAMPLE_COUNT} live, editable examples.`,
       url: CHEATSHEET_URL,
       image: `${SITE_URL}/og-cheatsheet.png`,
       imageAlt: 'The RenderMD markdown cheat sheet',

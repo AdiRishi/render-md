@@ -6,18 +6,18 @@ tags: [markdown, typography, sample]
 
 # A field guide to RenderMD
 
-Paste it, drop it, or type it — **any markdown, rendered beautifully.** No ads, no sign-up, and nothing leaves your browser unless you choose to share it.
+This page shows what RenderMD can render. Edit it, or replace it with your own markdown by pasting, dropping a file or typing. There are no ads or sign-ups, and nothing leaves your browser unless you share it.
 
 > [!TIP]
 > Drag a `.md` file anywhere onto this page, paste a GitHub link with <kbd>⌘</kbd> <kbd>K</kbd> → _Open from URL_, or just start typing in the editor. Everything is saved locally as you go.
 
 ![Aurora borealis over snow-capped mountains](https://imagedelivery.net/dUGyBDwDArlYQF97CccBHg/69b78600-3195-42c1-9750-e27bebe26800/public)
 
-## Typography that gets out of the way
+## Text formatting
 
-Mix **bold**, _italic_, ~~struck~~ and <mark>highlighted</mark> text naturally. Use `inline code` for terms like `useDeferredValue`, and footnotes when you need an aside.[^aside] Emoji shortcodes work too :sparkles:
+Mix **bold**, _italic_, ~~struck~~ and <mark>highlighted</mark> text. Use `inline code` for terms like `useDeferredValue`, and footnotes when you need an aside.[^aside] Emoji shortcodes work too :sparkles:
 
-Switch the **typeset** from the <kbd>Aa</kbd> menu — _Modern_, _Editorial_ or _Technical_ — and the whole document re-sets itself.
+Switch the **typeset** from the <kbd>Aa</kbd> menu — _Modern_, _Editorial_ or _Technical_. It changes the fonts and spacing of the whole document.
 
 > The universe is made of stories, not of atoms.
 >
@@ -25,23 +25,23 @@ Switch the **typeset** from the <kbd>Aa</kbd> menu — _Modern_, _Editorial_ or 
 
 ### Lists & tasks
 
-1. Start with curiosity
-2. Add persistence
-   - and a little stubbornness
-   - and a lot of coffee
-3. Ship it
+1. Write the draft
+2. Ask for feedback
+   - from your team
+   - from a few readers
+3. Publish
 
 Tick a box in the preview and the markdown updates itself:
 
 - [x] Render GitHub Flavored Markdown
 - [x] Render math, diagrams and 200+ languages
-- [ ] Change the world
-- [ ] Take a nap
+- [ ] Export to PDF
+- [ ] Send a share link
 
-## Code, highlighted properly
+## Code
 
 ```ts title="render.worker.ts"
-// Parsing happens off the main thread, so typing never stutters.
+// Parsing happens off the main thread, so the editor stays responsive.
 self.onmessage = ({ data }: MessageEvent<RenderRequest>) => {
   const result = renderMarkdown(data.markdown, { stripPositions: true })
   self.postMessage({ id: data.id, ok: true, result })
@@ -54,21 +54,21 @@ self.onmessage = ({ data }: MessageEvent<RenderRequest>) => {
 ```
 
 ```sql
-SELECT dreams.name, COUNT(*) AS frequency
-FROM consciousness.dreams
-WHERE dreamer = 'you' AND lucid = TRUE
-GROUP BY dreams.name
-ORDER BY frequency DESC
+SELECT author, COUNT(*) AS books
+FROM library
+WHERE published >= 2000
+GROUP BY author
+ORDER BY books DESC
 LIMIT 5;
 ```
 
 ## Diagrams
 
-Any [Mermaid](https://mermaid.js.org) diagram renders inline. Try the _Sketch_ look in the <kbd>Aa</kbd> menu for a hand-drawn feel.
+Any [Mermaid](https://mermaid.js.org) diagram renders inline. Try the _Sketch_ look in the <kbd>Aa</kbd> menu for a hand-drawn style.
 
 ```mermaid
 flowchart LR
-  Idea([A spark]) --> Draft[Rough draft]
+  Idea([Idea]) --> Draft[Rough draft]
   Draft --> Render{Looks right?}
   Render -->|Not yet| Revise[Revise]
   Revise --> Render
@@ -77,9 +77,9 @@ flowchart LR
 
 ## Mathematics
 
-Inline math sits in the line: $E = mc^2$, and $\nabla \times \mathbf{E} = -\frac{\partial \mathbf{B}}{\partial t}$.
+Inline math sits within the text: $E = mc^2$, and $\nabla \times \mathbf{E} = -\frac{\partial \mathbf{B}}{\partial t}$.
 
-Display math gets room to breathe:
+Display math gets its own line:
 
 $$
 \int_{-\infty}^{\infty} e^{-x^2}\,dx = \sqrt{\pi}
@@ -87,17 +87,17 @@ $$
 
 ## Tables
 
-| Shortcut                  |     Action      | Magic |
-| :------------------------ | :-------------: | ----: |
-| <kbd>⌘</kbd> <kbd>K</kbd> | Command palette |   ★★★ |
-| <kbd>⌘</kbd> <kbd>O</kbd> |   Open a file   |   ★★☆ |
-| <kbd>⌘</kbd> <kbd>S</kbd> |  Save to disk   |   ★★☆ |
-| <kbd>⌘</kbd> <kbd>B</kbd> |    **Bold**     |   ★☆☆ |
+| Action          |            Mac            |              Windows & Linux |
+| :-------------- | :-----------------------: | ---------------------------: |
+| Command palette | <kbd>⌘</kbd> <kbd>K</kbd> | <kbd>Ctrl</kbd> <kbd>K</kbd> |
+| Open a file     | <kbd>⌘</kbd> <kbd>O</kbd> | <kbd>Ctrl</kbd> <kbd>O</kbd> |
+| Save to disk    | <kbd>⌘</kbd> <kbd>S</kbd> | <kbd>Ctrl</kbd> <kbd>S</kbd> |
+| **Bold**        | <kbd>⌘</kbd> <kbd>B</kbd> | <kbd>Ctrl</kbd> <kbd>B</kbd> |
 
 ## Callouts
 
 > [!NOTE]
-> GitHub-style alerts render as proper callouts.
+> GitHub-style alerts render as callouts.
 
 > [!WARNING]
 > Share links contain the whole document, compressed into the URL fragment — which is never sent to any server.
@@ -105,12 +105,12 @@ $$
 <details>
 <summary>Raw HTML works too (safely sanitized)</summary>
 
-READMEs love `<details>`, `<kbd>`, centered images and badges. RenderMD keeps the useful parts of HTML and strips anything that could run code.
+READMEs often use `<details>`, `<kbd>`, centered images and badges. RenderMD keeps the useful parts of HTML and strips anything that could run code.
 
 </details>
 
 ---
 
-_Clear this page and make it yours._
+_Clear this page to start your own document._
 
-[^aside]: Footnotes collect at the end of the document, like they should.
+[^aside]: Footnotes are collected at the end of the document.

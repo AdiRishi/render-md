@@ -5,13 +5,13 @@ import { ArrowRight } from 'lucide-react'
 export function ClosingCta() {
   return (
     <aside className="relative overflow-hidden rounded-2xl bg-ink px-8 py-12 text-paper md:px-14 print:hidden">
-      <p className="label-caps text-proof">Now you know the marks</p>
+      <p className="label-caps text-proof">The editor</p>
       <p className="mt-4 max-w-lg font-display text-5xl leading-[1.02] tracking-tight">
-        Go write something worth reading.
+        Write markdown and see it typeset as you go.
       </p>
       <p className="mt-4 max-w-md text-[15px] leading-relaxed text-paper/70">
-        Paste, drop or link any markdown file and RenderMD typesets it instantly — private, free, no
-        ads.
+        Paste, drop or link a markdown file, or start from a blank page. It runs in your browser and
+        it’s free, with no ads.
       </p>
       <Link
         to="/"

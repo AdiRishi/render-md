@@ -9,15 +9,15 @@ export const SUPPORT_LABEL: Record<Support, { label: string; description: string
   gfm: {
     label: 'GFM',
     description:
-      'GitHub Flavored Markdown — supported by GitHub, GitLab, Reddit, VS Code and most modern tools.',
+      'GitHub Flavored Markdown — supported by GitHub, GitLab, Reddit, VS Code and many other tools.',
   },
   github: {
     label: 'GitHub',
-    description: 'A GitHub extension, also supported by RenderMD and a growing number of tools.',
+    description: 'A GitHub extension, also supported by RenderMD and some other tools.',
   },
   extended: {
     label: 'Extended',
     description:
-      'Widely supported extension (GitHub, GitLab, Obsidian, RenderMD…) but not part of a spec.',
+      'Not part of any spec, but supported by GitHub, GitLab, Obsidian, RenderMD and others.',
   },
 }

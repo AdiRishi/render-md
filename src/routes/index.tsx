@@ -14,9 +14,9 @@ export const Route = createFileRoute('/')({
   }),
   head: () => ({
     meta: seo({
-      title: 'RenderMD — Beautiful markdown, rendered instantly',
+      title: 'RenderMD: Free markdown viewer and editor',
       description:
-        'Paste, drop or link any markdown file and read it beautifully typeset. Live editor, GitHub Flavored Markdown, Mermaid, LaTeX, syntax highlighting, private share links and PDF export. Free, no ads, no sign-up.',
+        'Paste, drop or link a markdown file and read it as a typeset page. Live editor, GitHub Flavored Markdown, Mermaid, LaTeX, syntax highlighting, private share links and PDF export. Free, with no ads and no sign-up.',
       url: SITE_URL,
     }),
     links: [{ rel: 'canonical', href: SITE_URL }],

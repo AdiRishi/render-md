@@ -14,10 +14,10 @@ type JsonLdSchema = Record<string, unknown>
 export const SITE_NAME = 'RenderMD'
 export const SITE_URL = 'https://www.render-md.com'
 export const SITE_DESCRIPTION =
-  'Paste, drop or link any markdown and read it beautifully typeset. GitHub Flavored Markdown, Mermaid diagrams, LaTeX math and 200+ languages — private, free, no ads.'
+  'Paste, drop or link a markdown file and read it as a typeset page. Supports GitHub Flavored Markdown, Mermaid diagrams, LaTeX math and syntax highlighting for 200+ languages. Free and private, with no ads.'
 export const OG_IMAGE = `${SITE_URL}/og.png`
 export const THEME_COLOR = '#1c1915'
-const DEFAULT_IMAGE_ALT = 'RenderMD — markdown on the left, a beautifully typeset page on the right'
+const DEFAULT_IMAGE_ALT = 'RenderMD, with markdown on the left and the typeset page on the right'
 
 /**
  * Convert JSON-LD schema objects to script tags for TanStack head

@@ -3,7 +3,7 @@ export const FAQ: Array<{ question: string; answer: string }> = [
   {
     question: 'What is markdown?',
     answer:
-      'Markdown is a lightweight way to format plain text. You write `**bold**` or `# Heading` and a renderer turns it into formatted text. It was created by John Gruber in 2004 and is now used everywhere from GitHub READMEs to notes apps, chat tools and documentation sites.',
+      'Markdown is a lightweight way to format plain text. You write `**bold**` or `# Heading` and a renderer turns it into formatted text. John Gruber created it in 2004. Today it’s used in GitHub READMEs, notes apps, chat tools and documentation sites.',
   },
   {
     question: 'What’s the difference between CommonMark and GitHub Flavored Markdown?',
@@ -28,11 +28,11 @@ export const FAQ: Array<{ question: string; answer: string }> = [
   {
     question: 'Can I use HTML in markdown?',
     answer:
-      'Yes — most renderers allow a safe subset of HTML for things markdown can’t express, like `<details>` for collapsible sections, `<kbd>` for keys and `<img width="…">` for sized images. Scripts and event handlers are always removed.',
+      'Yes. Most renderers allow a safe subset of HTML for things markdown can’t express, like `<details>` for collapsible sections, `<kbd>` for keys and `<img width="…">` for sized images. Scripts and event handlers are always removed.',
   },
   {
     question: 'How can I preview a markdown file?',
     answer:
-      'Paste or drop it into [RenderMD](https://www.render-md.com) — it renders instantly in your browser, including tables, math and diagrams, without uploading the file anywhere. You can also open a URL or a GitHub repository directly.',
+      'Paste or drop it into [RenderMD](https://www.render-md.com). It renders in your browser, including tables, math and diagrams, and the file is never uploaded. You can also open a URL or a GitHub repository directly.',
   },
 ]

@@ -36,7 +36,7 @@ export const gfm: CheatsheetChapter = {
         },
       ],
       tips: [
-        'The pipes don’t need to line up — but aligned tables are easier to read in source. RenderMD’s Table button inserts a starter.',
+        'The pipes don’t need to line up, though aligned tables are easier to read in source. RenderMD’s Table button inserts a starter.',
         'Escape a literal pipe inside a cell with `\\|`.',
         'Cells can only hold inline content. Use `<br>` for line breaks; lists and code blocks aren’t allowed.',
       ],
@@ -57,7 +57,7 @@ export const gfm: CheatsheetChapter = {
         },
       ],
       tips: [
-        'In the RenderMD editor you can tick the boxes right in the preview — the markdown updates itself.',
+        'In the RenderMD editor you can tick the boxes in the preview, and the markdown updates to match.',
       ],
     },
     {
