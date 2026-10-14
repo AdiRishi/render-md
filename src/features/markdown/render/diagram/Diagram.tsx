@@ -1,11 +1,10 @@
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
-import { Download, FileCode2, FileImage, Maximize2, TriangleAlert, X } from 'lucide-react'
+import { Copy, Download, FileCode2, FileImage, Maximize2, TriangleAlert, X } from 'lucide-react'
 import { use, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 import { useTheme } from '@/features/theme/ThemeProvider'
 import { downloadFile } from '@/lib/download'
-import { CopyButton } from '@/ui/copy-button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -55,12 +54,35 @@ export function Diagram({ code, line }: { code: string; line?: number }) {
 
   const svg = state.svg
 
+  async function renderPng() {
+    const flat = await renderMermaid(code, resolved, look, { htmlLabels: false })
+    return svgToPng(flat, diagramBackground(resolved))
+  }
+
   async function downloadPng() {
     try {
-      const flat = await renderMermaid(code, resolved, look, { htmlLabels: false })
-      downloadFile('diagram.png', await svgToPng(flat, diagramBackground(resolved)))
+      downloadFile('diagram.png', await renderPng())
     } catch {
       toast.error('This diagram could not be exported as PNG.')
+    }
+  }
+
+  async function copyPng() {
+    try {
+      // Hand the clipboard a promise so Safari still counts this as part of the click.
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': renderPng() })])
+      toast.success('Copied diagram as image')
+    } catch {
+      toast.error('This diagram could not be copied as an image.')
+    }
+  }
+
+  async function copySource() {
+    try {
+      await navigator.clipboard.writeText(code)
+      toast.success('Copied Mermaid source')
+    } catch {
+      toast.error('Clipboard access was blocked')
     }
   }
 
@@ -111,7 +133,30 @@ export function Diagram({ code, line }: { code: string; line?: number }) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <CopyButton value={code} label="Copy source" />
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <button
+                  type="button"
+                  className={actionClass}
+                  aria-label="Copy diagram"
+                  title="Copy"
+                />
+              }
+            >
+              <Copy className="size-3.5" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-44">
+              <DropdownMenuItem disabled={!svg} onClick={() => void copyPng()}>
+                <FileImage />
+                Image (.png)
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => void copySource()}>
+                <FileCode2 />
+                Mermaid source
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </span>
       </figcaption>
 
