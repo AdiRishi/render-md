@@ -12,7 +12,8 @@ function loadPostHog() {
   if (import.meta.env.SSR || window.location.origin !== SITE_URL) return undefined
   client ??= import('posthog-js').then(({ posthog }) => {
     posthog.init(POSTHOG_TOKEN, {
-      api_host: 'https://us.i.posthog.com',
+      api_host: 'https://t.render-md.com',
+      ui_host: 'https://us.posthog.com',
       defaults: '2026-08-30',
       capture_exceptions: true,
       // Documents never leave the browser: share links carry them in the URL fragment, `?url=`
