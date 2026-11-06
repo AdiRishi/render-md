@@ -1,0 +1,6 @@
+{
+  "$schema": "https://raw.githubusercontent.com/raineorshine/npm-check-updates/main/src/types/RunOptions.json",
+  "root": true,
+  "packageManager": "pnpm",
+  "cooldown": "1d"
+}
