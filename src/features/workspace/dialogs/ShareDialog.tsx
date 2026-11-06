@@ -1,4 +1,3 @@
-import { usePostHog } from '@posthog/react'
 import { Check, Copy, LockKeyhole, Share } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
@@ -8,13 +7,13 @@ import { Button } from '@/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/ui/dialog'
 import { Input } from '@/ui/input'
 
+import { track } from '../analytics'
 import { useDocumentStore } from '../state/document-store'
 import { useUiStore } from '../state/ui-store'
 
 const LONG_URL = 32_000
 
 export function ShareDialog() {
-  const posthog = usePostHog()
   const open = useUiStore((state) => state.dialog === 'share')
   const closeDialog = useUiStore((state) => state.closeDialog)
   const markdown = useDocumentStore((state) => state.markdown)
@@ -42,7 +41,7 @@ export function ShareDialog() {
   async function copy() {
     if (!url) return
     await navigator.clipboard.writeText(url)
-    posthog.capture('share_link_copied')
+    track('document_shared', { method: 'copy_link' })
     setCopied(true)
     setTimeout(() => setCopied(false), 1800)
   }
@@ -83,7 +82,7 @@ export function ShareDialog() {
               type="button"
               className="flex items-center gap-1 rounded px-1.5 py-0.5 hover:bg-desk-2 hover:text-ink"
               onClick={() => {
-                posthog.capture('share_link_shared')
+                track('document_shared', { method: 'share_sheet' })
                 void navigator
                   .share({ url, title: 'A document on RenderMD' })
                   .catch(() => undefined)

@@ -1,11 +1,9 @@
-import { posthog } from 'posthog-js'
-
 import { guessTitle } from '@/features/markdown/engine/source'
 import { downloadFile } from '@/lib/download'
 import { toFileSlug } from '@/lib/format'
-import { posthogLogs } from '@/lib/posthog-logs'
 import { toast } from '@/ui/toast'
 
+import { track } from './analytics'
 import { buildStandaloneHtml, copyRichText } from './io/export'
 import {
   getFileHandle,
@@ -69,7 +67,7 @@ export const documentActions = {
           .openDocument({ markdown: file.markdown, source: 'file', name: file.name })
         rememberFileHandle(useDocumentStore.getState().id, file.handle)
       }, `Opened ${file.name}`)
-      posthog.capture('document_opened', { source: 'file_picker' })
+      track('document_opened', { source: 'file_picker' })
     } catch (error) {
       toast.add({
         type: 'error',
@@ -89,7 +87,7 @@ export const documentActions = {
             .openDocument({ markdown: opened.markdown, source: 'file', name: opened.name }),
         `Opened ${opened.name}`,
       )
-      posthog.capture('document_opened', { source: 'file_drop' })
+      track('document_opened', { source: 'file_drop' })
     } catch (error) {
       toast.add({
         type: 'error',
@@ -114,11 +112,10 @@ export const documentActions = {
           }),
         `Loaded ${remote.name}`,
       )
-      posthog.capture('document_opened', { source: 'url' })
-      posthogLogs.remoteDocumentOpened()
+      track('document_opened', { source: 'url' })
       return true
     } catch (error) {
-      posthogLogs.remoteDocumentOpenFailed()
+      track('document_open_failed', { source: 'url' })
       toast.update(loading, {
         type: 'error',
         title: 'Couldn’t load that URL',
@@ -134,7 +131,15 @@ export const documentActions = {
       'Opened a shared document',
     )
     useSettingsStore.getState().set('viewMode', view)
-    posthog.capture('document_opened', { source: 'shared_link' })
+    track('document_opened', { source: 'shared_link' })
+  },
+
+  /** Switch between write, split and read at the user's request. */
+  setViewMode: (mode: ViewMode) => {
+    const settings = useSettingsStore.getState()
+    if (settings.viewMode === mode) return
+    settings.set('viewMode', mode)
+    track('view_mode_changed', { view_mode: mode })
   },
 
   newDocument: () => {
@@ -144,7 +149,7 @@ export const documentActions = {
     )
     const settings = useSettingsStore.getState()
     if (settings.viewMode === 'read') settings.set('viewMode', 'split')
-    posthog.capture('document_opened', { source: 'blank_page' })
+    track('document_opened', { source: 'blank_page' })
   },
 
   loadSample: () => {
@@ -153,7 +158,7 @@ export const documentActions = {
         useDocumentStore.getState().openDocument({ markdown: SAMPLE_MARKDOWN, source: 'sample' }),
       'Loaded the field guide',
     )
-    posthog.capture('document_opened', { source: 'sample' })
+    track('document_opened', { source: 'sample' })
   },
 
   pasteFromClipboard: async () => {
@@ -167,7 +172,7 @@ export const documentActions = {
         () => useDocumentStore.getState().openDocument({ markdown: text, source: 'local' }),
         'Pasted from clipboard',
       )
-      posthog.capture('document_opened', { source: 'clipboard' })
+      track('document_opened', { source: 'clipboard' })
     } catch {
       toast.add({
         type: 'error',
@@ -186,11 +191,13 @@ export const documentActions = {
         markdown,
         suggestedName: getFileName('md'),
       })
-      if (result === 'saved')
-        toast.add({ type: 'success', title: hadHandle ? 'Saved' : 'Saved to disk' })
-      if (result === 'downloaded') toast.add({ type: 'success', title: 'Downloaded markdown' })
-      posthog.capture('document_saved', { destination: result })
-      if (result !== 'cancelled') posthogLogs.documentSaved(result)
+      if (result === 'cancelled') return
+      toast.add({
+        type: 'success',
+        title:
+          result === 'downloaded' ? 'Downloaded markdown' : hadHandle ? 'Saved' : 'Saved to disk',
+      })
+      track('document_saved', { destination: result })
     } catch (error) {
       toast.add({ type: 'error', title: 'Couldn’t save', description: errorMessage(error) })
     }
@@ -198,7 +205,7 @@ export const documentActions = {
 
   downloadMarkdown: () => {
     downloadFile(getFileName('md'), useDocumentStore.getState().markdown)
-    posthog.capture('document_exported', { format: 'markdown' })
+    track('document_exported', { format: 'markdown' })
   },
 
   downloadHtml: () => {
@@ -208,13 +215,13 @@ export const documentActions = {
       return
     }
     downloadFile(getFileName('html'), buildStandaloneHtml(article, getDocumentTitle()), 'text/html')
-    posthog.capture('document_exported', { format: 'html' })
+    track('document_exported', { format: 'html' })
     toast.add({ type: 'success', title: 'Exported a standalone HTML file' })
   },
 
   copyMarkdown: async () => {
     await navigator.clipboard.writeText(useDocumentStore.getState().markdown)
-    posthog.capture('document_copied', { format: 'markdown' })
+    track('document_copied', { format: 'markdown' })
     toast.add({ type: 'success', title: 'Markdown copied' })
   },
 
@@ -226,9 +233,7 @@ export const documentActions = {
     }
     try {
       const mode = await copyRichText(article, useDocumentStore.getState().markdown)
-      posthog.capture('document_copied', {
-        format: mode === 'rich' ? 'rich_text' : 'markdown_fallback',
-      })
+      track('document_copied', { format: mode === 'rich' ? 'rich_text' : 'markdown_fallback' })
       toast.add({
         type: 'success',
         title: mode === 'rich' ? 'Copied formatted text' : 'Copied markdown',
@@ -241,7 +246,7 @@ export const documentActions = {
 
   print: () => {
     const { viewMode } = useSettingsStore.getState()
-    posthog.capture('document_exported', { format: 'pdf_or_print' })
+    track('document_exported', { format: 'print' })
     if (viewMode === 'write') {
       useSettingsStore.getState().set('viewMode', 'read')
       setTimeout(() => window.print(), 350)

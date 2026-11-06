@@ -4,6 +4,7 @@ import { decodeShareFragment, readSharePayload, readShareView } from '@/lib/shar
 import { toast } from '@/ui/toast'
 
 import { documentActions } from '../actions'
+import { track } from '../analytics'
 import { rememberFileHandle } from '../io/file-system'
 import { useDocumentStore } from '../state/document-store'
 import { useSettingsStore } from '../state/settings-store'
@@ -70,6 +71,7 @@ export function useIncomingDocuments(
           .openDocument({ markdown: await file.text(), source: 'file', name: file.name })
         rememberFileHandle(useDocumentStore.getState().id, handle)
         useSettingsStore.getState().set('viewMode', 'read')
+        track('document_opened', { source: 'os_file' })
       })()
     })
   }, [initialUrl, startBlank])

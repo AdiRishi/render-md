@@ -26,8 +26,7 @@ export function useHotkeys() {
         void documentActions.save()
       } else if (key === '\\') {
         event.preventDefault()
-        const settings = useSettingsStore.getState()
-        settings.set('viewMode', CYCLE[settings.viewMode])
+        documentActions.setViewMode(CYCLE[useSettingsStore.getState().viewMode])
       }
     }
     window.addEventListener('keydown', onKeyDown, { capture: true })

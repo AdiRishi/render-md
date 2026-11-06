@@ -1,5 +1,6 @@
-import { posthog } from 'posthog-js'
 import { Component, type ErrorInfo, type ReactNode } from 'react'
+
+import { analytics } from './analytics'
 
 type Props = { children: ReactNode }
 type State = { error: Error | null }
@@ -12,7 +13,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    posthog.captureException(error)
+    analytics.captureException(error)
     console.error('RenderMD crashed:', error, info)
   }
 

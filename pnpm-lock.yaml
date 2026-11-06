@@ -205,9 +205,6 @@ importers:
       '@lezer/highlight':
         specifier: ^1.2.5
         version: 1.2.5
-      '@posthog/react':
-        specifier: ^1.11.3
-        version: 1.11.3(@types/react@19.3.0)(posthog-js@1.446.3(@types/react@19.3.0)(react@19.3.1))(react@19.3.1)
       '@tailwindcss/vite':
         specifier: ^4.3.4
         version: 4.3.4(vite@8.3.6(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))
@@ -1747,16 +1744,6 @@ packages:
 
   '@posthog/core@1.63.2':
     resolution: {integrity: sha512-GC03SzHTTDB1tnwT6dvVdSs5tsbNXC+rg7vPLtlFCGtl9tWNzqRcpUes+pe3qgkeOaSEEQ7/pWZMyfvCf6SN3w==}
-
-  '@posthog/react@1.11.3':
-    resolution: {integrity: sha512-YqvZb2y9jh/yW0ojUtAns0l4yHWqpu+5UeIBxZlXpyGuWlh8M4siXRMtqhEh1BKfqp6Sq2usdsQCuoUzx1QFWQ==}
-    peerDependencies:
-      '@types/react': '>=16.8.0'
-      posthog-js: '>=1.257.2'
-      react: '>=16.8.0'
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
 
   '@posthog/types@1.420.0':
     resolution: {integrity: sha512-WrfsR3hynbNOkQor6TrQJrI+7UzStZs2rjFzQ+xK9mRCUH6TLMLfBSR+ibGoKreatb76Uh30b6lSZLWbOgdTsg==}
@@ -6335,13 +6322,6 @@ snapshots:
   '@posthog/core@1.63.2':
     dependencies:
       '@posthog/types': 1.420.0
-
-  '@posthog/react@1.11.3(@types/react@19.3.0)(posthog-js@1.446.3(@types/react@19.3.0)(react@19.3.1))(react@19.3.1)':
-    dependencies:
-      posthog-js: 1.446.3(@types/react@19.3.0)(react@19.3.1)
-      react: 19.3.1
-    optionalDependencies:
-      '@types/react': 19.3.0
 
   '@posthog/types@1.420.0': {}
 
