@@ -48,6 +48,7 @@
     "katex": "^0.19.1",
     "lucide-react": "^1.69.0",
     "mermaid": "^12.3.0",
+    "posthog-js": "^1.446.3",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "rehype-raw": "^7.0.0",

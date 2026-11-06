@@ -1,6 +1,7 @@
 import { FormattingToolbar } from '@/features/editor/FormattingToolbar'
 import { MarkdownEditor } from '@/features/editor/MarkdownEditor'
 
+import { trackOncePerDocument } from '../analytics'
 import { useDocumentStore } from '../state/document-store'
 import { useUiStore } from '../state/ui-store'
 
@@ -19,7 +20,12 @@ export function EditorPane() {
         <MarkdownEditor
           key={loadKey}
           value={markdown}
-          onChange={setMarkdown}
+          onChange={(next) => {
+            trackOncePerDocument('document_edited', {
+              document_source: useDocumentStore.getState().source,
+            })
+            setMarkdown(next)
+          }}
           onCursorChange={setCursor}
         />
       </div>

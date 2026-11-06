@@ -1,8 +1,10 @@
 import { guessTitle } from '@/features/markdown/engine/source'
 import { downloadFile } from '@/lib/download'
 import { toFileSlug } from '@/lib/format'
+import { type ShareOrigin } from '@/lib/share-link'
 import { toast } from '@/ui/toast'
 
+import { track, trackOncePerDocument } from './analytics'
 import { buildStandaloneHtml, copyRichText } from './io/export'
 import {
   getFileHandle,
@@ -66,6 +68,7 @@ export const documentActions = {
           .openDocument({ markdown: file.markdown, source: 'file', name: file.name })
         rememberFileHandle(useDocumentStore.getState().id, file.handle)
       }, `Opened ${file.name}`)
+      track('document_opened', { source: 'file_picker' })
     } catch (error) {
       toast.add({
         type: 'error',
@@ -85,6 +88,7 @@ export const documentActions = {
             .openDocument({ markdown: opened.markdown, source: 'file', name: opened.name }),
         `Opened ${opened.name}`,
       )
+      track('document_opened', { source: 'file_drop' })
     } catch (error) {
       toast.add({
         type: 'error',
@@ -109,8 +113,10 @@ export const documentActions = {
           }),
         `Loaded ${remote.name}`,
       )
+      track('document_opened', { source: 'url' })
       return true
     } catch (error) {
+      track('document_open_failed', { source: 'url' })
       toast.update(loading, {
         type: 'error',
         title: 'Couldn’t load that URL',
@@ -120,12 +126,15 @@ export const documentActions = {
     }
   },
 
-  openShared: (markdown: string, view: ViewMode = 'read') => {
+  openShared: (markdown: string, view: ViewMode, from: ShareOrigin) => {
     replaceDocument(
       () => useDocumentStore.getState().openDocument({ markdown, source: 'shared' }),
       'Opened a shared document',
     )
     useSettingsStore.getState().set('viewMode', view)
+    track('document_opened', {
+      source: from === 'cheatsheet' ? 'cheatsheet_example' : 'shared_link',
+    })
   },
 
   newDocument: () => {
@@ -135,6 +144,7 @@ export const documentActions = {
     )
     const settings = useSettingsStore.getState()
     if (settings.viewMode === 'read') settings.set('viewMode', 'split')
+    track('document_opened', { source: 'blank_page' })
   },
 
   loadSample: () => {
@@ -143,6 +153,7 @@ export const documentActions = {
         useDocumentStore.getState().openDocument({ markdown: SAMPLE_MARKDOWN, source: 'sample' }),
       'Loaded the field guide',
     )
+    track('document_opened', { source: 'sample' })
   },
 
   pasteFromClipboard: async () => {
@@ -156,6 +167,7 @@ export const documentActions = {
         () => useDocumentStore.getState().openDocument({ markdown: text, source: 'local' }),
         'Pasted from clipboard',
       )
+      track('document_opened', { source: 'clipboard' })
     } catch {
       toast.add({
         type: 'error',
@@ -174,9 +186,13 @@ export const documentActions = {
         markdown,
         suggestedName: getFileName('md'),
       })
-      if (result === 'saved')
-        toast.add({ type: 'success', title: hadHandle ? 'Saved' : 'Saved to disk' })
-      if (result === 'downloaded') toast.add({ type: 'success', title: 'Downloaded markdown' })
+      if (result === 'cancelled') return
+      toast.add({
+        type: 'success',
+        title:
+          result === 'downloaded' ? 'Downloaded markdown' : hadHandle ? 'Saved' : 'Saved to disk',
+      })
+      trackOncePerDocument('document_saved', { destination: result })
     } catch (error) {
       toast.add({ type: 'error', title: 'Couldn’t save', description: errorMessage(error) })
     }
@@ -184,6 +200,7 @@ export const documentActions = {
 
   downloadMarkdown: () => {
     downloadFile(getFileName('md'), useDocumentStore.getState().markdown)
+    track('document_exported', { format: 'markdown' })
   },
 
   downloadHtml: () => {
@@ -193,11 +210,13 @@ export const documentActions = {
       return
     }
     downloadFile(getFileName('html'), buildStandaloneHtml(article, getDocumentTitle()), 'text/html')
+    track('document_exported', { format: 'html' })
     toast.add({ type: 'success', title: 'Exported a standalone HTML file' })
   },
 
   copyMarkdown: async () => {
     await navigator.clipboard.writeText(useDocumentStore.getState().markdown)
+    track('document_copied', { format: 'markdown' })
     toast.add({ type: 'success', title: 'Markdown copied' })
   },
 
@@ -209,6 +228,7 @@ export const documentActions = {
     }
     try {
       const mode = await copyRichText(article, useDocumentStore.getState().markdown)
+      track('document_copied', { format: mode === 'rich' ? 'rich_text' : 'markdown_fallback' })
       toast.add({
         type: 'success',
         title: mode === 'rich' ? 'Copied formatted text' : 'Copied markdown',
@@ -221,6 +241,7 @@ export const documentActions = {
 
   print: () => {
     const { viewMode } = useSettingsStore.getState()
+    track('document_exported', { format: 'print' })
     if (viewMode === 'write') {
       useSettingsStore.getState().set('viewMode', 'read')
       setTimeout(() => window.print(), 350)

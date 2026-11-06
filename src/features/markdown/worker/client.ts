@@ -1,3 +1,5 @@
+import { analytics } from '@/features/site/analytics'
+
 import { type RenderOptions, type RenderResult } from '../engine/pipeline'
 import { type RenderRequest, type RenderResponse } from './render.worker'
 
@@ -28,6 +30,7 @@ function getWorker() {
     })
     worker.addEventListener('error', (event) => {
       console.error('The markdown worker crashed; rendering on the main thread.', event.message)
+      analytics.captureException(new Error(`Markdown worker crashed: ${event.message}`))
       // Fall back to the main thread for this and every future render.
       workerFailed = true
       worker?.terminate()

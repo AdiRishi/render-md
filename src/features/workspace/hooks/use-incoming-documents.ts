@@ -1,9 +1,15 @@
 import { useEffect } from 'react'
 
-import { decodeShareFragment, readSharePayload, readShareView } from '@/lib/share-link'
+import {
+  decodeShareFragment,
+  readShareOrigin,
+  readSharePayload,
+  readShareView,
+} from '@/lib/share-link'
 import { toast } from '@/ui/toast'
 
 import { documentActions } from '../actions'
+import { track } from '../analytics'
 import { rememberFileHandle } from '../io/file-system'
 import { useDocumentStore } from '../state/document-store'
 import { useSettingsStore } from '../state/settings-store'
@@ -23,9 +29,10 @@ function openSharedFromHash() {
   const payload = readSharePayload(window.location.hash)
   if (!payload) return false
   const view = readShareView(window.location.hash)
+  const from = readShareOrigin(window.location.hash)
   decodeShareFragment(payload).then(
     (markdown) => {
-      documentActions.openShared(markdown, view)
+      documentActions.openShared(markdown, view, from)
       cleanUrl()
     },
     () =>
@@ -70,6 +77,7 @@ export function useIncomingDocuments(
           .openDocument({ markdown: await file.text(), source: 'file', name: file.name })
         rememberFileHandle(useDocumentStore.getState().id, handle)
         useSettingsStore.getState().set('viewMode', 'read')
+        track('document_opened', { source: 'os_file' })
       })()
     })
   }, [initialUrl, startBlank])

@@ -4,6 +4,7 @@ import {
   createShareUrl,
   decodeShareFragment,
   encodeShareFragment,
+  readShareOrigin,
   readSharePayload,
   readShareView,
 } from './share-link'
@@ -32,6 +33,18 @@ describe('share links', () => {
     expect(readShareView(url.hash)).toBe('split')
     await expect(decodeShareFragment(readSharePayload(url.hash)!)).resolves.toBe('# Hi')
     expect(readShareView('#md=abc')).toBe('read')
+  })
+
+  it('marks links made by the cheat sheet', async () => {
+    const url = new URL(
+      await createShareUrl('# Hi', 'https://x.dev', { view: 'split', from: 'cheatsheet' }),
+    )
+    expect(readShareOrigin(url.hash)).toBe('cheatsheet')
+    expect(readShareView(url.hash)).toBe('split')
+    await expect(decodeShareFragment(readSharePayload(url.hash)!)).resolves.toBe('# Hi')
+
+    const shared = new URL(await createShareUrl('# Hi', 'https://x.dev'))
+    expect(readShareOrigin(shared.hash)).toBe('share')
   })
 
   it('ignores unrelated fragments', () => {

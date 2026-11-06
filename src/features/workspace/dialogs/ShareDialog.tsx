@@ -7,6 +7,7 @@ import { Button } from '@/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/ui/dialog'
 import { Input } from '@/ui/input'
 
+import { track } from '../analytics'
 import { useDocumentStore } from '../state/document-store'
 import { useUiStore } from '../state/ui-store'
 
@@ -40,6 +41,7 @@ export function ShareDialog() {
   async function copy() {
     if (!url) return
     await navigator.clipboard.writeText(url)
+    track('document_shared', { method: 'copy_link' })
     setCopied(true)
     setTimeout(() => setCopied(false), 1800)
   }
@@ -80,9 +82,10 @@ export function ShareDialog() {
               type="button"
               className="flex items-center gap-1 rounded px-1.5 py-0.5 hover:bg-desk-2 hover:text-ink"
               onClick={() =>
-                void navigator
-                  .share({ url, title: 'A document on RenderMD' })
-                  .catch(() => undefined)
+                void navigator.share({ url, title: 'A document on RenderMD' }).then(
+                  () => track('document_shared', { method: 'share_sheet' }),
+                  () => undefined,
+                )
               }
             >
               <Share className="size-3" /> Share via…

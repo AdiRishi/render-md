@@ -4,8 +4,9 @@ import newsreaderWoff2 from '@fontsource-variable/newsreader/files/newsreader-la
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { ClientOnly, HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { type ReactNode } from 'react'
+import { type ReactNode, useEffect } from 'react'
 
+import { analytics } from '@/features/site/analytics'
 import { ErrorBoundary } from '@/features/site/ErrorBoundary'
 import { GoogleAnalytics } from '@/features/site/GoogleAnalytics'
 import { getThemePreferenceServerFn, themeBootScript } from '@/features/theme/theme'
@@ -49,6 +50,7 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: ReactNode }) {
   const preference = Route.useLoaderData()
+  useEffect(() => analytics.start(), [])
 
   return (
     <html
