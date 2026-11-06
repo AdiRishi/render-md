@@ -58,6 +58,9 @@ export async function decodeShareFragment(payload: string) {
 
 export type ShareView = 'read' | 'split' | 'write'
 
+/** Where a share link was made: the share dialog, or a cheat sheet example's "Open in editor". */
+export type ShareOrigin = 'share' | 'cheatsheet'
+
 export function readSharePayload(hash: string) {
   const params = new URLSearchParams(hash.replace(/^#/, ''))
   return params.get(SHARE_PARAM)
@@ -69,11 +72,19 @@ export function readShareView(hash: string): ShareView {
   return view === 'split' || view === 'write' ? view : 'read'
 }
 
+export function readShareOrigin(hash: string): ShareOrigin {
+  return new URLSearchParams(hash.replace(/^#/, '')).get('from') === 'cheatsheet'
+    ? 'cheatsheet'
+    : 'share'
+}
+
 export async function createShareUrl(
   markdown: string,
   origin: string,
-  { view = 'read' }: { view?: ShareView } = {},
+  { view = 'read', from = 'share' }: { view?: ShareView; from?: ShareOrigin } = {},
 ) {
-  const payload = await encodeShareFragment(markdown)
-  return `${origin}/#${SHARE_PARAM}=${payload}${view === 'read' ? '' : `&view=${view}`}`
+  const params = new URLSearchParams({ [SHARE_PARAM]: await encodeShareFragment(markdown) })
+  if (view !== 'read') params.set('view', view)
+  if (from !== 'share') params.set('from', from)
+  return `${origin}/#${params}`
 }

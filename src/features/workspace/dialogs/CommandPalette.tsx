@@ -182,17 +182,17 @@ export function CommandPalette({ headings }: { headings: HeadingEntry[] }) {
           ) : null}
 
           <CommandGroup heading="View">
-            <CommandItem onSelect={run(() => documentActions.setViewMode('write'))}>
+            <CommandItem onSelect={run(() => settings.set('viewMode', 'write'))}>
               <PenLine />
               Write mode
             </CommandItem>
-            <CommandItem onSelect={run(() => documentActions.setViewMode('split'))}>
+            <CommandItem onSelect={run(() => settings.set('viewMode', 'split'))}>
               <Columns2 />
               Split mode
             </CommandItem>
             <CommandItem
               keywords={['preview', 'reader']}
-              onSelect={run(() => documentActions.setViewMode('read'))}
+              onSelect={run(() => settings.set('viewMode', 'read'))}
             >
               <BookOpen />
               Read mode

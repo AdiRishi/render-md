@@ -3,7 +3,6 @@ import { BookOpen, Columns2, PenLine } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group'
 
-import { documentActions } from '../actions'
 import { type ViewMode, useSettingsStore } from '../state/settings-store'
 
 const VIEW_MODES: Array<{ value: ViewMode; label: string; icon: typeof PenLine; mobile: boolean }> =
@@ -15,6 +14,7 @@ const VIEW_MODES: Array<{ value: ViewMode; label: string; icon: typeof PenLine; 
 
 export function ViewSwitch() {
   const viewMode = useSettingsStore((state) => state.viewMode)
+  const setSetting = useSettingsStore((state) => state.set)
 
   return (
     <ToggleGroup
@@ -22,7 +22,7 @@ export function ViewSwitch() {
       value={[viewMode]}
       onValueChange={(next) => {
         const mode = VIEW_MODES.find((option) => option.value === next[0])
-        if (mode) documentActions.setViewMode(mode.value)
+        if (mode) setSetting('viewMode', mode.value)
       }}
       className="gap-0 rounded-lg bg-desk-2 p-0.5"
     >

@@ -1,9 +1,10 @@
 import { guessTitle } from '@/features/markdown/engine/source'
 import { downloadFile } from '@/lib/download'
 import { toFileSlug } from '@/lib/format'
+import { type ShareOrigin } from '@/lib/share-link'
 import { toast } from '@/ui/toast'
 
-import { track } from './analytics'
+import { track, trackOncePerDocument } from './analytics'
 import { buildStandaloneHtml, copyRichText } from './io/export'
 import {
   getFileHandle,
@@ -125,21 +126,15 @@ export const documentActions = {
     }
   },
 
-  openShared: (markdown: string, view: ViewMode = 'read') => {
+  openShared: (markdown: string, view: ViewMode, from: ShareOrigin) => {
     replaceDocument(
       () => useDocumentStore.getState().openDocument({ markdown, source: 'shared' }),
       'Opened a shared document',
     )
     useSettingsStore.getState().set('viewMode', view)
-    track('document_opened', { source: 'shared_link' })
-  },
-
-  /** Switch between write, split and read at the user's request. */
-  setViewMode: (mode: ViewMode) => {
-    const settings = useSettingsStore.getState()
-    if (settings.viewMode === mode) return
-    settings.set('viewMode', mode)
-    track('view_mode_changed', { view_mode: mode })
+    track('document_opened', {
+      source: from === 'cheatsheet' ? 'cheatsheet_example' : 'shared_link',
+    })
   },
 
   newDocument: () => {
@@ -197,7 +192,7 @@ export const documentActions = {
         title:
           result === 'downloaded' ? 'Downloaded markdown' : hadHandle ? 'Saved' : 'Saved to disk',
       })
-      track('document_saved', { destination: result })
+      trackOncePerDocument('document_saved', { destination: result })
     } catch (error) {
       toast.add({ type: 'error', title: 'Couldn’t save', description: errorMessage(error) })
     }

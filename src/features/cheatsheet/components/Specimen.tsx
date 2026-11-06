@@ -11,7 +11,9 @@ import { type CheatsheetEntry } from '../content'
 
 async function openInEditor(source: string) {
   const { createShareUrl } = await import('@/lib/share-link')
-  window.location.assign(await createShareUrl(source, window.location.origin, { view: 'split' }))
+  window.location.assign(
+    await createShareUrl(source, window.location.origin, { view: 'split', from: 'cheatsheet' }),
+  )
 }
 
 export function Specimen({ entry, hast }: { entry: CheatsheetEntry; hast: Root }) {
