@@ -81,12 +81,12 @@ export function ShareDialog() {
             <button
               type="button"
               className="flex items-center gap-1 rounded px-1.5 py-0.5 hover:bg-desk-2 hover:text-ink"
-              onClick={() => {
-                track('document_shared', { method: 'share_sheet' })
-                void navigator
-                  .share({ url, title: 'A document on RenderMD' })
-                  .catch(() => undefined)
-              }}
+              onClick={() =>
+                void navigator.share({ url, title: 'A document on RenderMD' }).then(
+                  () => track('document_shared', { method: 'share_sheet' }),
+                  () => undefined,
+                )
+              }
             >
               <Share className="size-3" /> Share via…
             </button>
