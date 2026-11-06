@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { type RenderResult } from '../engine/pipeline'
-import { renderInBackground } from './client'
 
 /**
  * Renders markdown in a worker. While a render is in flight, newer input is
@@ -23,10 +22,14 @@ export function useRenderedMarkdown(markdown: string, baseUrl: string | null) {
   }, [])
 
   useEffect(() => {
+    // Effects never run on the server; the SSR branch keeps the worker bundle,
+    // with its copy of every grammar, out of the server build.
+    if (import.meta.env.SSR) return
     queued.current = { markdown, baseUrl }
     if (inFlight.current) return
 
     const pump = async () => {
+      const { renderInBackground } = await import('./client')
       while (queued.current && mounted.current) {
         const next = queued.current
         queued.current = null
