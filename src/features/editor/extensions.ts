@@ -6,7 +6,7 @@ import {
   syntaxHighlighting,
 } from '@codemirror/language'
 import { languages } from '@codemirror/language-data'
-import { EditorSelection, type Extension } from '@codemirror/state'
+import { type Extension } from '@codemirror/state'
 import { EditorView, keymap } from '@codemirror/view'
 import { tags as t } from '@lezer/highlight'
 
@@ -146,31 +146,6 @@ const mermaid = LanguageDescription.of({
   load: () => import('./mermaid').then((m) => new LanguageSupport(m.mermaidLanguage)),
 })
 
-/** Paste a URL over a selection → turn the selection into a link. */
-const pasteLinks = EditorView.domEventHandlers({
-  paste(event, view) {
-    const text = event.clipboardData?.getData('text/plain')?.trim()
-    if (!text || !/^https?:\/\/\S+$/.test(text)) return false
-    const { state } = view
-    if (state.selection.ranges.every((range) => range.empty)) return false
-
-    event.preventDefault()
-    view.dispatch(
-      state.changeByRange((range) => {
-        if (range.empty) return { range }
-        const label = state.sliceDoc(range.from, range.to)
-        const insert = `[${label}](${text})`
-        return {
-          changes: { from: range.from, to: range.to, insert },
-          range: EditorSelection.cursor(range.from + insert.length),
-        }
-      }),
-      { userEvent: 'input.paste' },
-    )
-    return true
-  },
-})
-
 export function createEditorExtensions(): Extension[] {
   return [
     markdown({ base: markdownLanguage, codeLanguages: [mermaid, ...languages], addKeymap: true }),
@@ -181,7 +156,6 @@ export function createEditorExtensions(): Extension[] {
       'aria-label': 'Markdown source',
     }),
     keymap.of(formattingKeymap),
-    pasteLinks,
     theme,
     syntaxHighlighting(highlight),
   ]
