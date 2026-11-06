@@ -1,16 +1,17 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
+import { cloudflare } from '@cloudflare/vite-plugin'
 import babel from '@rolldown/plugin-babel'
 import tailwindcss from '@tailwindcss/vite'
 import { devtools } from '@tanstack/devtools-vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact, { reactCompilerPreset } from '@vitejs/plugin-react'
-import { nitro } from 'nitro/vite'
 import { visualizer } from 'rollup-plugin-visualizer'
 import { defineConfig } from 'vite'
 
-import { sitemapPlugin } from './build/vite-sitemap-plugin.ts'
+import { CHEATSHEET_UPDATED } from './src/features/cheatsheet/content/updated.ts'
+import { SITE_URL } from './src/lib/seo.ts'
 
 // KaTeX's package exports don't include its package.json.
 const katex: { version: string } = JSON.parse(
@@ -36,12 +37,14 @@ export default defineConfig({
   },
   plugins: [
     devtools(),
-    nitro(),
+    cloudflare({ viteEnvironment: { name: 'ssr' } }),
     tailwindcss(),
-    tanstackStart(),
+    tanstackStart({
+      pages: [{ path: '/' }, { path: '/cheatsheet', sitemap: { lastmod: CHEATSHEET_UPDATED } }],
+      sitemap: { host: SITE_URL },
+    }),
     viteReact(),
     babel({ presets: [reactCompilerPreset()] }),
-    visualizer({ filename: '.output/stats.html' }),
-    sitemapPlugin({ baseUrl: 'https://www.render-md.com' }),
+    visualizer({ filename: 'dist/stats.html' }),
   ],
 })

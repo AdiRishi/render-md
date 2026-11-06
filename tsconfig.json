@@ -1,6 +1,6 @@
 {
   "include": ["src", "build", "*.ts"],
-  "exclude": ["node_modules", ".output", ".wrangler", ".tanstack", "public"],
+  "exclude": ["node_modules", "dist", ".wrangler", ".tanstack", "public"],
   "compilerOptions": {
     "target": "ES2023",
     "lib": ["ES2024", "DOM", "DOM.Iterable"],

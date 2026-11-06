@@ -16,7 +16,7 @@ import type {
   RenderResponse,
 } from '../src/features/markdown/worker/render.worker.ts'
 
-const assets = resolve('.output/public/assets')
+const assets = resolve('dist/client/assets')
 const file = readdirSync(assets).find((name) => /^render\.worker-.+\.js$/.test(name))
 if (!file) throw new Error(`No render worker bundle in ${assets}. Run \`pnpm build\` first.`)
 

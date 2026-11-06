@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "clean": "rm -rf .output .wrangler .tanstack",
+    "clean": "rm -rf dist .wrangler .tanstack",
     "dev": "vite dev --port 3000",
     "build": "vite build",
     "preview": "vite preview",
@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit",
     "check": "oxfmt --check && oxlint --type-aware && tsc --noEmit",
     "fix": "oxfmt && oxlint --type-aware --fix",
-    "deploy": "wrangler --cwd .output/ deploy"
+    "deploy": "wrangler deploy"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
@@ -48,7 +48,6 @@
     "katex": "^0.19.1",
     "lucide-react": "^1.69.0",
     "mermaid": "^12.3.0",
-    "nitro": "3.0.261103-rc",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "rehype-raw": "^7.0.0",
@@ -73,6 +72,7 @@
   },
   "devDependencies": {
     "@babel/core": "^8.1.0",
+    "@cloudflare/vite-plugin": "^1.67.0",
     "@rolldown/plugin-babel": "^0.3.0",
     "@tanstack/devtools-vite": "^0.8.6",
     "@testing-library/dom": "^10.4.2",

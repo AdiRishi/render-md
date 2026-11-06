@@ -6,17 +6,17 @@ Guidance for AI agents working in this repository. (`CLAUDE.md` and `GEMINI.md` 
 
 RenderMD is a private, ad-free markdown renderer and editor: paste, drop, open or link any markdown file and read it beautifully typeset. Everything renders in the browser — documents are stored in `localStorage`, and share links carry the document inside the URL fragment (never sent to a server).
 
-Built with TanStack Start (React 19), Tailwind CSS 4, CodeMirror 6, a unified/remark/rehype pipeline running in a Web Worker, Shiki, KaTeX and Mermaid. Deployed to Cloudflare Workers via Nitro.
+Built with TanStack Start (React 19), Tailwind CSS 4, CodeMirror 6, a unified/remark/rehype pipeline running in a Web Worker, Shiki, KaTeX and Mermaid. Deployed to Cloudflare Workers with `@cloudflare/vite-plugin` (config in `wrangler.jsonc`).
 
 ## Commands
 
 ```bash
-pnpm dev          # Dev server on :3000 (Nitro runs on Node in dev)
-pnpm build        # Production build → .output/ (Cloudflare module worker)
+pnpm dev          # Dev server on :3000 (SSR runs in workerd, as in production)
+pnpm build        # Production build → dist/ (client assets + Worker), plus the sitemap
 pnpm test         # Vitest
 pnpm check        # oxfmt --check + oxlint --type-aware + tsc (TypeScript 7) — what CI runs
 pnpm fix          # Format and auto-fix lint issues
-pnpm deploy       # Deploy .output/ with wrangler
+pnpm deploy       # Deploy dist/ with wrangler
 ```
 
 ## Toolchain
@@ -46,7 +46,7 @@ src/
 ├── lib/           Framework-free helpers (utils → cn, format, platform, download, seo, share-link).
 ├── styles/        Global CSS: Tailwind entry (app.css) and color tokens (tokens.css).
 └── router.tsx
-build/             Build-time tooling (the sitemap Vite plugin, the render-worker smoke test) — never shipped.
+build/             Build-time tooling (the render-worker smoke test) — never shipped.
 ```
 
 ### Layers and dependency rules

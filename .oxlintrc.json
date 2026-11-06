@@ -51,7 +51,7 @@
     "import/no-named-as-default-member": "off",
     "react/jsx-no-constructed-context-values": "off"
   },
-  "ignorePatterns": [".output", ".tanstack", ".wrangler", "public", "**/*.gen.ts"],
+  "ignorePatterns": ["dist", ".tanstack", ".wrangler", "public", "**/*.gen.ts"],
   "overrides": [
     {
       "files": ["src/lib/**"],
