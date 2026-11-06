@@ -1,3 +1,4 @@
+import { usePostHog } from '@posthog/react'
 import { BookOpen, Columns2, PenLine } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
@@ -13,6 +14,7 @@ const VIEW_MODES: Array<{ value: ViewMode; label: string; icon: typeof PenLine; 
   ]
 
 export function ViewSwitch() {
+  const posthog = usePostHog()
   const viewMode = useSettingsStore((state) => state.viewMode)
   const setSetting = useSettingsStore((state) => state.set)
 
@@ -22,7 +24,10 @@ export function ViewSwitch() {
       value={[viewMode]}
       onValueChange={(next) => {
         const mode = VIEW_MODES.find((option) => option.value === next[0])
-        if (mode) setSetting('viewMode', mode.value)
+        if (mode && mode.value !== viewMode) {
+          setSetting('viewMode', mode.value)
+          posthog.capture('view_mode_changed', { view_mode: mode.value })
+        }
       }}
       className="gap-0 rounded-lg bg-desk-2 p-0.5"
     >

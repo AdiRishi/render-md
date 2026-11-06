@@ -1,6 +1,7 @@
 import geistMonoWoff2 from '@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2?url'
 import hankenGroteskWoff2 from '@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2?url'
 import newsreaderWoff2 from '@fontsource-variable/newsreader/files/newsreader-latin-standard-normal.woff2?url'
+import { PostHogProvider } from '@posthog/react'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { ClientOnly, HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
@@ -23,6 +24,42 @@ const preloadFont = (href: string) => ({
   type: 'font/woff2',
   crossOrigin: 'anonymous' as const,
 })
+
+const posthogProjectToken = import.meta.env.VITE_PUBLIC_POSTHOG_PROJECT_TOKEN
+const posthogHost = import.meta.env.VITE_PUBLIC_POSTHOG_HOST
+
+function PostHogRoot({ children }: { children: ReactNode }) {
+  if (!posthogProjectToken || !posthogHost) {
+    if (import.meta.env.DEV) {
+      const missingVariable = posthogProjectToken
+        ? 'VITE_PUBLIC_POSTHOG_HOST'
+        : 'VITE_PUBLIC_POSTHOG_PROJECT_TOKEN'
+      throw new Error(
+        `${missingVariable} variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once ${missingVariable} is configured`,
+      )
+    }
+
+    return children
+  }
+
+  return (
+    <PostHogProvider
+      apiKey={posthogProjectToken}
+      options={{
+        api_host: posthogHost,
+        capture_exceptions: true,
+        debug: import.meta.env.DEV,
+        defaults: '2025-05-24',
+        logs: {
+          serviceName: 'render-md-web',
+          environment: import.meta.env.MODE,
+        },
+      }}
+    >
+      {children}
+    </PostHogProvider>
+  )
+}
 
 export const Route = createRootRoute({
   head: () => ({
@@ -66,17 +103,19 @@ function RootDocument({ children }: { children: ReactNode }) {
         </ClientOnly>
       </head>
       <body>
-        <ThemeProvider initialPreference={preference}>
-          <TooltipProvider delay={350}>
-            <ErrorBoundary>{children}</ErrorBoundary>
-          </TooltipProvider>
-          {/* Centered above the workspace status bar. */}
-          <Toaster className="bottom-11 sm:inset-x-4 sm:mx-auto" />
-        </ThemeProvider>
-        <TanStackDevtools
-          config={{ position: 'bottom-left' }}
-          plugins={[{ name: 'TanStack Router', render: <TanStackRouterDevtoolsPanel /> }]}
-        />
+        <PostHogRoot>
+          <ThemeProvider initialPreference={preference}>
+            <TooltipProvider delay={350}>
+              <ErrorBoundary>{children}</ErrorBoundary>
+            </TooltipProvider>
+            {/* Centered above the workspace status bar. */}
+            <Toaster className="bottom-11 sm:inset-x-4 sm:mx-auto" />
+          </ThemeProvider>
+          <TanStackDevtools
+            config={{ position: 'bottom-left' }}
+            plugins={[{ name: 'TanStack Router', render: <TanStackRouterDevtoolsPanel /> }]}
+          />
+        </PostHogRoot>
         <Scripts />
       </body>
     </html>
