@@ -136,9 +136,18 @@ async function highlightBlock(text: string, language: string | null) {
   }
 }
 
-/** Highlight every fenced code block in a rendered document, in place. */
+/**
+ * Highlight every fenced code block in a rendered document, in place. Only the
+ * markup changes: each block's text, final newline included, stays as rendered.
+ */
 export async function highlightCodeBlocks(tree: Root) {
-  const blocks: Array<{ code: Element; key: string; text: string; language: string | null }> = []
+  const blocks: Array<{
+    code: Element
+    key: string
+    text: string
+    language: string | null
+    finalNewline: boolean
+  }> = []
   visit(tree, 'element', (node) => {
     if (node.tagName !== 'pre') return
     const code = node.children.find(
@@ -147,19 +156,21 @@ export async function highlightCodeBlocks(tree: Root) {
     if (!code) return
     const language = fenceLanguage(code)
     if (language && NOT_CODE.has(language)) return
-    const text = toText(code, { whitespace: 'pre' }).replace(/\n$/, '')
-    blocks.push({ code, key: `${language}\u0000${text}`, text, language })
+    const source = toText(code, { whitespace: 'pre' })
+    const finalNewline = source.endsWith('\n')
+    const text = finalNewline ? source.slice(0, -1) : source
+    blocks.push({ code, key: `${language}\u0000${text}`, text, language, finalNewline })
   })
 
   await Promise.all(
-    blocks.map(async ({ code, key, text, language }) => {
+    blocks.map(async ({ code, key, text, language, finalNewline }) => {
       let lines = cache.get(key)
       if (!lines) {
         lines = await highlightBlock(text, language)
         if (cache.size >= MAX_CACHE) cache.delete(cache.keys().next().value!)
         cache.set(key, lines)
       }
-      code.children = lines
+      code.children = finalNewline ? [...lines, { type: 'text', value: '\n' }] : lines
     }),
   )
   return tree

@@ -29,12 +29,12 @@ export function useRenderedMarkdown(markdown: string, baseUrl: string | null) {
     if (inFlight.current) return
 
     const pump = async () => {
-      const { renderInBackground } = await import('./client')
       while (queued.current && mounted.current) {
         const next = queued.current
         queued.current = null
         inFlight.current = true
         try {
+          const { renderInBackground } = await import('./client')
           const rendered = await renderInBackground(next.markdown, { baseUrl: next.baseUrl })
           if (mounted.current) {
             setResult(rendered)

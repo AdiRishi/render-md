@@ -18,11 +18,13 @@ describe('highlightCodeBlocks', () => {
     expect(out).toContain('>const<')
   })
 
-  it('keeps the source text exactly', async () => {
-    const source = 'if (a < b) {\n  return "x & y"\n}\n\nlast()'
+  it('keeps the source text exactly, trailing blank line included', async () => {
+    const source = 'if (a < b) {\n  return "x & y"\n}\n\nlast()\n'
     const { hast } = renderMarkdown(`\`\`\`js\n${source}\n\`\`\``)
     await highlightCodeBlocks(hast)
-    expect(toText(hast, { whitespace: 'pre' }).trimEnd()).toBe(source)
+    const code = hast.children.find((node) => node.type === 'element')!
+    // A fence's code text is its content plus one final newline.
+    expect(toText(code, { whitespace: 'pre' })).toBe(`${source}\n`)
   })
 
   it('splits unknown and unlabelled fences into plain lines', async () => {
