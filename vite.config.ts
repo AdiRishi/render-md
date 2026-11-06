@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
 import babel from '@rolldown/plugin-babel'
@@ -11,7 +12,15 @@ import { defineConfig } from 'vite'
 
 import { sitemapPlugin } from './build/vite-sitemap-plugin.ts'
 
+// KaTeX's package exports don't include its package.json.
+const katex: { version: string } = JSON.parse(
+  readFileSync(new URL('./node_modules/katex/package.json', import.meta.url), 'utf8'),
+)
+
 export default defineConfig({
+  define: {
+    'import.meta.env.KATEX_VERSION': JSON.stringify(katex.version),
+  },
   resolve: {
     tsconfigPaths: true,
     alias: {
