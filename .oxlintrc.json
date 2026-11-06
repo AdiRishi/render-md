@@ -217,6 +217,12 @@
         "jsx-a11y/click-events-have-key-events": "off",
         "jsx-a11y/no-noninteractive-element-interactions": "off"
       }
+    },
+    {
+      "files": ["src/ui/toast.tsx"],
+      "rules": {
+        "react/no-object-type-as-default-prop": "off"
+      }
     }
   ]
 }

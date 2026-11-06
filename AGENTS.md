@@ -142,7 +142,7 @@ crosses documents.
 
 - Add or update components with the CLI — `pnpm dlx shadcn@latest add <name>` (add `--overwrite` to pull upstream changes) — then `pnpm fix` to apply our formatting.
 - Keep generated components close to stock. The look comes from the tokens: `styles/tokens.css` maps shadcn's semantic variables (`--background`, `--popover`, `--primary`, `--muted`, `--ring`, …) onto the Paper & Proof palette, so restyle there rather than editing component classes. Per-use tweaks go in `className` at the call site.
-- Deliberate deviations are commented in the file (e.g. `sonner.tsx` takes the theme from our provider instead of `next-themes`).
+- Deliberate deviations are commented in the file (e.g. `toast.tsx`'s `Toaster` takes a `className` to position its viewport).
 - Our own primitives that shadcn doesn't ship (`brand`, `crop-marks`, `copy-button`) live alongside them with the same naming.
 
 ## Design system — "Paper & Proof"

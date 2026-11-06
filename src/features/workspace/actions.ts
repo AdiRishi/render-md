@@ -1,8 +1,7 @@
-import { toast } from 'sonner'
-
 import { guessTitle } from '@/features/markdown/engine/source'
 import { downloadFile } from '@/lib/download'
 import { toFileSlug } from '@/lib/format'
+import { toast } from '@/ui/toast'
 
 import { buildStandaloneHtml, copyRichText } from './io/export'
 import {
@@ -44,19 +43,14 @@ function replaceDocument(open: () => void, message: string) {
 
   const store = useDocumentStore.getState()
   const canRestore = store.recents.some((entry) => entry.id === previousId)
-  toast(message, {
-    action:
-      canRestore || wasPristineSample
-        ? {
-            label: 'Undo',
-            onClick: () =>
-              canRestore
-                ? useDocumentStore.getState().restoreRecent(previousId)
-                : useDocumentStore
-                    .getState()
-                    .openDocument({ markdown: SAMPLE_MARKDOWN, source: 'sample' }),
-          }
-        : undefined,
+  const undo = () => {
+    toast.close(id)
+    if (canRestore) useDocumentStore.getState().restoreRecent(previousId)
+    else useDocumentStore.getState().openDocument({ markdown: SAMPLE_MARKDOWN, source: 'sample' })
+  }
+  const id = toast.add({
+    title: message,
+    actionProps: canRestore || wasPristineSample ? { children: 'Undo', onClick: undo } : undefined,
   })
 }
 
@@ -73,7 +67,11 @@ export const documentActions = {
         rememberFileHandle(useDocumentStore.getState().id, file.handle)
       }, `Opened ${file.name}`)
     } catch (error) {
-      toast.error('Couldn’t open that file', { description: errorMessage(error) })
+      toast.add({
+        type: 'error',
+        title: 'Couldn’t open that file',
+        description: errorMessage(error),
+      })
     }
   },
 
@@ -88,15 +86,19 @@ export const documentActions = {
         `Opened ${opened.name}`,
       )
     } catch (error) {
-      toast.error('Couldn’t read that file', { description: errorMessage(error) })
+      toast.add({
+        type: 'error',
+        title: 'Couldn’t read that file',
+        description: errorMessage(error),
+      })
     }
   },
 
   openUrl: async (input: string) => {
-    const loading = toast.loading('Fetching document…')
+    const loading = toast.add({ title: 'Fetching document…', type: 'loading' })
     try {
       const remote = await fetchRemoteMarkdown(input)
-      toast.dismiss(loading)
+      toast.close(loading)
       replaceDocument(
         () =>
           useDocumentStore.getState().openDocument({
@@ -109,7 +111,11 @@ export const documentActions = {
       )
       return true
     } catch (error) {
-      toast.error('Couldn’t load that URL', { id: loading, description: errorMessage(error) })
+      toast.update(loading, {
+        type: 'error',
+        title: 'Couldn’t load that URL',
+        description: errorMessage(error),
+      })
       return false
     }
   },
@@ -143,7 +149,7 @@ export const documentActions = {
     try {
       const text = await navigator.clipboard.readText()
       if (!text.trim()) {
-        toast('Your clipboard is empty')
+        toast.add({ title: 'Your clipboard is empty' })
         return
       }
       replaceDocument(
@@ -151,7 +157,9 @@ export const documentActions = {
         'Pasted from clipboard',
       )
     } catch {
-      toast.error('Clipboard access was blocked', {
+      toast.add({
+        type: 'error',
+        title: 'Clipboard access was blocked',
         description: 'Click into the editor and paste with ⌘V / Ctrl+V instead.',
       })
     }
@@ -166,10 +174,11 @@ export const documentActions = {
         markdown,
         suggestedName: getFileName('md'),
       })
-      if (result === 'saved') toast.success(hadHandle ? 'Saved' : 'Saved to disk')
-      if (result === 'downloaded') toast.success('Downloaded markdown')
+      if (result === 'saved')
+        toast.add({ type: 'success', title: hadHandle ? 'Saved' : 'Saved to disk' })
+      if (result === 'downloaded') toast.add({ type: 'success', title: 'Downloaded markdown' })
     } catch (error) {
-      toast.error('Couldn’t save', { description: errorMessage(error) })
+      toast.add({ type: 'error', title: 'Couldn’t save', description: errorMessage(error) })
     }
   },
 
@@ -180,31 +189,33 @@ export const documentActions = {
   downloadHtml: () => {
     const article = previewArticle.current
     if (!article) {
-      toast.error('Open the preview to export HTML')
+      toast.add({ type: 'error', title: 'Open the preview to export HTML' })
       return
     }
     downloadFile(getFileName('html'), buildStandaloneHtml(article, getDocumentTitle()), 'text/html')
-    toast.success('Exported a standalone HTML file')
+    toast.add({ type: 'success', title: 'Exported a standalone HTML file' })
   },
 
   copyMarkdown: async () => {
     await navigator.clipboard.writeText(useDocumentStore.getState().markdown)
-    toast.success('Markdown copied')
+    toast.add({ type: 'success', title: 'Markdown copied' })
   },
 
   copyRichText: async () => {
     const article = previewArticle.current
     if (!article) {
-      toast.error('Open the preview to copy formatted text')
+      toast.add({ type: 'error', title: 'Open the preview to copy formatted text' })
       return
     }
     try {
       const mode = await copyRichText(article, useDocumentStore.getState().markdown)
-      toast.success(mode === 'rich' ? 'Copied formatted text' : 'Copied markdown', {
+      toast.add({
+        type: 'success',
+        title: mode === 'rich' ? 'Copied formatted text' : 'Copied markdown',
         description: mode === 'rich' ? 'Paste into Docs, Gmail, Notion or Word.' : undefined,
       })
     } catch (error) {
-      toast.error('Couldn’t copy', { description: errorMessage(error) })
+      toast.add({ type: 'error', title: 'Couldn’t copy', description: errorMessage(error) })
     }
   },
 
