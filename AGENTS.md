@@ -46,7 +46,7 @@ src/
 ├── lib/           Framework-free helpers (utils → cn, format, platform, download, seo, share-link).
 ├── styles/        Global CSS: Tailwind entry (app.css) and color tokens (tokens.css).
 └── router.tsx
-build/             Build-time tooling (the sitemap Vite plugin) — never shipped.
+build/             Build-time tooling (the sitemap Vite plugin, the render-worker smoke test) — never shipped.
 ```
 
 ### Layers and dependency rules

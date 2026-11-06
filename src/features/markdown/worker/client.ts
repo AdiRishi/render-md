@@ -26,7 +26,8 @@ function getWorker() {
       if (data.ok) request.resolve(data.result)
       else request.reject(new Error(data.error))
     })
-    worker.addEventListener('error', () => {
+    worker.addEventListener('error', (event) => {
+      console.error('The markdown worker crashed; rendering on the main thread.', event.message)
       // Fall back to the main thread for this and every future render.
       workerFailed = true
       worker?.terminate()
