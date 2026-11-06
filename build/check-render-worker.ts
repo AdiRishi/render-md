@@ -1,6 +1,6 @@
 /**
  * Smoke-test the built markdown worker: load it without a DOM, as a Web Worker
- * runs, and render a document that exercises entities and math. Vite bundles
+ * runs, and render a document that exercises entities, math and highlighted code. Vite bundles
  * workers with the `browser` export condition, which can select DOM-only entry
  * points; a worker that crashes on load is otherwise invisible, because the app
  * falls back to rendering on the main thread.
@@ -33,7 +33,11 @@ const response = await new Promise<RenderResponse>((respond, reject) => {
   import(pathToFileURL(join(assets, file)).href).then(() => {
     if (!onMessage) throw new Error('The worker never listened for messages.')
     onMessage({
-      data: { id: 1, markdown: '# Fish &amp; chips &copy;\n\n$e^{i\\pi}$', options: {} },
+      data: {
+        id: 1,
+        markdown: '# Fish &amp; chips &copy;\n\n$e^{i\\pi}$\n\n```js\nconst x = 1\n```',
+        options: {},
+      },
     })
   }, reject)
 })
@@ -44,5 +48,8 @@ if (response.result.title !== 'Fish & chips ©') {
 }
 if (!JSON.stringify(response.result.hast).includes('"katex"')) {
   throw new Error('The worker rendered no KaTeX.')
+}
+if (!JSON.stringify(response.result.hast).includes('--shiki-light')) {
+  throw new Error('The worker highlighted no code.')
 }
 console.log(`✓ ${file} renders without a DOM`)

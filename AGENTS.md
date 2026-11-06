@@ -85,8 +85,9 @@ features or layers, use the `@/` alias. Tests sit next to the code they cover
 
 ```
 markdown/
-├── engine/      Pure, synchronous markdown → HAST. Runs in the worker, on the server and in tests.
-│   ├── pipeline.ts          renderMarkdown(): the unified pipeline, cached per base URL
+├── engine/      Pure markdown → HAST. Runs in the worker, on the server and in tests.
+│   ├── pipeline.ts          renderMarkdown(): the synchronous unified pipeline, cached per base URL
+│   ├── highlight.ts         highlightCodeBlocks(): Shiki tokens for fenced code, an async pass over the result
 │   ├── plugins/             one remark/rehype plugin per file (alerts, math, frontmatter, …)
 │   ├── sanitize-schema.ts   GitHub's sanitize rules, widened slightly
 │   └── source.ts, links.ts, stats.ts, hast.ts, types.ts
@@ -94,7 +95,7 @@ markdown/
 └── render/      HAST → React
     ├── DocumentView.tsx     the document (<article class="doc">)
     ├── elements/            one component per HTML element we customize (Link, Heading, TaskList, …)
-    ├── code/                Shiki code blocks
+    ├── code/                code blocks (language label, title, copy, line numbers)
     ├── diagram/             Mermaid diagrams + pan/zoom viewer
     ├── document.css         the document's typography (also inlined into HTML exports)
     └── typesets.ts, context.ts
@@ -102,8 +103,10 @@ markdown/
 
 Pipeline order: `remark-parse → frontmatter → gfm → math → gemoji → code meta →
 remark-rehype → rehype-raw → source lines → rehype-sanitize → KaTeX → alerts →
-slug → fragment links → base URL → heading outline`. Anything a plugin adds
-_before_ sanitizing must be allow-listed in `sanitize-schema.ts`. Block elements
+slug → fragment links → base URL → heading outline`, then `highlightCodeBlocks`,
+which every caller (worker, main-thread fallback, cheat sheet server function)
+awaits because grammars load on demand. Anything a plugin adds _before_
+sanitizing must be allow-listed in `sanitize-schema.ts`. Block elements
 carry `data-line` (their source line) for scroll sync, double-click-to-locate
 and live task toggles.
 
@@ -160,7 +163,7 @@ crosses documents.
 - **Path alias:** `@/*` → `./src/*`, used across features and layers; relative imports within a feature.
 - **No barrel files**, except where a folder is a single unit of data (`cheatsheet/content/index.ts`) or a registry (`markdown/render/elements/index.ts`). Barrels hide dependencies and defeat lazy loading.
 - **Heavy dependencies load lazily:** Shiki, Mermaid and the markdown pipeline are dynamic imports; keep them out of the initial bundle.
-- Keep the markdown engine pure and synchronous; add tests in `features/markdown/engine/pipeline.test.ts` for any syntax change.
+- Keep the markdown engine pure, and `renderMarkdown` synchronous (highlighting is the one async pass); add tests in `features/markdown/engine/pipeline.test.ts` for any syntax change.
 
 ## The cheat sheet (`/cheatsheet`) — an SEO page
 

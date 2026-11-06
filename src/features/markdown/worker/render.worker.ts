@@ -1,3 +1,4 @@
+import { highlightCodeBlocks } from '../engine/highlight'
 import { type RenderOptions, type RenderResult, renderMarkdown } from '../engine/pipeline'
 
 export type RenderRequest = { id: number; markdown: string; options: RenderOptions }
@@ -13,15 +14,16 @@ const scope = self as unknown as {
   postMessage: (message: RenderResponse) => void
 }
 
-scope.addEventListener('message', ({ data }) => {
+async function render({ id, markdown, options }: RenderRequest): Promise<RenderResponse> {
   try {
-    const result = renderMarkdown(data.markdown, { ...data.options, stripPositions: true })
-    scope.postMessage({ id: data.id, ok: true, result })
+    const result = renderMarkdown(markdown, { ...options, stripPositions: true })
+    await highlightCodeBlocks(result.hast)
+    return { id, ok: true, result }
   } catch (error) {
-    scope.postMessage({
-      id: data.id,
-      ok: false,
-      error: error instanceof Error ? error.message : String(error),
-    })
+    return { id, ok: false, error: error instanceof Error ? error.message : String(error) }
   }
+}
+
+scope.addEventListener('message', ({ data }) => {
+  void render(data).then((response) => scope.postMessage(response))
 })

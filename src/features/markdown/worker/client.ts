@@ -46,8 +46,13 @@ function getWorker() {
 }
 
 async function renderOnMainThread(markdown: string, options: RenderOptions) {
-  const { renderMarkdown } = await import('../engine/pipeline')
-  return renderMarkdown(markdown, options)
+  const [{ renderMarkdown }, { highlightCodeBlocks }] = await Promise.all([
+    import('../engine/pipeline'),
+    import('../engine/highlight'),
+  ])
+  const result = renderMarkdown(markdown, options)
+  await highlightCodeBlocks(result.hast)
+  return result
 }
 
 /**

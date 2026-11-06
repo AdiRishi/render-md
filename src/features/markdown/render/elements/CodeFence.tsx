@@ -7,7 +7,7 @@ import { type ElementProps, sourceLineOf } from './element-props'
 
 const MERMAID = new Set(['mermaid', 'mmd'])
 
-/** `<pre><code>`: Mermaid fences become diagrams, everything else is highlighted. */
+/** `<pre><code>`: Mermaid fences become diagrams, everything else a code block. */
 export function CodeFence({ node, children, ...props }: ElementProps<'pre'>) {
   const code = node?.children.find(
     (child): child is Element => child.type === 'element' && child.tagName === 'code',
@@ -25,5 +25,9 @@ export function CodeFence({ node, children, ...props }: ElementProps<'pre'>) {
   if (language && MERMAID.has(language)) return <Diagram code={text} line={line} />
 
   const meta = typeof code.properties.dataMeta === 'string' ? code.properties.dataMeta : null
-  return <CodeBlock code={text} language={language} meta={meta} line={line} />
+  return (
+    <CodeBlock code={text} language={language} meta={meta} line={line}>
+      {children}
+    </CodeBlock>
+  )
 }
