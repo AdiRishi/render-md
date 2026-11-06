@@ -1,7 +1,6 @@
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import { Copy, Download, FileCode2, FileImage, Maximize2, TriangleAlert, X } from 'lucide-react'
 import { use, useEffect, useState } from 'react'
-import { toast } from 'sonner'
 
 import { useTheme } from '@/features/theme/ThemeProvider'
 import { downloadFile } from '@/lib/download'
@@ -11,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/ui/dropdown-menu'
+import { toast } from '@/ui/toast'
 
 import { DocumentContext } from '../context'
 import { diagramBackground, renderMermaid } from './mermaid'
@@ -63,7 +63,7 @@ export function Diagram({ code, line }: { code: string; line?: number }) {
     try {
       downloadFile('diagram.png', await renderPng())
     } catch {
-      toast.error('This diagram could not be exported as PNG.')
+      toast.add({ type: 'error', title: 'This diagram could not be exported as PNG.' })
     }
   }
 
@@ -71,18 +71,18 @@ export function Diagram({ code, line }: { code: string; line?: number }) {
     try {
       // Hand the clipboard a promise so Safari still counts this as part of the click.
       await navigator.clipboard.write([new ClipboardItem({ 'image/png': renderPng() })])
-      toast.success('Copied diagram as image')
+      toast.add({ type: 'success', title: 'Copied diagram as image' })
     } catch {
-      toast.error('This diagram could not be copied as an image.')
+      toast.add({ type: 'error', title: 'This diagram could not be copied as an image.' })
     }
   }
 
   async function copySource() {
     try {
       await navigator.clipboard.writeText(code)
-      toast.success('Copied Mermaid source')
+      toast.add({ type: 'success', title: 'Copied Mermaid source' })
     } catch {
-      toast.error('Clipboard access was blocked')
+      toast.add({ type: 'error', title: 'Clipboard access was blocked' })
     }
   }
 

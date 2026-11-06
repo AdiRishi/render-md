@@ -9,9 +9,9 @@ import { type ReactNode } from 'react'
 import { ErrorBoundary } from '@/features/site/ErrorBoundary'
 import { GoogleAnalytics } from '@/features/site/GoogleAnalytics'
 import { getThemePreferenceServerFn, themeBootScript } from '@/features/theme/theme'
-import { ThemeProvider, useTheme } from '@/features/theme/ThemeProvider'
+import { ThemeProvider } from '@/features/theme/ThemeProvider'
 import { THEME_COLOR } from '@/lib/seo'
-import { Toaster } from '@/ui/sonner'
+import { Toaster } from '@/ui/toast'
 import { TooltipProvider } from '@/ui/tooltip'
 
 import appCss from '@/styles/app.css?url'
@@ -47,12 +47,6 @@ export const Route = createRootRoute({
   shellComponent: RootDocument,
 })
 
-/** Toasts follow the app's own theme preference (not the OS one). */
-function ThemedToaster() {
-  const { resolved } = useTheme()
-  return <Toaster theme={resolved} position="bottom-center" offset={44} />
-}
-
 function RootDocument({ children }: { children: ReactNode }) {
   const preference = Route.useLoaderData()
 
@@ -76,7 +70,8 @@ function RootDocument({ children }: { children: ReactNode }) {
           <TooltipProvider delay={350}>
             <ErrorBoundary>{children}</ErrorBoundary>
           </TooltipProvider>
-          <ThemedToaster />
+          {/* Centered above the workspace status bar. */}
+          <Toaster className="bottom-11 sm:inset-x-4 sm:mx-auto" />
         </ThemeProvider>
         <TanStackDevtools
           config={{ position: 'bottom-left' }}

@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "render-md",
+  "main": "@tanstack/react-start/server-entry",
+  "compatibility_date": "2026-09-01",
+  "routes": [
+    { "pattern": "render-md.com", "custom_domain": true },
+    { "pattern": "www.render-md.com", "custom_domain": true },
+  ],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "traces": { "enabled": true },
+  },
+  "preview_urls": true,
+}

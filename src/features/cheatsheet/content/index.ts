@@ -11,9 +11,7 @@ export { FAQ } from './faq'
 export { QUICK_REFERENCE } from './quick-reference'
 export { SUPPORT_LABEL, type Support } from './support'
 export type { CheatsheetChapter, CheatsheetEntry, CheatsheetSection } from './types'
-
-/** Bump when the content changes meaningfully — it's published as dateModified. */
-export const CHEATSHEET_UPDATED = '2026-10-01'
+export { CHEATSHEET_UPDATED } from './updated'
 
 export const CHAPTERS: CheatsheetChapter[] = [basics, gfm, beyond]
 

@@ -1,22 +1,22 @@
 # AGENTS.md
 
-Guidance for AI agents working in this repository. (`CLAUDE.md` and `GEMINI.md` are symlinks to this file.)
+Guidance for AI agents working in this repository.
 
 ## Project overview
 
 RenderMD is a private, ad-free markdown renderer and editor: paste, drop, open or link any markdown file and read it beautifully typeset. Everything renders in the browser — documents are stored in `localStorage`, and share links carry the document inside the URL fragment (never sent to a server).
 
-Built with TanStack Start (React 19), Tailwind CSS 4, CodeMirror 6, a unified/remark/rehype pipeline running in a Web Worker, Shiki, KaTeX and Mermaid. Deployed to Cloudflare Workers via Nitro.
+Built with TanStack Start (React 19), Tailwind CSS 4, CodeMirror 6, a unified/remark/rehype pipeline running in a Web Worker, Shiki, KaTeX and Mermaid. Deployed to Cloudflare Workers with `@cloudflare/vite-plugin` (config in `wrangler.jsonc`).
 
 ## Commands
 
 ```bash
-pnpm dev          # Dev server on :3000 (Nitro runs on Node in dev)
-pnpm build        # Production build → .output/ (Cloudflare module worker)
+pnpm dev          # Dev server on :3000 (SSR runs in workerd, as in production)
+pnpm build        # Production build → dist/ (client assets + Worker), plus the sitemap
 pnpm test         # Vitest
 pnpm check        # oxfmt --check + oxlint --type-aware + tsc (TypeScript 7) — what CI runs
 pnpm fix          # Format and auto-fix lint issues
-pnpm deploy       # Deploy .output/ with wrangler
+pnpm deploy       # Deploy dist/ with wrangler
 ```
 
 ## Toolchain
@@ -46,7 +46,7 @@ src/
 ├── lib/           Framework-free helpers (utils → cn, format, platform, download, seo, share-link).
 ├── styles/        Global CSS: Tailwind entry (app.css) and color tokens (tokens.css).
 └── router.tsx
-build/             Build-time tooling (the sitemap Vite plugin) — never shipped.
+build/             Build-time tooling (the render-worker smoke test) — never shipped.
 ```
 
 ### Layers and dependency rules
@@ -85,8 +85,9 @@ features or layers, use the `@/` alias. Tests sit next to the code they cover
 
 ```
 markdown/
-├── engine/      Pure, synchronous markdown → HAST. Runs in the worker, on the server and in tests.
-│   ├── pipeline.ts          renderMarkdown(): the unified pipeline, cached per base URL
+├── engine/      Pure markdown → HAST. Runs in the worker, on the server and in tests.
+│   ├── pipeline.ts          renderMarkdown(): the synchronous unified pipeline, cached per base URL
+│   ├── highlight.ts         highlightCodeBlocks(): Shiki tokens for fenced code, an async pass over the result
 │   ├── plugins/             one remark/rehype plugin per file (alerts, math, frontmatter, …)
 │   ├── sanitize-schema.ts   GitHub's sanitize rules, widened slightly
 │   └── source.ts, links.ts, stats.ts, hast.ts, types.ts
@@ -94,7 +95,7 @@ markdown/
 └── render/      HAST → React
     ├── DocumentView.tsx     the document (<article class="doc">)
     ├── elements/            one component per HTML element we customize (Link, Heading, TaskList, …)
-    ├── code/                Shiki code blocks
+    ├── code/                code blocks (language label, title, copy, line numbers)
     ├── diagram/             Mermaid diagrams + pan/zoom viewer
     ├── document.css         the document's typography (also inlined into HTML exports)
     └── typesets.ts, context.ts
@@ -102,8 +103,10 @@ markdown/
 
 Pipeline order: `remark-parse → frontmatter → gfm → math → gemoji → code meta →
 remark-rehype → rehype-raw → source lines → rehype-sanitize → KaTeX → alerts →
-slug → fragment links → base URL → heading outline`. Anything a plugin adds
-_before_ sanitizing must be allow-listed in `sanitize-schema.ts`. Block elements
+slug → fragment links → base URL → heading outline`, then `highlightCodeBlocks`,
+which every caller (worker, main-thread fallback, cheat sheet server function)
+awaits because grammars load on demand. Anything a plugin adds _before_
+sanitizing must be allow-listed in `sanitize-schema.ts`. Block elements
 carry `data-line` (their source line) for scroll sync, double-click-to-locate
 and live task toggles.
 
@@ -142,7 +145,7 @@ crosses documents.
 
 - Add or update components with the CLI — `pnpm dlx shadcn@latest add <name>` (add `--overwrite` to pull upstream changes) — then `pnpm fix` to apply our formatting.
 - Keep generated components close to stock. The look comes from the tokens: `styles/tokens.css` maps shadcn's semantic variables (`--background`, `--popover`, `--primary`, `--muted`, `--ring`, …) onto the Paper & Proof palette, so restyle there rather than editing component classes. Per-use tweaks go in `className` at the call site.
-- Deliberate deviations are commented in the file (e.g. `sonner.tsx` takes the theme from our provider instead of `next-themes`).
+- Deliberate deviations are commented in the file (e.g. `toast.tsx`'s `Toaster` takes a `className` to position its viewport).
 - Our own primitives that shadcn doesn't ship (`brand`, `crop-marks`, `copy-button`) live alongside them with the same naming.
 
 ## Design system — "Paper & Proof"
@@ -160,7 +163,7 @@ crosses documents.
 - **Path alias:** `@/*` → `./src/*`, used across features and layers; relative imports within a feature.
 - **No barrel files**, except where a folder is a single unit of data (`cheatsheet/content/index.ts`) or a registry (`markdown/render/elements/index.ts`). Barrels hide dependencies and defeat lazy loading.
 - **Heavy dependencies load lazily:** Shiki, Mermaid and the markdown pipeline are dynamic imports; keep them out of the initial bundle.
-- Keep the markdown engine pure and synchronous; add tests in `features/markdown/engine/pipeline.test.ts` for any syntax change.
+- Keep the markdown engine pure, and `renderMarkdown` synchronous (highlighting is the one async pass); add tests in `features/markdown/engine/pipeline.test.ts` for any syntax change.
 
 ## The cheat sheet (`/cheatsheet`) — an SEO page
 

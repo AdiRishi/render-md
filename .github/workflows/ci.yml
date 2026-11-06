@@ -27,3 +27,5 @@ jobs:
       - run: pnpm check
       - run: pnpm test
       - run: pnpm build
+      # The app hides a crashing render worker by rendering on the main thread.
+      - run: node build/check-render-worker.ts

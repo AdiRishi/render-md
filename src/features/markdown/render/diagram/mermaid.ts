@@ -58,6 +58,8 @@ const PALETTES: Record<ResolvedTheme, Record<string, string>> = {
 }
 
 function loadMermaid() {
+  // Diagrams render in effects only. The SSR branch keeps Mermaid out of the server bundle.
+  if (import.meta.env.SSR) throw new Error('Mermaid renders in the browser only.')
   mermaidPromise ??= import('mermaid').then((module) => module.default)
   return mermaidPromise
 }

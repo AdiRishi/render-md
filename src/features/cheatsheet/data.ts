@@ -26,23 +26,29 @@ export type CheatsheetData = {
 }
 
 const renderCheatsheet = createServerFn().handler(async () => {
-  const { renderMarkdown } = await import('@/features/markdown/engine/pipeline')
-  const render = (source: string) => renderMarkdown(source, { stripPositions: true }).hast
+  const [{ renderMarkdown }, { highlightCodeBlocks }] = await Promise.all([
+    import('@/features/markdown/engine/pipeline'),
+    import('@/features/markdown/engine/highlight'),
+  ])
+  const render = (source: string) =>
+    highlightCodeBlocks(renderMarkdown(source, { stripPositions: true }).hast)
+  const entries = SECTIONS.flatMap((section) => section.entries)
+  const tipSections = SECTIONS.filter((section) => section.tips?.length)
+  const [hero, examples, tips, faq] = await Promise.all([
+    render(HERO_SOURCE),
+    Promise.all(entries.map((entry) => render(entry.source))),
+    Promise.all(
+      tipSections.map((section) => render(section.tips!.map((tip) => `- ${tip}`).join('\n'))),
+    ),
+    Promise.all(FAQ.map((item) => render(item.answer))),
+  ])
   const data: CheatsheetData = {
-    hero: stripHeadingIds(render(HERO_SOURCE)),
+    hero: stripHeadingIds(hero),
     examples: Object.fromEntries(
-      SECTIONS.flatMap((section) => section.entries).map((entry) => [
-        entry.source,
-        stripHeadingIds(render(entry.source)),
-      ]),
+      entries.map((entry, index) => [entry.source, stripHeadingIds(examples[index])]),
     ),
-    tips: Object.fromEntries(
-      SECTIONS.filter((section) => section.tips?.length).map((section) => [
-        section.id,
-        render(section.tips!.map((tip) => `- ${tip}`).join('\n')),
-      ]),
-    ),
-    faq: FAQ.map((item) => render(item.answer)),
+    tips: Object.fromEntries(tipSections.map((section, index) => [section.id, tips[index]])),
+    faq,
   }
   // HAST is plain JSON; a string keeps the server-function contract simple.
   return JSON.stringify(data)

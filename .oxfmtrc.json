@@ -12,5 +12,5 @@
     "functions": ["cn", "cva"]
   },
   "sortPackageJson": true,
-  "ignorePatterns": ["pnpm-lock.yaml", "**/*.gen.ts", ".output", ".tanstack", ".wrangler", "public"]
+  "ignorePatterns": ["pnpm-lock.yaml", "**/*.gen.ts", "dist", ".tanstack", ".wrangler", "public"]
 }

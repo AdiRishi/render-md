@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { toast } from 'sonner'
 
 import { decodeShareFragment, readSharePayload, readShareView } from '@/lib/share-link'
+import { toast } from '@/ui/toast'
 
 import { documentActions } from '../actions'
 import { rememberFileHandle } from '../io/file-system'
@@ -29,7 +29,9 @@ function openSharedFromHash() {
       cleanUrl()
     },
     () =>
-      toast.error('That share link looks damaged', {
+      toast.add({
+        type: 'error',
+        title: 'That share link looks damaged',
         description: 'It may have been cut off when copied.',
       }),
   )

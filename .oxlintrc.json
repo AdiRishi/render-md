@@ -51,7 +51,7 @@
     "import/no-named-as-default-member": "off",
     "react/jsx-no-constructed-context-values": "off"
   },
-  "ignorePatterns": [".output", ".tanstack", ".wrangler", "public", "**/*.gen.ts"],
+  "ignorePatterns": ["dist", ".tanstack", ".wrangler", "public", "**/*.gen.ts"],
   "overrides": [
     {
       "files": ["src/lib/**"],
@@ -216,6 +216,12 @@
       "rules": {
         "jsx-a11y/click-events-have-key-events": "off",
         "jsx-a11y/no-noninteractive-element-interactions": "off"
+      }
+    },
+    {
+      "files": ["src/ui/toast.tsx"],
+      "rules": {
+        "react/no-object-type-as-default-prop": "off"
       }
     }
   ]

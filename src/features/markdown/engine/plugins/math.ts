@@ -1,5 +1,5 @@
 import { type Element, type ElementContent, type Root, type RootContent } from 'hast'
-import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
+import { fromHtml } from 'hast-util-from-html'
 import { toText } from 'hast-util-to-text'
 import { renderToString } from 'katex'
 import { SKIP, visit } from 'unist-util-visit'
@@ -14,7 +14,7 @@ function renderMath(value: string, displayMode: boolean): ElementContent[] {
     output: 'htmlAndMathml',
     trust: false,
   })
-  return fromHtmlIsomorphic(html, { fragment: true }).children as ElementContent[]
+  return fromHtml(html, { fragment: true }).children as ElementContent[]
 }
 
 /**

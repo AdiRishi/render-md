@@ -39,7 +39,7 @@ Markdown is rendered off the main thread in a Web Worker by a [unified](https://
 | Layer     | Technology                                                                         |
 | --------- | ---------------------------------------------------------------------------------- |
 | Framework | [TanStack Start](https://tanstack.com/start) · React 19 (Activity, React Compiler) |
-| Build     | Vite 8 (Rolldown) · Nitro → Cloudflare Workers                                     |
+| Build     | Vite 8 (Rolldown) · `@cloudflare/vite-plugin` → Cloudflare Workers                 |
 | Language  | TypeScript 7 (native compiler)                                                     |
 | Quality   | Oxlint (type-aware) · Oxfmt · Vitest 5                                             |
 | Styling   | Tailwind CSS 4 · shadcn/ui on Base UI · Hanken Grotesk, Newsreader, Geist Mono     |
@@ -48,7 +48,7 @@ Markdown is rendered off the main thread in a Web Worker by a [unified](https://
 
 ## Development
 
-Requires Node 24 (see `.node-version`) and pnpm.
+Requires Node 26 (see `.node-version`) and pnpm.
 
 ```bash
 pnpm install
@@ -58,7 +58,7 @@ pnpm dev        # http://localhost:3000
 | Command       | What it does                                               |
 | ------------- | ---------------------------------------------------------- |
 | `pnpm dev`    | Dev server on port 3000                                    |
-| `pnpm build`  | Production build for Cloudflare Workers (`.output/`)       |
+| `pnpm build`  | Production build for Cloudflare Workers (`dist/`)          |
 | `pnpm test`   | Unit tests (Vitest)                                        |
 | `pnpm check`  | Format check, type-aware lint and typecheck — what CI runs |
 | `pnpm fix`    | Format and auto-fix lint issues                            |
@@ -68,7 +68,7 @@ See [AGENTS.md](AGENTS.md) for an architecture tour and the design system.
 
 ## Deployment
 
-`pnpm build` produces a Cloudflare module worker via Nitro (`nitro.config.ts`). CI deploys `main` automatically and uploads a preview version for every pull request. To target another host, change the Nitro preset.
+`pnpm build` produces a Cloudflare Worker and its static assets with `@cloudflare/vite-plugin`; the Worker's settings live in `wrangler.jsonc`. CI deploys `main` automatically and uploads a preview version for every pull request.
 
 ## License
 

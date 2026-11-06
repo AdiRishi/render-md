@@ -21,7 +21,8 @@ export function Specimen({ entry, hast }: { entry: CheatsheetEntry; hast: Root }
 
   // Edits re-render live through the same worker the editor uses.
   useEffect(() => {
-    if (source === entry.source) return
+    // The SSR branch keeps the worker bundle out of the server build.
+    if (import.meta.env.SSR || source === entry.source) return
     let active = true
     const timer = setTimeout(() => {
       void import('@/features/markdown/worker/client')
