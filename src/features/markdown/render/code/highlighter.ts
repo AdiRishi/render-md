@@ -67,7 +67,9 @@ async function resolveLanguage(highlighter: Highlighter, language: string) {
 
 /** Tokenize code for both themes at once. Resolves null for unknown languages. */
 export function highlightCode(code: string, language: string | null) {
-  if (!language) return Promise.resolve(null)
+  // Highlighting runs in effects only. The SSR branch keeps Shiki and its
+  // grammars out of the server bundle.
+  if (!language || import.meta.env.SSR) return Promise.resolve(null)
   const key = `${language}\u0000${code}`
   const cached = cache.get(key)
   if (cached) return cached
