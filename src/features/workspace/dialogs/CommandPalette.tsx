@@ -42,6 +42,7 @@ import {
   CommandList,
   CommandShortcut,
 } from '@/ui/command'
+import { Kbd, KbdGroup } from '@/ui/kbd'
 
 import { documentActions } from '../actions'
 import { useDocumentStore } from '../state/document-store'
@@ -103,7 +104,12 @@ export function CommandPalette({ headings }: { headings: HeadingEntry[] }) {
             <CommandItem onSelect={run(documentActions.openFile)}>
               <FolderOpen />
               Open file…
-              <CommandShortcut>{`${mod} O`}</CommandShortcut>
+              <CommandShortcut>
+                <KbdGroup>
+                  <Kbd>{mod}</Kbd>
+                  <Kbd>O</Kbd>
+                </KbdGroup>
+              </CommandShortcut>
             </CommandItem>
             <CommandItem
               keywords={['github', 'gist', 'web', 'link']}
@@ -151,7 +157,12 @@ export function CommandPalette({ headings }: { headings: HeadingEntry[] }) {
             <CommandItem onSelect={run(documentActions.save)}>
               <Save />
               Save markdown file
-              <CommandShortcut>{`${mod} S`}</CommandShortcut>
+              <CommandShortcut>
+                <KbdGroup>
+                  <Kbd>{mod}</Kbd>
+                  <Kbd>S</Kbd>
+                </KbdGroup>
+              </CommandShortcut>
             </CommandItem>
             <CommandItem onSelect={run(documentActions.downloadHtml)}>
               <FileDown />
@@ -160,7 +171,12 @@ export function CommandPalette({ headings }: { headings: HeadingEntry[] }) {
             <CommandItem keywords={['pdf']} onSelect={run(documentActions.print)}>
               <Printer />
               Print or save as PDF
-              <CommandShortcut>{`${mod} P`}</CommandShortcut>
+              <CommandShortcut>
+                <KbdGroup>
+                  <Kbd>{mod}</Kbd>
+                  <Kbd>P</Kbd>
+                </KbdGroup>
+              </CommandShortcut>
             </CommandItem>
           </CommandGroup>
 
@@ -220,7 +236,7 @@ export function CommandPalette({ headings }: { headings: HeadingEntry[] }) {
                 <Type />
                 {typeset.label} <span className="text-ink-3">— {typeset.hint}</span>
                 {settings.typeset === typeset.value ? (
-                  <CommandShortcut>'current'</CommandShortcut>
+                  <CommandShortcut>Current</CommandShortcut>
                 ) : null}
               </CommandItem>
             ))}

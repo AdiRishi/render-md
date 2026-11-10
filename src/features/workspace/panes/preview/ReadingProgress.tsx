@@ -1,5 +1,7 @@
 import { type RefObject, useEffect, useState } from 'react'
 
+import { cn } from '@/lib/utils'
+
 /** Reading progress */
 export function ReadingProgress({ scrollRef }: { scrollRef: RefObject<HTMLDivElement | null> }) {
   const [progress, setProgress] = useState(0)
@@ -16,7 +18,13 @@ export function ReadingProgress({ scrollRef }: { scrollRef: RefObject<HTMLDivEle
   }, [scrollRef])
 
   return (
-    <div className="pointer-events-none sticky top-0 z-10 h-0.5 print:hidden" aria-hidden>
+    <div
+      className={cn(
+        'pointer-events-none sticky top-0 z-10 h-0.5 transition-opacity duration-500 print:hidden',
+        progress > 0.995 && 'opacity-0',
+      )}
+      aria-hidden
+    >
       <div
         className="h-full origin-left bg-proof transition-transform duration-75"
         style={{ transform: `scaleX(${progress})` }}

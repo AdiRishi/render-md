@@ -174,7 +174,8 @@ export const basics: CheatsheetChapter = {
           label: 'With a file title',
           source: lines(
             `${fence}ts title="greet.ts"`,
-            'export const greet = (name: string) => `Hello, ${name}!`',
+            'export const greet = (name: string) =>',
+            '  `Hello, ${name}!`',
             fence,
           ),
         },

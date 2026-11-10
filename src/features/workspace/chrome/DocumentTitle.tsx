@@ -3,7 +3,7 @@ import { guessTitle } from '@/features/markdown/engine/source'
 import { type DocumentSource, useDocumentStore } from '../state/document-store'
 
 const SOURCE_LABEL: Record<DocumentSource, string> = {
-  sample: 'Field guide',
+  sample: 'Sample',
   local: 'Draft',
   file: 'File',
   url: 'Web',
@@ -22,9 +22,7 @@ export function DocumentTitle() {
       <span className="truncate text-[13px] font-medium text-ink-2" title={title}>
         {title}
       </span>
-      <span className="shrink-0 rounded-[4px] px-1.5 py-0.5 label-caps text-[9.5px] text-ink-3 shadow-[inset_0_0_0_1px_var(--rule-strong)]">
-        {SOURCE_LABEL[source]}
-      </span>
+      <span className="shrink-0 label-caps text-ink-3">{SOURCE_LABEL[source]}</span>
     </div>
   )
 }

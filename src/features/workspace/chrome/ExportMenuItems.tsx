@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
 } from '@/ui/dropdown-menu'
+import { Kbd, KbdGroup } from '@/ui/kbd'
 
 import { documentActions } from '../actions'
 
@@ -32,7 +33,12 @@ export function ExportMenuItems() {
         <DropdownMenuItem onClick={() => void documentActions.save()}>
           <FileDown />
           Markdown (.md)
-          <DropdownMenuShortcut>{`${mod} S`}</DropdownMenuShortcut>
+          <DropdownMenuShortcut>
+            <KbdGroup>
+              <Kbd>{mod}</Kbd>
+              <Kbd>S</Kbd>
+            </KbdGroup>
+          </DropdownMenuShortcut>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={documentActions.downloadHtml}>
           <FileText />
@@ -41,7 +47,12 @@ export function ExportMenuItems() {
         <DropdownMenuItem onClick={documentActions.print}>
           <Printer />
           Print or save as PDF
-          <DropdownMenuShortcut>{`${mod} P`}</DropdownMenuShortcut>
+          <DropdownMenuShortcut>
+            <KbdGroup>
+              <Kbd>{mod}</Kbd>
+              <Kbd>P</Kbd>
+            </KbdGroup>
+          </DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuGroup>
     </>

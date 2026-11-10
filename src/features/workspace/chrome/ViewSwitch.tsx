@@ -31,13 +31,13 @@ export function ViewSwitch() {
           key={value}
           value={value}
           className={cn(
-            'h-7 min-w-0 gap-1.5 px-2.5 text-[12.5px] text-ink-3 transition-all duration-150 hover:bg-transparent hover:text-ink max-md:px-3',
-            'aria-pressed:bg-paper aria-pressed:text-ink aria-pressed:shadow-[0_1px_2px_rgb(var(--shadow-ink)/0.14),0_0_0_1px_rgb(var(--shadow-ink)/0.06)]',
+            'h-7 min-w-0 gap-1.5 rounded-md px-2.5 text-[13px] text-ink-3 transition-all duration-150 hover:bg-transparent hover:text-ink max-md:px-3',
+            'aria-pressed:bg-segment aria-pressed:text-ink aria-pressed:shadow-segment',
             !mobile && 'max-md:hidden',
             // On phones there's no split view; it falls back to Write.
             value === 'write' &&
               viewMode === 'split' &&
-              'max-md:bg-paper max-md:text-ink max-md:shadow-[0_1px_2px_rgb(var(--shadow-ink)/0.14),0_0_0_1px_rgb(var(--shadow-ink)/0.06)]',
+              'max-md:bg-segment max-md:text-ink max-md:shadow-segment',
           )}
         >
           <Icon className="size-3.5" />

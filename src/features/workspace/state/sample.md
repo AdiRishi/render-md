@@ -41,9 +41,9 @@ Tick a box in the preview and the markdown updates itself:
 ## Code
 
 ```ts title="render.worker.ts"
-// Parsing happens off the main thread, so the editor stays responsive.
+// Parsing runs off the main thread, so typing stays smooth.
 self.onmessage = ({ data }: MessageEvent<RenderRequest>) => {
-  const result = renderMarkdown(data.markdown, { stripPositions: true })
+  const result = renderMarkdown(data.markdown)
   self.postMessage({ id: data.id, ok: true, result })
 }
 ```

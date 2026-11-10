@@ -49,7 +49,7 @@ export const useSettingsStore = create<SettingsStore>()(
 )
 
 export const MEASURES: Record<Measure, string> = {
-  narrow: '36rem',
-  normal: '44rem',
+  narrow: '30rem',
+  normal: '36rem',
   wide: '60rem',
 }

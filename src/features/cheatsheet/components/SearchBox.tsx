@@ -36,7 +36,7 @@ export function SearchBox({ className, hotkey = false }: { className?: string; h
 
   return (
     <div className={cn('relative', className)}>
-      <label className="flex h-10 items-center gap-2.5 rounded-lg bg-paper px-3 shadow-[inset_0_0_0_1px_var(--rule-strong)] transition-shadow focus-within:shadow-[inset_0_0_0_1.5px_var(--ink)]">
+      <label className="flex h-10 items-center gap-2.5 rounded-md bg-paper px-3 shadow-[inset_0_0_0_1px_var(--rule-strong)] transition-shadow focus-within:shadow-[inset_0_0_0_1px_var(--ink-2),0_0_0_2px_rgb(var(--shadow-ink)/0.08)]">
         <Search className="size-4 shrink-0 text-ink-3" />
         <input
           ref={inputRef}
@@ -59,10 +59,10 @@ export function SearchBox({ className, hotkey = false }: { className?: string; h
               setQuery('')
             }
           }}
-          placeholder="Find syntax — table, footnote…"
+          placeholder={hotkey ? 'Find syntax…' : 'Find syntax — table, footnote…'}
           aria-label="Search the cheat sheet"
           aria-controls={listId}
-          className="min-w-0 flex-1 bg-transparent text-[13.5px] text-ink outline-none placeholder:text-ink-4 [&::-webkit-search-cancel-button]:hidden"
+          className="min-w-0 flex-1 bg-transparent text-[13px] text-ink outline-none placeholder:text-ink-3 [&::-webkit-search-cancel-button]:hidden"
         />
         {hotkey ? <Kbd className="text-ink-3">/</Kbd> : null}
       </label>
@@ -70,7 +70,7 @@ export function SearchBox({ className, hotkey = false }: { className?: string; h
         <ul
           id={listId}
           aria-label="Matching sections"
-          className="absolute inset-x-0 top-12 z-30 overflow-hidden rounded-xl bg-popover p-1.5 shadow-float ring-1 ring-foreground/10"
+          className="absolute inset-x-0 top-12 z-30 overflow-hidden rounded-lg bg-popover p-1 shadow-float"
         >
           {results.map((section, index) => (
             <li key={section.id}>
@@ -79,7 +79,7 @@ export function SearchBox({ className, hotkey = false }: { className?: string; h
                 onMouseEnter={() => setHighlighted(index)}
                 onClick={() => go(section)}
                 className={cn(
-                  'flex w-full items-center justify-between gap-3 rounded-md px-2.5 py-2 text-start text-[13px]',
+                  'flex w-full items-center justify-between gap-3 rounded-sm px-2.5 py-2 text-start text-[13px]',
                   index === highlighted ? 'bg-muted text-ink' : 'text-ink-2',
                 )}
               >

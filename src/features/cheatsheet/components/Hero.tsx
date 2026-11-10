@@ -40,22 +40,22 @@ export function Hero({ specimen }: { specimen: Root }) {
   return (
     <header className="relative overflow-hidden border-b border-rule desk-grid print:border-0 print:bg-none">
       <HeroSpecimen hast={specimen} />
-      <div className="mx-auto max-w-6xl px-5 pt-10 pb-16 md:pt-14 md:pb-24 print:p-0">
+      <div className="mx-auto max-w-6xl px-5 pt-6 pb-10 md:pt-14 md:pb-24 print:p-0">
         <Breadcrumb />
 
-        <p className="mt-14 animate-rise label-caps text-proof [animation-delay:60ms] md:mt-20">
+        <p className="mt-6 animate-rise label-caps text-ink-3 [animation-delay:60ms] md:mt-20">
           {SECTIONS.length} topics · {EXAMPLE_COUNT} editable examples
         </p>
         <h1 className="mt-5 max-w-3xl animate-rise font-display text-[clamp(3.4rem,10vw,8rem)] leading-[0.88] tracking-[-0.02em] text-ink [animation-delay:120ms]">
           Markdown <br />
           <em className="text-ink-3">cheat sheet</em>
         </h1>
-        <p className="mt-8 max-w-[34rem] animate-rise text-lg leading-relaxed text-ink-2 [animation-delay:180ms]">
+        <p className="mt-6 max-w-[34rem] animate-rise text-lg leading-relaxed text-ink-2 [animation-delay:180ms] md:mt-8">
           CommonMark, GitHub Flavored Markdown, math and diagrams. Every example is editable.
         </p>
-        <div className="relative z-10 mt-9 flex max-w-xl animate-rise flex-col gap-3 [animation-delay:240ms] sm:flex-row print:hidden">
+        <div className="relative z-10 mt-6 flex max-w-xl animate-rise flex-col gap-3 [animation-delay:240ms] sm:flex-row md:mt-9 print:hidden">
           <SearchBox className="flex-1" />
-          <Link to="/" className={cn(buttonVariants({ size: 'lg' }), 'shrink-0')}>
+          <Link to="/" className={cn(buttonVariants({ size: 'lg' }), 'shrink-0 bg-clip-border')}>
             Open the editor <ArrowRight />
           </Link>
         </div>

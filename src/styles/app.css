@@ -25,11 +25,11 @@
         monospace;
 
     --shadow-paper:
-        0 0 0 1px rgb(var(--shadow-ink) / 0.05), 0 1px 1px rgb(var(--shadow-ink) / 0.04),
+        0 0 0 1px var(--sheet-ring), 0 1px 1px rgb(var(--shadow-ink) / 0.04),
         0 12px 24px -12px rgb(var(--shadow-ink) / 0.12),
-        0 32px 64px -32px rgb(var(--shadow-ink) / 0.18);
+        0 32px 64px -32px rgb(var(--shadow-ink) / 0.12);
     --shadow-float:
-        0 0 0 1px rgb(var(--shadow-ink) / 0.06), 0 8px 16px -8px rgb(var(--shadow-ink) / 0.16),
+        0 0 0 1px var(--sheet-ring), 0 8px 16px -8px rgb(var(--shadow-ink) / 0.16),
         0 24px 48px -16px rgb(var(--shadow-ink) / 0.2);
 
     --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
@@ -53,6 +53,8 @@
     --color-proof-ink: var(--proof-ink);
     --color-proof-soft: var(--proof-soft);
     --color-marker: var(--marker);
+    --color-segment: var(--segment);
+    --shadow-segment: var(--segment-shadow);
 
     --color-background: var(--background);
     --color-foreground: var(--foreground);

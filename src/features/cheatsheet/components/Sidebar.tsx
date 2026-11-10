@@ -22,17 +22,17 @@ function NavLink({
       href={`#${id}`}
       aria-current={active ? 'location' : undefined}
       className={cn(
-        'flex items-baseline gap-3 rounded-md py-[5px] text-[13.5px] transition-colors',
+        'flex items-baseline gap-3 rounded-md py-[5px] text-[13px] transition-colors',
         active ? 'text-ink' : 'text-ink-3 hover:text-ink',
       )}
     >
       <span
         className={cn(
           'w-5 shrink-0 font-mono text-[10.5px] tabular-nums transition-colors',
-          active ? 'text-proof' : 'text-ink-4',
+          active ? 'text-proof' : 'text-ink-3',
         )}
       >
-        {number === undefined ? '·' : String(number).padStart(2, '0')}
+        {number === undefined ? '¶' : String(number).padStart(2, '0')}
       </span>
       {children}
     </a>
@@ -41,7 +41,7 @@ function NavLink({
 
 export function Sidebar({ active }: { active: string }) {
   return (
-    <aside className="sticky top-20 hidden max-h-[calc(100vh-6rem)] w-56 shrink-0 scrollbar-quiet self-start overflow-y-auto px-1 pb-10 lg:block print:hidden">
+    <aside className="sticky top-20 -mx-1 hidden max-h-[calc(100vh-6rem)] w-56 shrink-0 scrollbar-quiet self-start overflow-y-auto px-1 pb-10 lg:block print:hidden">
       <SearchBox hotkey className="mb-6" />
       <nav aria-label="Cheat sheet sections">
         <NavLink id="quick-reference" active={active === 'quick-reference'}>
@@ -49,8 +49,9 @@ export function Sidebar({ active }: { active: string }) {
         </NavLink>
         {CHAPTERS.map((chapter) => (
           <div key={chapter.id} className="mt-5">
-            <p className="mb-1.5 label-caps text-ink-3">
-              <span className="text-proof">{chapter.numeral}.</span> {chapter.title}
+            <p className="mb-1.5 flex gap-3 label-caps text-ink-3">
+              <span className="w-5 shrink-0 tracking-normal text-ink-4">{chapter.numeral}.</span>
+              {chapter.title}
             </p>
             {chapter.sections.map((section) => (
               <NavLink

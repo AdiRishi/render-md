@@ -50,11 +50,11 @@ export function ShareDialog() {
     <Dialog open={open} onOpenChange={(next) => !next && closeDialog()}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <p className="label-caps text-proof">Share</p>
+          <p className="label-caps text-ink-3">Share</p>
           <DialogTitle className="font-display text-[1.9rem] leading-tight font-normal tracking-[-0.01em]">
             A link that is the document
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-ink-2">
             Your markdown is compressed into the link itself. It opens in reading mode for whoever
             you send it to.
           </DialogDescription>
@@ -67,7 +67,7 @@ export function ShareDialog() {
             aria-label="Share link"
             className="h-10 min-w-0 flex-1 truncate font-mono text-[12px] text-ink-2"
           />
-          <Button size="lg" onClick={() => void copy()} disabled={!url}>
+          <Button size="lg" className="bg-clip-border" onClick={() => void copy()} disabled={!url}>
             {copied ? <Check /> : <Copy />}
             {copied ? 'Copied' : 'Copy'}
           </Button>
@@ -94,16 +94,16 @@ export function ShareDialog() {
         </div>
 
         {linkSize > LONG_URL ? (
-          <p className="rounded-lg bg-[color-mix(in_oklch,var(--alert-warning)_12%,var(--paper))] px-3 py-2 text-xs leading-relaxed text-ink-2">
+          <p className="rounded-lg bg-[color-mix(in_oklab,var(--alert-warning)_12%,var(--paper))] px-3 py-2 text-xs leading-relaxed text-ink-2">
             This is a long link. Browsers handle it fine, but some chat apps truncate very long URLs
             — consider exporting a file instead.
           </p>
         ) : null}
 
-        <p className="flex gap-2.5 border-t border-rule pt-4 text-xs leading-relaxed text-ink-3">
-          <LockKeyhole className="mt-0.5 size-3.5 shrink-0 text-ink-2" />
+        <p className="flex gap-2.5 border-t border-rule pt-4 text-xs leading-relaxed text-ink-2">
+          <LockKeyhole className="mt-0.5 size-3.5 shrink-0 text-ink-3" />
           <span>
-            The document lives after the <code className="font-mono text-ink-2">#</code> in the URL,
+            The document lives after the <code className="font-mono text-ink">#</code> in the URL,
             which browsers never send to a server. No upload, no account, no tracking of contents.
           </span>
         </p>

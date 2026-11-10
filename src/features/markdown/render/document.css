@@ -11,7 +11,7 @@
     --doc-body: var(--font-sans);
     --doc-heading: var(--font-sans);
     --doc-size: 16.5px;
-    --doc-leading: 1.72;
+    --doc-leading: 1.65;
     --doc-heading-weight: 640;
     --doc-heading-tracking: -0.022em;
     --doc-h1: 2.35em;
@@ -247,7 +247,7 @@
     background: var(--paper);
     border: 1px solid var(--rule-strong);
     border-bottom-width: 2px;
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
 .doc abbr[title] {
@@ -259,7 +259,7 @@
     font-family: var(--font-mono);
     font-size: var(--doc-code-size);
     padding: 0.14em 0.38em;
-    border-radius: 5px;
+    border-radius: 4px;
     background: var(--paper-2);
     box-shadow: inset 0 0 0 1px var(--rule);
     color: var(--ink);
@@ -279,6 +279,13 @@
 .doc ul,
 .doc ol {
     padding-inline-start: 1.5em;
+}
+/* Stated outright: the app's CSS reset removes list markers. */
+.doc ul {
+    list-style: disc;
+}
+.doc ol {
+    list-style: decimal;
 }
 .doc li {
     padding-inline-start: 0.25em;
@@ -376,8 +383,11 @@
 .doc blockquote {
     margin: 1.5em 0;
     padding: 0.1em 0 0.1em 1.15em;
-    border-inline-start: 2px solid var(--proof);
+    border-inline-start: 2px solid var(--rule-strong);
     color: var(--ink-2);
+}
+.doc blockquote > p {
+    margin-bottom: 0.5em;
 }
 .doc blockquote > :last-child {
     margin-bottom: 0;
@@ -398,7 +408,7 @@
     top: -0.18em;
     font-size: 2.6em;
     line-height: 1;
-    color: var(--proof);
+    color: var(--ink-4);
     font-style: normal;
 }
 
@@ -467,7 +477,7 @@
 .doc .table-scroll {
     overflow-x: auto;
     border: 1px solid var(--rule);
-    border-radius: 8px;
+    border-radius: 6px;
 }
 .doc table {
     width: 100%;
@@ -501,6 +511,8 @@
     color: var(--ink-2);
     background: var(--paper-2);
     white-space: nowrap;
+    /* Cell padding is in em, so scale it back up to keep header text on the body's edge. */
+    padding: calc(0.6em / 0.78) calc(0.95em / 0.78);
 }
 .doc tbody tr:last-child td {
     border-bottom: 0;
@@ -516,7 +528,7 @@
 
 .doc .code-block {
     margin: 1.5em 0;
-    border-radius: 10px;
+    border-radius: 6px;
     background: var(--paper-2);
     box-shadow: inset 0 0 0 1px var(--rule);
     overflow: hidden;
@@ -529,8 +541,9 @@
     padding: 0 0.5rem 0 0.95rem;
     border-bottom: 1px solid var(--rule);
     font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.08em;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--ink-3);
 }
@@ -538,11 +551,12 @@
     text-transform: none;
     letter-spacing: 0;
     font-size: 12px;
+    font-weight: 400;
     color: var(--ink-2);
 }
 .doc pre {
     margin: 0;
-    padding: 0.95rem 1.1rem 1.05rem;
+    padding: 0.95rem 0 1.05rem;
     overflow-x: auto;
     font-family: var(--font-mono);
     font-size: calc(13.5px * var(--doc-scale));
@@ -551,10 +565,16 @@
     scrollbar-width: thin;
     scrollbar-color: var(--rule-strong) transparent;
 }
+/* The side padding sits on the code so a scrolled line ends with the gutter it starts with. */
+.doc pre:not(:has(> code)) {
+    padding-inline: 1.1rem;
+}
 .doc pre code {
     font: inherit;
     display: block;
+    box-sizing: border-box;
     min-width: max-content;
+    padding-inline: 1.1rem;
 }
 .doc pre .line {
     display: inline-block;
@@ -573,24 +593,33 @@
     color: var(--ink-4);
     user-select: none;
 }
+.doc pre .line:is(.diff-add, .diff-remove) {
+    box-sizing: content-box;
+    margin-inline: -1.1rem;
+    padding-inline: 1.1rem;
+    background: color-mix(in oklab, var(--diff) 11%, transparent);
+}
 .doc pre .line.diff-add {
-    background: color-mix(in oklch, var(--alert-tip) 13%, transparent);
+    --diff: var(--alert-tip);
 }
 .doc pre .line.diff-remove {
-    background: color-mix(in oklch, var(--alert-caution) 13%, transparent);
+    --diff: var(--alert-caution);
 }
 
 /* Shiki dual themes — colours arrive as CSS variables on each token. */
 .doc pre .token {
     color: var(--shiki-light);
     font-style: var(--shiki-light-font-style, inherit);
-    font-weight: var(--shiki-light-font-weight, inherit);
 }
+/* The dark theme's colours are tuned for a darker ground than paper-2, so lift them toward ink. */
 .dark .doc pre .token,
 .doc.dark pre .token {
-    color: var(--shiki-dark);
+    color: color-mix(in oklab, var(--shiki-dark) 80%, var(--ink));
     font-style: var(--shiki-dark-font-style, inherit);
-    font-weight: var(--shiki-dark-font-weight, inherit);
+}
+.doc pre .line:is(.diff-add, .diff-remove),
+.doc pre .line:is(.diff-add, .diff-remove) .token {
+    color: color-mix(in oklab, var(--diff) 72%, var(--ink));
 }
 
 /* -- Math ------------------------------------------------------------------- */
@@ -615,9 +644,10 @@
     --alert: var(--alert-note);
     margin: 1.5em 0;
     padding: 0.85em 1.1em 0.9em;
-    border-radius: 8px;
-    background: color-mix(in oklch, var(--alert) 7%, var(--paper));
-    box-shadow: inset 3px 0 0 var(--alert);
+    border-inline-start: 2px solid var(--alert);
+    border-start-end-radius: 6px;
+    border-end-end-radius: 6px;
+    background: color-mix(in oklab, var(--alert) 7%, var(--paper));
 }
 .doc .markdown-alert[data-alert='tip'] {
     --alert: var(--alert-tip);
@@ -655,7 +685,7 @@
 
 .doc details {
     border: 1px solid var(--rule);
-    border-radius: 8px;
+    border-radius: 6px;
     padding: 0 1em;
     background: var(--paper);
 }
@@ -697,6 +727,12 @@
     font-size: 0.86em;
     color: var(--ink-2);
 }
+/* A closing rule already separates the notes. */
+.doc hr + .footnotes {
+    margin-top: 1.5em;
+    padding-top: 0;
+    border-top: 0;
+}
 .doc .footnotes h2 {
     font-family: var(--font-mono);
     font-size: 0.8em;
@@ -732,26 +768,29 @@
 
 .doc .frontmatter {
     margin: 0 0 2.2em;
-    padding: 0.8em 1em;
-    border: 1px dashed var(--rule-strong);
-    border-radius: 8px;
+    padding: 0 0 1em;
+    border-bottom: 1px solid var(--rule);
     font-family: var(--font-mono);
-    font-size: 12.5px;
-    line-height: 1.6;
+    font-size: 12px;
+    line-height: 1.7;
 }
 .doc .frontmatter dl {
     display: grid;
     grid-template-columns: max-content 1fr;
-    gap: 0.2em 1.2em;
+    align-items: baseline;
+    gap: 0.2em 1.5em;
     margin: 0;
 }
 .doc .frontmatter dt {
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: var(--ink-3);
-    font-weight: 400;
 }
 .doc .frontmatter dd {
     margin: 0;
-    color: var(--ink);
+    color: var(--ink-2);
     overflow-wrap: anywhere;
 }
 
@@ -759,7 +798,7 @@
 
 .doc .diagram {
     margin: 1.8em 0;
-    border-radius: 10px;
+    border-radius: 6px;
     box-shadow: inset 0 0 0 1px var(--rule);
     overflow: hidden;
 }
@@ -768,6 +807,14 @@
     justify-content: center;
     padding: 1.4em 1em;
     overflow-x: auto;
+}
+/* Edge labels sit on the page colour, with a little air so the line stops short of the text. */
+.doc .diagram-canvas foreignObject {
+    overflow: visible;
+}
+.doc .diagram-canvas .labelBkg {
+    background: var(--paper);
+    box-shadow: 0 0 0 4px var(--paper);
 }
 .doc .diagram-canvas svg {
     max-width: 100%;
