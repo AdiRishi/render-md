@@ -804,8 +804,8 @@
 }
 .doc .diagram-canvas {
     display: flex;
-    justify-content: safe center;
-    padding: 1.4em 0;
+    justify-content: center;
+    padding: 1.4em 1em;
     overflow-x: auto;
 }
 /* Edge labels sit on the page colour, with a little air so the line stops short of the text. */
@@ -816,13 +816,8 @@
     background: var(--paper);
     box-shadow: 0 0 0 4px var(--paper);
 }
-/* A wide diagram shrinks to fit only until its labels reach 11px, then the canvas scrolls.
-   The side gutter is a margin on the diagram so it survives at both ends of the scroll. */
 .doc .diagram-canvas svg {
-    flex-shrink: 0;
-    width: calc(100% - 2em);
-    min-width: calc(var(--diagram-width, 0px) * 0.75);
-    margin-inline: 1em;
+    max-width: 100%;
     height: auto;
 }
 
@@ -843,9 +838,6 @@
         overflow: visible;
     }
     .doc pre code {
-        min-width: 0;
-    }
-    .doc .diagram-canvas svg {
         min-width: 0;
     }
     .doc :is(h1, h2, h3, h4) {
