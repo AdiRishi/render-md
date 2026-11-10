@@ -61,7 +61,7 @@ const theme = EditorView.theme({
     fontVariantNumeric: 'tabular-nums',
   },
   '.cm-activeLineGutter': { backgroundColor: 'transparent', color: 'var(--ink-2)' },
-  '.cm-placeholder': { color: 'var(--ink-4)', fontStyle: 'italic' },
+  '.cm-placeholder': { color: 'var(--ink-3)', fontStyle: 'italic' },
   '.cm-matchingBracket': {
     backgroundColor: 'transparent',
     outline: '1px solid var(--rule-strong)',

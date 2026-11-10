@@ -20,7 +20,7 @@ export function MobileNav({ active }: { active: string }) {
   return (
     <nav
       aria-label="Cheat sheet sections"
-      className="sticky top-14 z-30 border-b border-rule bg-desk/90 backdrop-blur-md lg:hidden print:hidden"
+      className="sticky top-13 z-30 border-b border-rule bg-desk lg:hidden print:hidden"
     >
       <div ref={listRef} className="flex [scrollbar-width:none] gap-1 overflow-x-auto px-4 py-2">
         {NAV_IDS.map((id) => {

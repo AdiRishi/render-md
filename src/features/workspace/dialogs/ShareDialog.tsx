@@ -50,7 +50,7 @@ export function ShareDialog() {
     <Dialog open={open} onOpenChange={(next) => !next && closeDialog()}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <p className="label-caps text-proof">Share</p>
+          <p className="label-caps text-ink-3">Share</p>
           <DialogTitle className="font-display text-[1.9rem] leading-tight font-normal tracking-[-0.01em]">
             A link that is the document
           </DialogTitle>

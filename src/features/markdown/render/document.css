@@ -386,6 +386,9 @@
     border-inline-start: 2px solid var(--rule-strong);
     color: var(--ink-2);
 }
+.doc blockquote > p {
+    margin-bottom: 0.5em;
+}
 .doc blockquote > :last-child {
     margin-bottom: 0;
 }
@@ -405,7 +408,7 @@
     top: -0.18em;
     font-size: 2.6em;
     line-height: 1;
-    color: var(--proof);
+    color: var(--ink-4);
     font-style: normal;
 }
 
@@ -608,7 +611,7 @@
 /* The dark theme's colours are tuned for a darker ground than paper-2, so lift them toward ink. */
 .dark .doc pre .token,
 .doc.dark pre .token {
-    color: color-mix(in oklab, var(--shiki-dark) 72%, var(--ink));
+    color: color-mix(in oklab, var(--shiki-dark) 80%, var(--ink));
     font-style: var(--shiki-dark-font-style, inherit);
 }
 .doc pre .line:is(.diff-add, .diff-remove),
@@ -793,14 +796,16 @@
 .doc .diagram-canvas {
     display: flex;
     justify-content: safe center;
-    padding: 1.4em 1em;
+    padding: 1.4em 0;
     overflow-x: auto;
 }
-/* A wide diagram shrinks to fit only until its labels reach 12px, then the canvas scrolls. */
+/* A wide diagram shrinks to fit only until its labels reach 11px, then the canvas scrolls.
+   The side gutter is a margin on the diagram so it survives at both ends of the scroll. */
 .doc .diagram-canvas svg {
     flex-shrink: 0;
-    min-width: calc(var(--diagram-width, 0px) * 0.8);
-    max-width: 100%;
+    width: calc(100% - 2em);
+    min-width: calc(var(--diagram-width, 0px) * 0.75);
+    margin-inline: 1em;
     height: auto;
 }
 

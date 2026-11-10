@@ -8,7 +8,7 @@ export function Chapter({ chapter, data }: { chapter: CheatsheetChapter; data: C
   return (
     <section id={chapter.id} aria-labelledby={`${chapter.id}-title`} className="scroll-mt-24">
       <header className="mb-14 grid gap-4 border-t-2 border-ink pt-6 md:grid-cols-[6rem_1fr]">
-        <span className="font-display text-6xl leading-none text-proof italic">
+        <span className="font-display text-6xl leading-none text-ink-4 italic">
           {chapter.numeral}.
         </span>
         <div>

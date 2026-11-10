@@ -20,7 +20,7 @@ export function SyntaxSection({
     <section id={section.id} aria-labelledby={`${section.id}-title`} className="scroll-mt-28">
       <header className="mb-6">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <span className="font-mono text-xs text-proof tabular-nums">
+          <span className="font-mono text-xs text-ink-4 tabular-nums">
             §{String(number).padStart(2, '0')}
           </span>
           <h3

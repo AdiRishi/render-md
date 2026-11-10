@@ -11,9 +11,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/ui/tooltip'
 import { useSettingsStore } from '../state/settings-store'
 
 const SPECIMEN_FONT = {
-  sans: 'font-sans font-semibold tracking-tight',
-  serif: 'font-display',
-  mono: 'font-mono font-semibold text-[21px] tracking-tight',
+  sans: 'font-sans text-[26px] font-semibold tracking-tight',
+  serif: 'font-display text-[28px]',
+  mono: 'font-mono font-semibold text-[23px] tracking-tight',
 } as const
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
@@ -76,11 +76,11 @@ export function ReaderSettings() {
             />
           }
         >
-          <CaseSensitive className="size-5" />
+          <CaseSensitive className="size-5" strokeWidth={1.6} />
         </TooltipTrigger>
         <TooltipContent side="bottom">Typeset & reading</TooltipContent>
       </Tooltip>
-      <PopoverContent align="end" sideOffset={12} className="w-[22rem] gap-0 rounded-xl p-0">
+      <PopoverContent align="end" sideOffset={12} className="w-[22rem] gap-0 rounded-lg p-0">
         <div className="p-4 pb-3">
           <p className="mb-3 label-caps text-ink-3">Typeset</p>
           <div className="grid grid-cols-3 rounded-lg bg-desk-2 p-0.5 dark:bg-desk">
@@ -93,14 +93,19 @@ export function ReaderSettings() {
                   aria-pressed={active}
                   onClick={() => settings.set('typeset', typeset.value)}
                   className={cn(
-                    'group flex flex-col items-start gap-2 rounded-md p-2.5 text-start transition-all duration-150',
+                    'group flex flex-col items-start gap-2.5 rounded-md p-2.5 text-start transition-all duration-150',
                     active ? 'bg-segment text-ink shadow-segment' : 'text-ink-3 hover:text-ink',
                   )}
                 >
-                  <span
-                    className={cn('block h-7 text-[26px] leading-7', SPECIMEN_FONT[typeset.value])}
-                  >
-                    Aa
+                  <span className="flex h-6 items-end">
+                    <span
+                      className={cn(
+                        'leading-none [text-box:trim-both_cap_alphabetic]',
+                        SPECIMEN_FONT[typeset.value],
+                      )}
+                    >
+                      Aa
+                    </span>
                   </span>
                   <span className="text-[12px] leading-tight font-medium">{typeset.label}</span>
                 </button>

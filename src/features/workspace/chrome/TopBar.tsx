@@ -45,7 +45,7 @@ export function TopBar() {
         <div className="flex items-center gap-1 max-md:hidden">
           <DropdownMenu>
             <DropdownMenuTrigger
-              render={<Button variant="ghost" size="sm" className="gap-1.5 px-2.5" />}
+              render={<Button variant="ghost" size="sm" className="gap-1.5 px-2.5 text-[13px]" />}
             >
               <FolderOpen />
               <span className="max-xl:hidden">Open</span>
@@ -57,7 +57,7 @@ export function TopBar() {
 
           <DropdownMenu>
             <DropdownMenuTrigger
-              render={<Button variant="ghost" size="sm" className="gap-1.5 px-2.5" />}
+              render={<Button variant="ghost" size="sm" className="gap-1.5 px-2.5 text-[13px]" />}
             >
               <Download />
               <span className="max-xl:hidden">Export</span>
@@ -111,7 +111,7 @@ export function TopBar() {
 
         <Button
           size="sm"
-          className="ms-1.5 gap-1.5 max-sm:px-2.5"
+          className="ms-1.5 gap-1.5 text-[13px] max-sm:px-2.5"
           onClick={() => openDialog('share')}
         >
           <Link2 />

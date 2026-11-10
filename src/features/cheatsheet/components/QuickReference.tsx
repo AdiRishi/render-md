@@ -33,7 +33,7 @@ export function QuickReference() {
       </div>
 
       <div className="relative rounded-[3px] bg-paper px-5 py-6 shadow-paper md:px-10 md:py-9 print:shadow-none">
-        <CropMarks offset={20} size={14} />
+        <CropMarks offset={20} size={14} className="max-sm:hidden" />
         <div className="grid gap-x-12 md:grid-cols-2">
           {columns.map((rows, column) => (
             <table key={column} className="w-full border-collapse text-start">

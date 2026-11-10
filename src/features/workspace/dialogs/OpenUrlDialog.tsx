@@ -35,7 +35,7 @@ export function OpenUrlDialog() {
     <Dialog open={open} onOpenChange={(next) => !next && closeDialog()}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <p className="label-caps text-proof">Open from the web</p>
+          <p className="label-caps text-ink-3">Open from the web</p>
           <DialogTitle className="font-display text-[1.9rem] leading-tight font-normal tracking-[-0.01em]">
             Render any markdown URL
           </DialogTitle>
