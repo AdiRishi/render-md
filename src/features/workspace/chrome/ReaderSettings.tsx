@@ -18,7 +18,7 @@ const SPECIMEN_FONT = {
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-4">
+    <div className="flex min-h-7 items-center justify-between gap-4">
       <span className="text-[13px] text-ink-2">{label}</span>
       {children}
     </div>
@@ -80,7 +80,7 @@ export function ReaderSettings() {
         </TooltipTrigger>
         <TooltipContent side="bottom">Typeset & reading</TooltipContent>
       </Tooltip>
-      <PopoverContent align="end" sideOffset={12} className="w-[22rem] gap-0 rounded-lg p-0">
+      <PopoverContent align="end" sideOffset={16} className="w-[22rem] gap-0 rounded-lg p-0">
         <div className="p-4 pb-3">
           <p className="mb-3 label-caps text-ink-3">Typeset</p>
           <div className="grid grid-cols-3 rounded-lg bg-desk-2 p-0.5 dark:bg-desk">

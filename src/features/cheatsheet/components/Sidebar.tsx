@@ -49,8 +49,9 @@ export function Sidebar({ active }: { active: string }) {
         </NavLink>
         {CHAPTERS.map((chapter) => (
           <div key={chapter.id} className="mt-5">
-            <p className="mb-1.5 label-caps text-ink-3">
-              <span className="text-ink-4">{chapter.numeral}.</span> {chapter.title}
+            <p className="mb-1.5 flex gap-3 label-caps text-ink-3">
+              <span className="w-5 shrink-0 tracking-normal text-ink-4">{chapter.numeral}.</span>
+              {chapter.title}
             </p>
             {chapter.sections.map((section) => (
               <NavLink

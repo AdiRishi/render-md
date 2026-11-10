@@ -87,7 +87,7 @@ export function FormattingToolbar() {
       className="h-10 shrink-0 [scrollbar-width:none] overflow-x-auto border-b border-rule px-2.5"
     >
       {/* Sized in the editor's font so the tools line up with its centered column (gutter + 78ch). */}
-      <div className="mx-auto flex h-full w-full max-w-[calc(52px+78ch)] items-center gap-0.5 font-mono text-[14px]">
+      <div className="mx-auto flex h-full w-full max-w-[calc(52px+78ch)] items-center gap-0.5 ps-[42px] font-mono text-[14px]">
         {TOOL_GROUPS.map((group, index) => (
           <div key={index} className="flex items-center gap-0.5">
             {index > 0 ? <span className="mx-1.5 h-4 w-px bg-rule" aria-hidden /> : null}

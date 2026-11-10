@@ -12,7 +12,7 @@ const cache = new Map<string, Promise<string>>()
 
 const PALETTES: Record<ResolvedTheme, Record<string, string>> = {
   light: {
-    background: '#fdfcfa',
+    background: '#fefdfb',
     primaryColor: '#f6f3ee',
     primaryTextColor: '#2a241e',
     primaryBorderColor: '#3b342c',
@@ -25,7 +25,7 @@ const PALETTES: Record<ResolvedTheme, Record<string, string>> = {
     mainBkg: '#f6f3ee',
     clusterBkg: '#f1ede6',
     clusterBorder: '#cfc7bb',
-    edgeLabelBackground: '#fdfcfa',
+    edgeLabelBackground: '#fefdfb',
     noteBkgColor: '#fbf3d0',
     noteBorderColor: '#cdb860',
     actorBkg: '#f6f3ee',
@@ -34,7 +34,7 @@ const PALETTES: Record<ResolvedTheme, Record<string, string>> = {
     labelBoxBkgColor: '#f6f3ee',
   },
   dark: {
-    background: '#1e1b18',
+    background: '#181513',
     primaryColor: '#2a2622',
     primaryTextColor: '#ebe6dd',
     primaryBorderColor: '#c8c0b3',
@@ -47,7 +47,7 @@ const PALETTES: Record<ResolvedTheme, Record<string, string>> = {
     mainBkg: '#2a2622',
     clusterBkg: '#24211d',
     clusterBorder: '#4a443c',
-    edgeLabelBackground: '#1e1b18',
+    edgeLabelBackground: '#181513',
     noteBkgColor: '#3b3524',
     noteBorderColor: '#8c7c3c',
     actorBkg: '#2a2622',

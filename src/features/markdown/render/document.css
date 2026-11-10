@@ -724,6 +724,12 @@
     font-size: 0.86em;
     color: var(--ink-2);
 }
+/* A closing rule already separates the notes. */
+.doc hr + .footnotes {
+    margin-top: 1.5em;
+    padding-top: 0;
+    border-top: 0;
+}
 .doc .footnotes h2 {
     font-family: var(--font-mono);
     font-size: 0.8em;
@@ -798,6 +804,14 @@
     justify-content: safe center;
     padding: 1.4em 0;
     overflow-x: auto;
+}
+/* Edge labels sit on the page colour, with a little air so the line stops short of the text. */
+.doc .diagram-canvas foreignObject {
+    overflow: visible;
+}
+.doc .diagram-canvas .labelBkg {
+    background: var(--paper);
+    box-shadow: 0 0 0 4px var(--paper);
 }
 /* A wide diagram shrinks to fit only until its labels reach 11px, then the canvas scrolls.
    The side gutter is a margin on the diagram so it survives at both ends of the scroll. */

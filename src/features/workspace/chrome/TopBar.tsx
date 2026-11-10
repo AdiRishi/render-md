@@ -50,7 +50,7 @@ export function TopBar() {
               <FolderOpen />
               <span className="max-xl:hidden">Open</span>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" sideOffset={12} className="w-60">
+            <DropdownMenuContent align="end" sideOffset={16} className="w-60">
               <OpenMenuItems />
             </DropdownMenuContent>
           </DropdownMenu>
@@ -62,7 +62,7 @@ export function TopBar() {
               <Download />
               <span className="max-xl:hidden">Export</span>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" sideOffset={12} className="w-60">
+            <DropdownMenuContent align="end" sideOffset={16} className="w-60">
               <ExportMenuItems />
             </DropdownMenuContent>
           </DropdownMenu>
@@ -79,7 +79,7 @@ export function TopBar() {
           >
             <MoreHorizontal />
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" sideOffset={12} className="w-64">
+          <DropdownMenuContent align="end" sideOffset={16} className="w-64">
             <OpenMenuItems />
             <DropdownMenuSeparator />
             <ExportMenuItems />

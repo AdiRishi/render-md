@@ -3,7 +3,7 @@ import { guessTitle } from '@/features/markdown/engine/source'
 import { type DocumentSource, useDocumentStore } from '../state/document-store'
 
 const SOURCE_LABEL: Record<DocumentSource, string> = {
-  sample: 'Field guide',
+  sample: 'Sample',
   local: 'Draft',
   file: 'File',
   url: 'Web',
