@@ -85,7 +85,7 @@ export function QuickReference() {
         </div>
       </div>
 
-      <dl className="mt-6 grid gap-x-10 gap-y-3 sm:grid-cols-2">
+      <dl className="mt-10 grid gap-x-10 gap-y-3 sm:grid-cols-2">
         {(Object.keys(SUPPORT_LABEL) as Support[]).map((support) => (
           <div key={support} className="flex items-start gap-2.5">
             <dt className="w-28 shrink-0 pt-px">

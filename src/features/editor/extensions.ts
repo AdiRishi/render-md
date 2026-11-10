@@ -133,15 +133,18 @@ const highlight = HighlightStyle.define([
   { tag: [t.comment, t.lineComment, t.blockComment], color: 'var(--ink-3)', fontStyle: 'italic' },
   {
     tag: [t.keyword, t.controlKeyword, t.moduleKeyword, t.operatorKeyword],
-    color: 'oklch(0.55 0.15 300)',
+    color: 'var(--syntax-keyword)',
   },
-  { tag: [t.string, t.special(t.string), t.regexp], color: 'oklch(0.55 0.12 150)' },
-  { tag: [t.number, t.bool, t.null, t.atom], color: 'oklch(0.6 0.15 50)' },
-  { tag: [t.function(t.variableName), t.function(t.propertyName)], color: 'oklch(0.52 0.13 250)' },
-  { tag: [t.typeName, t.className, t.namespace], color: 'oklch(0.58 0.12 75)' },
+  { tag: [t.string, t.special(t.string), t.regexp], color: 'var(--syntax-string)' },
+  { tag: [t.number, t.bool, t.null, t.atom], color: 'var(--syntax-number)' },
+  {
+    tag: [t.function(t.variableName), t.function(t.propertyName)],
+    color: 'var(--syntax-function)',
+  },
+  { tag: [t.typeName, t.className, t.namespace], color: 'var(--syntax-type)' },
   { tag: t.special(t.operator), color: 'var(--proof)' },
   { tag: [t.tagName, t.angleBracket], color: 'var(--ink-3)' },
-  { tag: [t.attributeName, t.propertyName], color: 'oklch(0.55 0.1 210)' },
+  { tag: [t.attributeName, t.propertyName], color: 'var(--syntax-property)' },
   { tag: t.invalid, color: 'var(--alert-caution)' },
 ])
 

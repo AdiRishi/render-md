@@ -46,10 +46,7 @@ export function Specimen({ entry, hast }: { entry: CheatsheetEntry; hast: Root }
   return (
     <figure className="group/specimen m-0 break-inside-avoid">
       {entry.label ? (
-        <figcaption className="mb-2.5 flex items-center gap-2 label-caps text-ink-3">
-          <span className="h-px w-3 bg-proof" aria-hidden />
-          {entry.label}
-        </figcaption>
+        <figcaption className="mb-2.5 text-[13px] font-medium text-ink-2">{entry.label}</figcaption>
       ) : null}
       <div className="grid overflow-hidden rounded-[3px] bg-paper shadow-[0_0_0_1px_var(--rule)] md:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
         <div className="flex min-w-0 flex-col border-rule bg-paper-2 max-md:border-b md:border-e">

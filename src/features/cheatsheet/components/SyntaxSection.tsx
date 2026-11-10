@@ -45,7 +45,7 @@ export function SyntaxSection({
       </div>
 
       {tips ? (
-        <aside className="mt-6 rounded-[3px] border border-dashed border-rule-strong px-5 py-4 md:px-6">
+        <aside className="mt-6 rounded-[3px] border border-rule px-5 py-4 md:px-6">
           <p className="mb-2 label-caps text-ink-3">Good to know</p>
           <DocumentView
             hast={tips}

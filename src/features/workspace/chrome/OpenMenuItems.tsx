@@ -20,6 +20,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from '@/ui/dropdown-menu'
+import { Kbd, KbdGroup } from '@/ui/kbd'
 
 import { documentActions } from '../actions'
 import { useDocumentStore } from '../state/document-store'
@@ -31,7 +32,7 @@ function RecentItems() {
   const clearRecents = useDocumentStore((state) => state.clearRecents)
 
   if (recents.length === 0) {
-    return <p className="px-2 py-3 text-[12.5px] text-ink-3">Documents you replace show up here.</p>
+    return <p className="px-2 py-3 text-[13px] text-ink-3">Documents you replace show up here.</p>
   }
 
   return (
@@ -68,7 +69,12 @@ export function OpenMenuItems() {
       <DropdownMenuItem onClick={() => void documentActions.openFile()}>
         <FolderOpen />
         Open file…
-        <DropdownMenuShortcut>{`${mod} O`}</DropdownMenuShortcut>
+        <DropdownMenuShortcut>
+          <KbdGroup>
+            <Kbd>{mod}</Kbd>
+            <Kbd>O</Kbd>
+          </KbdGroup>
+        </DropdownMenuShortcut>
       </DropdownMenuItem>
       <DropdownMenuItem onClick={() => openDialog('open-url')}>
         <Globe />

@@ -14,7 +14,7 @@
     --paper-3: oklch(0.951 0.007 82);
     --ink: oklch(0.215 0.012 60);
     --ink-2: oklch(0.415 0.012 60);
-    --ink-3: oklch(0.575 0.01 65);
+    --ink-3: oklch(0.53 0.01 65);
     --ink-4: oklch(0.72 0.008 70);
     --rule: oklch(0.89 0.008 80);
     --rule-strong: oklch(0.82 0.01 78);
@@ -27,6 +27,13 @@
     --segment: var(--paper);
     --segment-shadow:
         0 1px 2px rgb(var(--shadow-ink) / 0.14), 0 0 0 1px rgb(var(--shadow-ink) / 0.06);
+
+    --syntax-keyword: oklch(0.55 0.15 300);
+    --syntax-string: oklch(0.55 0.12 150);
+    --syntax-number: oklch(0.6 0.15 50);
+    --syntax-function: oklch(0.52 0.13 250);
+    --syntax-type: oklch(0.58 0.12 75);
+    --syntax-property: oklch(0.55 0.1 210);
 
     --alert-note: oklch(0.55 0.16 255);
     --alert-tip: oklch(0.56 0.14 152);
@@ -66,7 +73,7 @@
     --paper-3: oklch(0.262 0.008 62);
     --ink: oklch(0.925 0.01 82);
     --ink-2: oklch(0.775 0.01 78);
-    --ink-3: oklch(0.6 0.01 72);
+    --ink-3: oklch(0.64 0.01 72);
     --ink-4: oklch(0.45 0.008 68);
     --rule: oklch(0.29 0.008 62);
     --rule-strong: oklch(0.37 0.01 62);
@@ -83,6 +90,15 @@
     /* In the dark, desk-2 sits too close to paper for hover and pressed states on popovers. */
     --muted: var(--paper-3);
     --accent: var(--paper-3);
+    /* Full-brightness ink makes a filled button the brightest thing on a dark screen. */
+    --primary: oklch(0.86 0.01 80);
+
+    --syntax-keyword: oklch(0.76 0.11 300);
+    --syntax-string: oklch(0.76 0.1 150);
+    --syntax-number: oklch(0.78 0.11 55);
+    --syntax-function: oklch(0.76 0.1 250);
+    --syntax-type: oklch(0.8 0.1 80);
+    --syntax-property: oklch(0.77 0.08 210);
 
     --alert-note: oklch(0.72 0.12 250);
     --alert-tip: oklch(0.74 0.13 155);

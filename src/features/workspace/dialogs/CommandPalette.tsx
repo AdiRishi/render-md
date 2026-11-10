@@ -105,7 +105,7 @@ export function CommandPalette({ headings }: { headings: HeadingEntry[] }) {
               <FolderOpen />
               Open file…
               <CommandShortcut>
-                <KbdGroup className="*:bg-transparent *:shadow-[inset_0_0_0_1px_var(--rule-strong)]">
+                <KbdGroup>
                   <Kbd>{mod}</Kbd>
                   <Kbd>O</Kbd>
                 </KbdGroup>
@@ -158,7 +158,7 @@ export function CommandPalette({ headings }: { headings: HeadingEntry[] }) {
               <Save />
               Save markdown file
               <CommandShortcut>
-                <KbdGroup className="*:bg-transparent *:shadow-[inset_0_0_0_1px_var(--rule-strong)]">
+                <KbdGroup>
                   <Kbd>{mod}</Kbd>
                   <Kbd>S</Kbd>
                 </KbdGroup>
@@ -172,7 +172,7 @@ export function CommandPalette({ headings }: { headings: HeadingEntry[] }) {
               <Printer />
               Print or save as PDF
               <CommandShortcut>
-                <KbdGroup className="*:bg-transparent *:shadow-[inset_0_0_0_1px_var(--rule-strong)]">
+                <KbdGroup>
                   <Kbd>{mod}</Kbd>
                   <Kbd>P</Kbd>
                 </KbdGroup>

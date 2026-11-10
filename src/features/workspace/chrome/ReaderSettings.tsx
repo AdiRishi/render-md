@@ -1,4 +1,4 @@
-import { Type } from 'lucide-react'
+import { CaseSensitive } from 'lucide-react'
 
 import { TYPESETS } from '@/features/markdown/render/typesets'
 import { cn } from '@/lib/utils'
@@ -76,14 +76,14 @@ export function ReaderSettings() {
             />
           }
         >
-          <Type />
+          <CaseSensitive className="size-5" />
         </TooltipTrigger>
         <TooltipContent side="bottom">Typeset & reading</TooltipContent>
       </Tooltip>
       <PopoverContent align="end" sideOffset={12} className="w-[22rem] gap-0 rounded-xl p-0">
         <div className="p-4 pb-3">
           <p className="mb-3 label-caps text-ink-3">Typeset</p>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 rounded-lg bg-desk-2 p-0.5 dark:bg-desk">
             {TYPESETS.map((typeset) => {
               const active = settings.typeset === typeset.value
               return (
@@ -94,22 +94,15 @@ export function ReaderSettings() {
                   onClick={() => settings.set('typeset', typeset.value)}
                   className={cn(
                     'group flex flex-col items-start gap-2 rounded-md p-2.5 text-start transition-all duration-150',
-                    active
-                      ? 'bg-paper-2 shadow-[inset_0_0_0_1px_var(--ink)]'
-                      : 'shadow-[inset_0_0_0_1px_var(--rule)] hover:bg-paper-2',
+                    active ? 'bg-segment text-ink shadow-segment' : 'text-ink-3 hover:text-ink',
                   )}
                 >
                   <span
-                    className={cn(
-                      'flex h-7 items-end text-[26px] leading-none text-ink',
-                      SPECIMEN_FONT[typeset.value],
-                    )}
+                    className={cn('block h-7 text-[26px] leading-7', SPECIMEN_FONT[typeset.value])}
                   >
                     Aa
                   </span>
-                  <span className="text-[12px] leading-tight font-medium text-ink">
-                    {typeset.label}
-                  </span>
+                  <span className="text-[12px] leading-tight font-medium">{typeset.label}</span>
                 </button>
               )
             })}

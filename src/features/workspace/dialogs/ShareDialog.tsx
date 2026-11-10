@@ -67,7 +67,7 @@ export function ShareDialog() {
             aria-label="Share link"
             className="h-10 min-w-0 flex-1 truncate font-mono text-[12px] text-ink-2"
           />
-          <Button size="lg" onClick={() => void copy()} disabled={!url}>
+          <Button size="lg" className="bg-clip-border" onClick={() => void copy()} disabled={!url}>
             {copied ? <Check /> : <Copy />}
             {copied ? 'Copied' : 'Copy'}
           </Button>
@@ -94,7 +94,7 @@ export function ShareDialog() {
         </div>
 
         {linkSize > LONG_URL ? (
-          <p className="rounded-lg bg-[color-mix(in_oklch,var(--alert-warning)_12%,var(--paper))] px-3 py-2 text-xs leading-relaxed text-ink-2">
+          <p className="rounded-lg bg-[color-mix(in_oklab,var(--alert-warning)_12%,var(--paper))] px-3 py-2 text-xs leading-relaxed text-ink-2">
             This is a long link. Browsers handle it fine, but some chat apps truncate very long URLs
             — consider exporting a file instead.
           </p>

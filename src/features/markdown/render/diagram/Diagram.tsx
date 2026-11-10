@@ -53,6 +53,8 @@ export function Diagram({ code, line }: { code: string; line?: number }) {
   }, [code, resolved, look])
 
   const svg = state.svg
+  // Mermaid states a diagram's natural width as an inline max-width on the <svg>.
+  const naturalWidth = svg?.match(/max-width:\s*([\d.]+)px/)?.[1]
 
   async function renderPng() {
     const flat = await renderMermaid(code, resolved, look, { htmlLabels: false })
@@ -163,7 +165,10 @@ export function Diagram({ code, line }: { code: string; line?: number }) {
       {svg ? (
         <div
           className="diagram-canvas transition-opacity duration-200"
-          style={{ opacity: state.status === 'ready' ? 1 : 0.45 }}
+          style={{
+            opacity: state.status === 'ready' ? 1 : 0.45,
+            ...(naturalWidth && { '--diagram-width': `${naturalWidth}px` }),
+          }}
           // Sanitized by Mermaid (securityLevel: strict).
           dangerouslySetInnerHTML={{ __html: svg }}
         />

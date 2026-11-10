@@ -41,7 +41,7 @@ function NavLink({
 
 export function Sidebar({ active }: { active: string }) {
   return (
-    <aside className="sticky top-20 hidden max-h-[calc(100vh-6rem)] w-56 shrink-0 scrollbar-quiet self-start overflow-y-auto px-1 pb-10 lg:block print:hidden">
+    <aside className="sticky top-20 -mx-1 hidden max-h-[calc(100vh-6rem)] w-56 shrink-0 scrollbar-quiet self-start overflow-y-auto px-1 pb-10 lg:block print:hidden">
       <SearchBox hotkey className="mb-6" />
       <nav aria-label="Cheat sheet sections">
         <NavLink id="quick-reference" active={active === 'quick-reference'}>
@@ -50,7 +50,7 @@ export function Sidebar({ active }: { active: string }) {
         {CHAPTERS.map((chapter) => (
           <div key={chapter.id} className="mt-5">
             <p className="mb-1.5 label-caps text-ink-3">
-              <span className="text-proof">{chapter.numeral}.</span> {chapter.title}
+              <span className="text-ink-4">{chapter.numeral}.</span> {chapter.title}
             </p>
             {chapter.sections.map((section) => (
               <NavLink

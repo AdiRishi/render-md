@@ -99,7 +99,8 @@ export function renderMermaid(
       fontFamily: 'Hanken Grotesk Variable, ui-sans-serif, sans-serif',
       themeVariables: { ...PALETTES[theme], fontSize: '15px' },
       htmlLabels,
-      flowchart: { curve: 'basis', padding: 14 },
+      // Mermaid's default minimum node width (120px) makes diagrams so wide that fitting them shrinks the labels.
+      flowchart: { curve: 'basis', padding: 14, minNodeWidth: 64 },
       suppressErrorRendering: true,
     })
     const { svg } = await mermaid.render(`mermaid-${++counter}`, code)

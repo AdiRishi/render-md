@@ -383,7 +383,7 @@
 .doc blockquote {
     margin: 1.5em 0;
     padding: 0.1em 0 0.1em 1.15em;
-    border-inline-start: 2px solid var(--proof);
+    border-inline-start: 2px solid var(--rule-strong);
     color: var(--ink-2);
 }
 .doc blockquote > :last-child {
@@ -508,6 +508,8 @@
     color: var(--ink-2);
     background: var(--paper-2);
     white-space: nowrap;
+    /* Cell padding is in em, so scale it back up to keep header text on the body's edge. */
+    padding: calc(0.6em / 0.78) calc(0.95em / 0.78);
 }
 .doc tbody tr:last-child td {
     border-bottom: 0;
@@ -551,7 +553,7 @@
 }
 .doc pre {
     margin: 0;
-    padding: 0.95rem 1.1rem 1.05rem;
+    padding: 0.95rem 0 1.05rem;
     overflow-x: auto;
     font-family: var(--font-mono);
     font-size: calc(13.5px * var(--doc-scale));
@@ -560,10 +562,13 @@
     scrollbar-width: thin;
     scrollbar-color: var(--rule-strong) transparent;
 }
+/* The side padding sits on the code so a scrolled line ends with the gutter it starts with. */
 .doc pre code {
     font: inherit;
     display: block;
+    box-sizing: border-box;
     min-width: max-content;
+    padding-inline: 1.1rem;
 }
 .doc pre .line {
     display: inline-block;
@@ -582,24 +587,33 @@
     color: var(--ink-4);
     user-select: none;
 }
+.doc pre .line:is(.diff-add, .diff-remove) {
+    box-sizing: content-box;
+    margin-inline: -1.1rem;
+    padding-inline: 1.1rem;
+    background: color-mix(in oklab, var(--diff) 11%, transparent);
+}
 .doc pre .line.diff-add {
-    background: color-mix(in oklch, var(--alert-tip) 13%, transparent);
+    --diff: var(--alert-tip);
 }
 .doc pre .line.diff-remove {
-    background: color-mix(in oklch, var(--alert-caution) 13%, transparent);
+    --diff: var(--alert-caution);
 }
 
 /* Shiki dual themes — colours arrive as CSS variables on each token. */
 .doc pre .token {
     color: var(--shiki-light);
     font-style: var(--shiki-light-font-style, inherit);
-    font-weight: var(--shiki-light-font-weight, inherit);
 }
+/* The dark theme's colours are tuned for a darker ground than paper-2, so lift them toward ink. */
 .dark .doc pre .token,
 .doc.dark pre .token {
-    color: var(--shiki-dark);
+    color: color-mix(in oklab, var(--shiki-dark) 72%, var(--ink));
     font-style: var(--shiki-dark-font-style, inherit);
-    font-weight: var(--shiki-dark-font-weight, inherit);
+}
+.doc pre .line:is(.diff-add, .diff-remove),
+.doc pre .line:is(.diff-add, .diff-remove) .token {
+    color: color-mix(in oklab, var(--diff) 72%, var(--ink));
 }
 
 /* -- Math ------------------------------------------------------------------- */
@@ -627,7 +641,7 @@
     border-inline-start: 2px solid var(--alert);
     border-start-end-radius: 6px;
     border-end-end-radius: 6px;
-    background: color-mix(in oklch, var(--alert) 7%, var(--paper));
+    background: color-mix(in oklab, var(--alert) 7%, var(--paper));
 }
 .doc .markdown-alert[data-alert='tip'] {
     --alert: var(--alert-tip);
@@ -778,11 +792,14 @@
 }
 .doc .diagram-canvas {
     display: flex;
-    justify-content: center;
+    justify-content: safe center;
     padding: 1.4em 1em;
     overflow-x: auto;
 }
+/* A wide diagram shrinks to fit only until its labels reach 12px, then the canvas scrolls. */
 .doc .diagram-canvas svg {
+    flex-shrink: 0;
+    min-width: calc(var(--diagram-width, 0px) * 0.8);
     max-width: 100%;
     height: auto;
 }
