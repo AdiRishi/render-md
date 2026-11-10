@@ -566,6 +566,9 @@
     scrollbar-color: var(--rule-strong) transparent;
 }
 /* The side padding sits on the code so a scrolled line ends with the gutter it starts with. */
+.doc pre:not(:has(> code)) {
+    padding-inline: 1.1rem;
+}
 .doc pre code {
     font: inherit;
     display: block;
@@ -840,6 +843,9 @@
         overflow: visible;
     }
     .doc pre code {
+        min-width: 0;
+    }
+    .doc .diagram-canvas svg {
         min-width: 0;
     }
     .doc :is(h1, h2, h3, h4) {

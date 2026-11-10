@@ -173,15 +173,25 @@ export function createEditorExtensions(): Extension[] {
             before: 'HorizontalRule',
             parse(context, line) {
               if (context.lineStart !== 0 || !FRONTMATTER_FENCE.test(line.text)) return false
-              let end = line.text.length
+              const dividerEnd = line.text.length
+              const rest: string[] = []
+              let restStart = dividerEnd
               while (context.nextLine()) {
-                end = context.lineStart + line.text.length
                 if (FRONTMATTER_FENCE.test(line.text)) {
+                  const end = context.lineStart + line.text.length
                   context.nextLine()
-                  break
+                  context.addElement(context.elt('Frontmatter', 0, end))
+                  return true
                 }
+                if (rest.length === 0) restStart = context.lineStart
+                rest.push(line.text)
               }
-              context.addElement(context.elt('Frontmatter', 0, end))
+              // No closing fence, so this was a divider. The lines after it are already
+              // consumed and a block parser can't rewind: parse them as their own document.
+              context.addElement(context.elt('HorizontalRule', 0, dividerEnd))
+              if (rest.length > 0) {
+                context.addElement(context.elt(context.parser.parse(rest.join('\n')), restStart))
+              }
               return true
             },
           },
