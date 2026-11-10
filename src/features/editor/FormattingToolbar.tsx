@@ -84,44 +84,47 @@ export function FormattingToolbar() {
     <div
       role="toolbar"
       aria-label="Formatting"
-      className="flex h-10 shrink-0 [scrollbar-width:none] items-center gap-0.5 overflow-x-auto border-b border-rule px-2.5"
+      className="h-10 shrink-0 [scrollbar-width:none] overflow-x-auto border-b border-rule px-2.5"
     >
-      {TOOL_GROUPS.map((group, index) => (
-        <div key={index} className="flex items-center gap-0.5">
-          {index > 0 ? <span className="mx-1.5 h-4 w-px bg-rule" aria-hidden /> : null}
-          {group.map((tool) => (
-            <Tooltip key={tool.command}>
-              <TooltipTrigger
-                render={
-                  <button
-                    type="button"
-                    aria-label={tool.label}
-                    // Keep focus (and the selection) in the editor.
-                    onMouseDown={(event) => event.preventDefault()}
-                    onClick={() => {
-                      const view = getEditorView()
-                      if (view) formatting[tool.command](view)
-                    }}
-                    className="grid size-7 shrink-0 place-items-center rounded-md text-ink-3 transition-colors hover:bg-desk-2 hover:text-ink [&_svg]:size-[15px]"
-                  />
-                }
-              >
-                {tool.icon}
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                {tool.label}
-                {tool.keys ? (
-                  <KbdGroup>
-                    {tool.keys.map((key) => (
-                      <Kbd key={key}>{keyLabel(key, mod)}</Kbd>
-                    ))}
-                  </KbdGroup>
-                ) : null}
-              </TooltipContent>
-            </Tooltip>
-          ))}
-        </div>
-      ))}
+      {/* Sized in the editor's font so the tools line up with its centered column (gutter + 78ch). */}
+      <div className="mx-auto flex h-full w-full max-w-[calc(52px+78ch)] items-center gap-0.5 font-mono text-[14px]">
+        {TOOL_GROUPS.map((group, index) => (
+          <div key={index} className="flex items-center gap-0.5">
+            {index > 0 ? <span className="mx-1.5 h-4 w-px bg-rule" aria-hidden /> : null}
+            {group.map((tool) => (
+              <Tooltip key={tool.command}>
+                <TooltipTrigger
+                  render={
+                    <button
+                      type="button"
+                      aria-label={tool.label}
+                      // Keep focus (and the selection) in the editor.
+                      onMouseDown={(event) => event.preventDefault()}
+                      onClick={() => {
+                        const view = getEditorView()
+                        if (view) formatting[tool.command](view)
+                      }}
+                      className="grid size-7 shrink-0 place-items-center rounded-md text-ink-3 transition-colors hover:bg-desk-2 hover:text-ink [&_svg]:size-[15px]"
+                    />
+                  }
+                >
+                  {tool.icon}
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  {tool.label}
+                  {tool.keys ? (
+                    <KbdGroup>
+                      {tool.keys.map((key) => (
+                        <Kbd key={key}>{keyLabel(key, mod)}</Kbd>
+                      ))}
+                    </KbdGroup>
+                  ) : null}
+                </TooltipContent>
+              </Tooltip>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

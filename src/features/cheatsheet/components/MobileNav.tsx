@@ -36,8 +36,8 @@ export function MobileNav({ active }: { active: string }) {
               data-id={id}
               href={`#${id}`}
               className={cn(
-                'shrink-0 rounded-full px-3 py-1 text-[12.5px] whitespace-nowrap transition-colors',
-                active === id ? 'bg-ink text-paper' : 'text-ink-2 hover:bg-desk-2',
+                'shrink-0 rounded-md px-3 py-1 text-[13px] whitespace-nowrap transition-colors',
+                active === id ? 'bg-segment text-ink shadow-segment' : 'text-ink-3 hover:text-ink',
               )}
             >
               {label}

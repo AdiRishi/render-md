@@ -57,11 +57,11 @@ export function PreviewPane({
     >
       {reading ? <ReadingProgress scrollRef={scrollRef} /> : null}
 
-      <div className="mx-auto flex w-full max-w-[90rem] justify-center gap-12 px-3 pt-8 pb-28 @md:px-10 @md:pt-12 print:p-0">
+      <div className="mx-auto flex w-full max-w-[90rem] justify-center gap-12 px-3 pt-5 pb-28 @md:px-10 @md:pt-12 print:p-0">
         {withOutline ? <Outline headings={headings} scrollRef={scrollRef} /> : null}
 
         <div className="w-full min-w-0" style={{ maxWidth: `calc(${MEASURES[measure]} + 10rem)` }}>
-          <div className="mb-8 flex items-center justify-between gap-4 px-1 font-mono text-[10.5px] tracking-[0.1em] text-ink-3 uppercase print:hidden">
+          <div className="mb-4 flex items-center justify-between gap-4 label-caps text-ink-3 @md:mb-8 print:hidden">
             <span className="flex items-center gap-2">
               <span className="text-proof">¶</span>
               {result && !isEmpty ? (
@@ -74,11 +74,13 @@ export function PreviewPane({
                 <span>Proof</span>
               )}
             </span>
-            {source ? <span className="truncate tracking-normal normal-case">{source}</span> : null}
+            {source ? (
+              <span className="truncate font-normal tracking-normal normal-case">{source}</span>
+            ) : null}
           </div>
 
           <div
-            className="relative rounded-[3px] bg-paper px-5 py-9 shadow-paper @md:px-12 @md:py-14 @2xl:px-[4.5rem] @2xl:py-[4.5rem] print:rounded-none print:p-0 print:shadow-none"
+            className="relative rounded-[3px] bg-paper px-5 py-6 shadow-paper @md:px-12 @md:py-14 @2xl:px-[4.5rem] @2xl:py-[4.5rem] print:rounded-none print:p-0 print:shadow-none"
             onDoubleClick={onDoubleClick}
           >
             <CropMarks offset={24} size={16} className="hidden @lg:block" />
@@ -104,7 +106,7 @@ export function PreviewPane({
             </div>
           </div>
 
-          <p className="mt-6 text-center font-mono text-[10px] tracking-[0.14em] text-ink-4 uppercase print:hidden">
+          <p className="mt-6 text-center label-caps text-ink-4 print:hidden">
             Rendered on your device · RenderMD
           </p>
         </div>

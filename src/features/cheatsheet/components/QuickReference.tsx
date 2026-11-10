@@ -67,7 +67,7 @@ export function QuickReference() {
                     </th>
                     <td className="py-2 align-top">
                       <div className="flex items-start justify-between gap-2">
-                        <code className="font-mono text-[12.5px] leading-[1.9] whitespace-pre-wrap text-ink-2">
+                        <code className="font-mono text-[13px] leading-[1.9] whitespace-pre-wrap text-ink-2">
                           {row.syntax}
                         </code>
                         <CopyButton
@@ -88,10 +88,10 @@ export function QuickReference() {
       <dl className="mt-6 grid gap-x-10 gap-y-3 sm:grid-cols-2">
         {(Object.keys(SUPPORT_LABEL) as Support[]).map((support) => (
           <div key={support} className="flex items-start gap-2.5">
-            <dt className="pt-px">
+            <dt className="w-28 shrink-0 pt-px">
               <SupportBadge support={support} />
             </dt>
-            <dd className="m-0 text-[12.5px] leading-snug text-ink-3">
+            <dd className="m-0 text-[13px] leading-snug text-ink-3">
               {SUPPORT_LABEL[support].description}
             </dd>
           </div>

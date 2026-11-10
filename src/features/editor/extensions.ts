@@ -28,6 +28,7 @@ const theme = EditorView.theme({
     fontFamily: 'var(--font-mono)',
     lineHeight: '1.75',
     overflow: 'auto',
+    justifyContent: 'center',
     scrollbarWidth: 'thin',
     scrollbarColor: 'var(--rule-strong) transparent',
   },
@@ -36,6 +37,9 @@ const theme = EditorView.theme({
     caretColor: 'var(--proof)',
     maxWidth: '78ch',
   },
+  // Gutter and text stay together as one centered column once the pane outgrows the measure.
+  '.cm-scroller > .cm-gutters, .cm-scroller > .cm-content': { flexGrow: '0' },
+  '.cm-scroller > .cm-content': { flexBasis: '78ch' },
   '.cm-line': { padding: '0 28px 0 6px' },
   '.cm-cursor, .cm-dropCursor': { borderLeft: '2px solid var(--proof)' },
   '&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection':
@@ -50,6 +54,8 @@ const theme = EditorView.theme({
   },
   '.cm-lineNumbers .cm-gutterElement': {
     fontSize: '11px',
+    // The text's own line height, so numbers sit on the baseline of their line.
+    lineHeight: '24.5px',
     minWidth: '32px',
     padding: '0 10px 0 0',
     fontVariantNumeric: 'tabular-nums',
@@ -100,14 +106,14 @@ const theme = EditorView.theme({
 
 /** Recessive markup, confident content — in the spirit of iA Writer. */
 const highlight = HighlightStyle.define([
-  { tag: t.heading1, color: 'var(--ink)', fontWeight: '700', fontSize: '1.18em' },
-  { tag: t.heading2, color: 'var(--ink)', fontWeight: '700', fontSize: '1.08em' },
-  { tag: [t.heading3, t.heading4, t.heading5, t.heading6], color: 'var(--ink)', fontWeight: '700' },
+  { tag: t.heading1, color: 'var(--ink)', fontWeight: '600', fontSize: '1.18em' },
+  { tag: t.heading2, color: 'var(--ink)', fontWeight: '600', fontSize: '1.08em' },
+  { tag: [t.heading3, t.heading4, t.heading5, t.heading6], color: 'var(--ink)', fontWeight: '600' },
   { tag: t.processingInstruction, color: 'var(--ink-4)' },
-  { tag: t.strong, fontWeight: '700', color: 'var(--ink)' },
+  { tag: t.strong, fontWeight: '600', color: 'var(--ink)' },
   { tag: t.emphasis, fontStyle: 'italic' },
   { tag: t.strikethrough, textDecoration: 'line-through', color: 'var(--ink-3)' },
-  { tag: t.link, color: 'var(--proof)' },
+  { tag: t.link, color: 'var(--ink-2)' },
   {
     tag: t.url,
     color: 'var(--ink-3)',
@@ -121,8 +127,9 @@ const highlight = HighlightStyle.define([
     borderRadius: '3px',
   },
   { tag: t.quote, color: 'var(--ink-2)', fontStyle: 'italic' },
-  { tag: t.list, color: 'var(--proof)' },
+  { tag: t.list, color: 'var(--ink-3)' },
   { tag: [t.contentSeparator, t.meta], color: 'var(--ink-4)' },
+  { tag: t.documentMeta, color: 'var(--ink-3)' },
   { tag: [t.comment, t.lineComment, t.blockComment], color: 'var(--ink-3)', fontStyle: 'italic' },
   {
     tag: [t.keyword, t.controlKeyword, t.moduleKeyword, t.operatorKeyword],
@@ -133,7 +140,7 @@ const highlight = HighlightStyle.define([
   { tag: [t.function(t.variableName), t.function(t.propertyName)], color: 'oklch(0.52 0.13 250)' },
   { tag: [t.typeName, t.className, t.namespace], color: 'oklch(0.58 0.12 75)' },
   { tag: t.special(t.operator), color: 'var(--proof)' },
-  { tag: [t.tagName, t.angleBracket], color: 'oklch(0.58 0.17 30)' },
+  { tag: [t.tagName, t.angleBracket], color: 'var(--ink-3)' },
   { tag: [t.attributeName, t.propertyName], color: 'oklch(0.55 0.1 210)' },
   { tag: t.invalid, color: 'var(--alert-caution)' },
 ])
@@ -146,9 +153,38 @@ const mermaid = LanguageDescription.of({
   load: () => import('./mermaid').then((m) => new LanguageSupport(m.mermaidLanguage)),
 })
 
+const FRONTMATTER_FENCE = /^---\s*$/
+
 export function createEditorExtensions(): Extension[] {
   return [
-    markdown({ base: markdownLanguage, codeLanguages: [mermaid, ...languages], addKeymap: true }),
+    markdown({
+      base: markdownLanguage,
+      codeLanguages: [mermaid, ...languages],
+      addKeymap: true,
+      extensions: {
+        defineNodes: [{ name: 'Frontmatter', block: true, style: t.documentMeta }],
+        parseBlock: [
+          {
+            // Without this, the YAML lines above the closing fence parse as a setext heading.
+            name: 'Frontmatter',
+            before: 'HorizontalRule',
+            parse(context, line) {
+              if (context.lineStart !== 0 || !FRONTMATTER_FENCE.test(line.text)) return false
+              let end = line.text.length
+              while (context.nextLine()) {
+                end = context.lineStart + line.text.length
+                if (FRONTMATTER_FENCE.test(line.text)) {
+                  context.nextLine()
+                  break
+                }
+              }
+              context.addElement(context.elt('Frontmatter', 0, end))
+              return true
+            },
+          },
+        ],
+      },
+    }),
     EditorView.lineWrapping,
     EditorView.contentAttributes.of({
       spellcheck: 'true',

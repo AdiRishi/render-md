@@ -23,6 +23,10 @@
     --proof-soft: oklch(0.605 0.205 33 / 0.1);
     --marker: oklch(0.92 0.13 98);
     --shadow-ink: 35 25 15;
+    --sheet-ring: rgb(var(--shadow-ink) / 0.06);
+    --segment: var(--paper);
+    --segment-shadow:
+        0 1px 2px rgb(var(--shadow-ink) / 0.14), 0 0 0 1px rgb(var(--shadow-ink) / 0.06);
 
     --alert-note: oklch(0.55 0.16 255);
     --alert-tip: oklch(0.56 0.14 152);
@@ -48,13 +52,13 @@
     --secondary-foreground: var(--ink);
     --destructive: var(--alert-caution);
 
-    --radius: 0.625rem;
+    --radius: 0.5rem;
 }
 
 .dark {
     color-scheme: dark;
 
-    --desk: oklch(0.163 0.005 60);
+    --desk: oklch(0.15 0.005 60);
     --desk-2: oklch(0.205 0.006 60);
     --desk-dot: oklch(0.92 0.01 80 / 0.06);
     --paper: oklch(0.198 0.006 62);
@@ -71,6 +75,10 @@
     --proof-soft: oklch(0.7 0.17 38 / 0.14);
     --marker: oklch(0.55 0.11 95 / 0.55);
     --shadow-ink: 0 0 0;
+    /* Black shadows vanish on the dark desk, so sheets and selected segments get a drawn edge. */
+    --sheet-ring: var(--rule);
+    --segment: var(--paper-3);
+    --segment-shadow: inset 0 0 0 1px var(--rule-strong);
 
     /* In the dark, desk-2 sits too close to paper for hover and pressed states on popovers. */
     --muted: var(--paper-3);

@@ -33,7 +33,7 @@ export function SyntaxSection({
           </h3>
           <SupportBadge support={section.support} />
         </div>
-        <p className="mt-3 max-w-2xl text-[15.5px] leading-relaxed text-ink-2">
+        <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-ink-2">
           <InlineMarkdown text={section.summary} />
         </p>
       </header>
@@ -45,12 +45,12 @@ export function SyntaxSection({
       </div>
 
       {tips ? (
-        <aside className="mt-6 rounded-xl border border-dashed border-rule-strong px-5 py-4 md:px-6">
+        <aside className="mt-6 rounded-[3px] border border-dashed border-rule-strong px-5 py-4 md:px-6">
           <p className="mb-2 label-caps text-ink-3">Good to know</p>
           <DocumentView
             hast={tips}
             textSize="s"
-            className="[&_li]:text-[14.5px] [&_li]:text-ink-2 [&_ul]:mb-0"
+            className="[&_li]:text-[14px] [&_li]:text-ink-2 [&_ul]:mb-0"
           />
         </aside>
       ) : null}

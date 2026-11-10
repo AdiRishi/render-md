@@ -11,7 +11,7 @@
     --doc-body: var(--font-sans);
     --doc-heading: var(--font-sans);
     --doc-size: 16.5px;
-    --doc-leading: 1.72;
+    --doc-leading: 1.65;
     --doc-heading-weight: 640;
     --doc-heading-tracking: -0.022em;
     --doc-h1: 2.35em;
@@ -247,7 +247,7 @@
     background: var(--paper);
     border: 1px solid var(--rule-strong);
     border-bottom-width: 2px;
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
 .doc abbr[title] {
@@ -259,7 +259,7 @@
     font-family: var(--font-mono);
     font-size: var(--doc-code-size);
     padding: 0.14em 0.38em;
-    border-radius: 5px;
+    border-radius: 4px;
     background: var(--paper-2);
     box-shadow: inset 0 0 0 1px var(--rule);
     color: var(--ink);
@@ -279,6 +279,13 @@
 .doc ul,
 .doc ol {
     padding-inline-start: 1.5em;
+}
+/* Stated outright: the app's CSS reset removes list markers. */
+.doc ul {
+    list-style: disc;
+}
+.doc ol {
+    list-style: decimal;
 }
 .doc li {
     padding-inline-start: 0.25em;
@@ -467,7 +474,7 @@
 .doc .table-scroll {
     overflow-x: auto;
     border: 1px solid var(--rule);
-    border-radius: 8px;
+    border-radius: 6px;
 }
 .doc table {
     width: 100%;
@@ -516,7 +523,7 @@
 
 .doc .code-block {
     margin: 1.5em 0;
-    border-radius: 10px;
+    border-radius: 6px;
     background: var(--paper-2);
     box-shadow: inset 0 0 0 1px var(--rule);
     overflow: hidden;
@@ -529,8 +536,9 @@
     padding: 0 0.5rem 0 0.95rem;
     border-bottom: 1px solid var(--rule);
     font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.08em;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--ink-3);
 }
@@ -538,6 +546,7 @@
     text-transform: none;
     letter-spacing: 0;
     font-size: 12px;
+    font-weight: 400;
     color: var(--ink-2);
 }
 .doc pre {
@@ -615,9 +624,10 @@
     --alert: var(--alert-note);
     margin: 1.5em 0;
     padding: 0.85em 1.1em 0.9em;
-    border-radius: 8px;
+    border-inline-start: 2px solid var(--alert);
+    border-start-end-radius: 6px;
+    border-end-end-radius: 6px;
     background: color-mix(in oklch, var(--alert) 7%, var(--paper));
-    box-shadow: inset 3px 0 0 var(--alert);
 }
 .doc .markdown-alert[data-alert='tip'] {
     --alert: var(--alert-tip);
@@ -655,7 +665,7 @@
 
 .doc details {
     border: 1px solid var(--rule);
-    border-radius: 8px;
+    border-radius: 6px;
     padding: 0 1em;
     background: var(--paper);
 }
@@ -732,26 +742,29 @@
 
 .doc .frontmatter {
     margin: 0 0 2.2em;
-    padding: 0.8em 1em;
-    border: 1px dashed var(--rule-strong);
-    border-radius: 8px;
+    padding: 0 0 1em;
+    border-bottom: 1px solid var(--rule);
     font-family: var(--font-mono);
-    font-size: 12.5px;
-    line-height: 1.6;
+    font-size: 12px;
+    line-height: 1.7;
 }
 .doc .frontmatter dl {
     display: grid;
     grid-template-columns: max-content 1fr;
-    gap: 0.2em 1.2em;
+    align-items: baseline;
+    gap: 0.2em 1.5em;
     margin: 0;
 }
 .doc .frontmatter dt {
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: var(--ink-3);
-    font-weight: 400;
 }
 .doc .frontmatter dd {
     margin: 0;
-    color: var(--ink);
+    color: var(--ink-2);
     overflow-wrap: anywhere;
 }
 
@@ -759,7 +772,7 @@
 
 .doc .diagram {
     margin: 1.8em 0;
-    border-radius: 10px;
+    border-radius: 6px;
     box-shadow: inset 0 0 0 1px var(--rule);
     overflow: hidden;
 }

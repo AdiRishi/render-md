@@ -22,17 +22,17 @@ function NavLink({
       href={`#${id}`}
       aria-current={active ? 'location' : undefined}
       className={cn(
-        'flex items-baseline gap-3 rounded-md py-[5px] text-[13.5px] transition-colors',
+        'flex items-baseline gap-3 rounded-md py-[5px] text-[13px] transition-colors',
         active ? 'text-ink' : 'text-ink-3 hover:text-ink',
       )}
     >
       <span
         className={cn(
           'w-5 shrink-0 font-mono text-[10.5px] tabular-nums transition-colors',
-          active ? 'text-proof' : 'text-ink-4',
+          active ? 'text-proof' : 'text-ink-3',
         )}
       >
-        {number === undefined ? '·' : String(number).padStart(2, '0')}
+        {number === undefined ? '¶' : String(number).padStart(2, '0')}
       </span>
       {children}
     </a>

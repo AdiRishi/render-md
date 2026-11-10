@@ -22,17 +22,33 @@ export function EmptyState() {
         <Button
           variant="outline"
           size="lg"
+          className="bg-paper"
           onClick={() => void documentActions.pasteFromClipboard()}
         >
           <ClipboardPaste /> Paste
         </Button>
-        <Button variant="outline" size="lg" onClick={() => void documentActions.openFile()}>
+        <Button
+          variant="outline"
+          size="lg"
+          className="bg-paper"
+          onClick={() => void documentActions.openFile()}
+        >
           <FolderOpen /> Open file
         </Button>
-        <Button variant="outline" size="lg" onClick={() => openDialog('open-url')}>
+        <Button
+          variant="outline"
+          size="lg"
+          className="bg-paper"
+          onClick={() => openDialog('open-url')}
+        >
           <Globe /> From a URL
         </Button>
-        <Button variant="outline" size="lg" onClick={documentActions.loadSample}>
+        <Button
+          variant="outline"
+          size="lg"
+          className="bg-paper"
+          onClick={documentActions.loadSample}
+        >
           <Sparkles /> Field guide
         </Button>
       </div>

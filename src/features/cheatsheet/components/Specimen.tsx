@@ -51,16 +51,16 @@ export function Specimen({ entry, hast }: { entry: CheatsheetEntry; hast: Root }
           {entry.label}
         </figcaption>
       ) : null}
-      <div className="grid overflow-hidden rounded-xl bg-paper shadow-paper md:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] print:shadow-[0_0_0_1px_var(--rule)]">
+      <div className="grid overflow-hidden rounded-[3px] bg-paper shadow-[0_0_0_1px_var(--rule)] md:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
         <div className="flex min-w-0 flex-col border-rule bg-paper-2 max-md:border-b md:border-e">
           <div className="flex h-9 items-center gap-2 ps-4 pe-1.5">
             <span className="label-caps text-ink-3">Markdown</span>
             {edited ? (
-              <span className="rounded-full bg-proof-soft px-1.5 py-0.5 label-caps text-[9px] text-proof">
+              <span className="rounded-sm px-1.5 py-0.5 label-caps text-ink-2 shadow-[inset_0_0_0_1px_var(--rule-strong)]">
                 Edited
               </span>
             ) : (
-              <span className="label-caps text-[9px] text-ink-4 opacity-0 transition-opacity group-hover/specimen:opacity-100 print:hidden">
+              <span className="label-caps text-ink-3 opacity-0 transition-opacity group-hover/specimen:opacity-100 print:hidden">
                 · Click to edit
               </span>
             )}
@@ -108,7 +108,7 @@ export function Specimen({ entry, hast }: { entry: CheatsheetEntry; hast: Root }
             onChange={(event) => setSource(event.target.value)}
             spellCheck={false}
             aria-label={`Markdown example${entry.label ? `: ${entry.label}` : ''}`}
-            className="[field-sizing:content] min-h-16 w-full flex-1 resize-none bg-transparent px-4 pt-1 pb-5 font-mono text-[12.5px] leading-[1.75] text-ink-2 outline-none focus:text-ink"
+            className="[field-sizing:content] min-h-16 w-full flex-1 resize-none bg-transparent px-4 pt-1 pb-5 font-mono text-[13px] leading-[1.75] text-ink-2 outline-none focus:text-ink"
           />
         </div>
         <div className="min-w-0">

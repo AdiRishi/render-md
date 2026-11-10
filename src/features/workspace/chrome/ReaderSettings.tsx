@@ -13,13 +13,13 @@ import { useSettingsStore } from '../state/settings-store'
 const SPECIMEN_FONT = {
   sans: 'font-sans font-semibold tracking-tight',
   serif: 'font-display',
-  mono: 'font-mono font-semibold text-[19px] tracking-tight',
+  mono: 'font-mono font-semibold text-[21px] tracking-tight',
 } as const
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <span className="text-[12.5px] text-ink-2">{label}</span>
+      <span className="text-[13px] text-ink-2">{label}</span>
       {children}
     </div>
   )
@@ -40,14 +40,11 @@ function Choice<T extends string>({
   return (
     <ToggleGroup
       aria-label={label}
-      variant="outline"
-      size="sm"
-      spacing={0}
       value={[value]}
       onValueChange={(next) => {
         if (next[0]) onChange(next[0] as T)
       }}
-      className="w-36"
+      className="w-36 gap-0 rounded-lg bg-desk-2 p-0.5 dark:bg-desk"
     >
       {options.map((option) => (
         <ToggleGroupItem
@@ -55,7 +52,7 @@ function Choice<T extends string>({
           value={option.value}
           title={option.title}
           aria-label={option.title}
-          className="h-7 flex-1 text-xs text-ink-3 aria-pressed:text-ink"
+          className="h-6 min-w-0 flex-1 rounded-md px-2 text-xs text-ink-3 transition-all duration-150 hover:bg-transparent hover:text-ink aria-pressed:bg-segment aria-pressed:text-ink aria-pressed:shadow-segment"
         >
           {option.label}
         </ToggleGroupItem>
@@ -83,7 +80,7 @@ export function ReaderSettings() {
         </TooltipTrigger>
         <TooltipContent side="bottom">Typeset & reading</TooltipContent>
       </Tooltip>
-      <PopoverContent align="end" className="w-[22rem] gap-0 p-0">
+      <PopoverContent align="end" sideOffset={12} className="w-[22rem] gap-0 rounded-xl p-0">
         <div className="p-4 pb-3">
           <p className="mb-3 label-caps text-ink-3">Typeset</p>
           <div className="grid grid-cols-3 gap-2">
@@ -96,15 +93,15 @@ export function ReaderSettings() {
                   aria-pressed={active}
                   onClick={() => settings.set('typeset', typeset.value)}
                   className={cn(
-                    'group flex flex-col items-start gap-2 rounded-lg p-2.5 text-start transition-all duration-150',
+                    'group flex flex-col items-start gap-2 rounded-md p-2.5 text-start transition-all duration-150',
                     active
-                      ? 'bg-paper-2 shadow-[inset_0_0_0_1.5px_var(--ink)]'
+                      ? 'bg-paper-2 shadow-[inset_0_0_0_1px_var(--ink)]'
                       : 'shadow-[inset_0_0_0_1px_var(--rule)] hover:bg-paper-2',
                   )}
                 >
                   <span
                     className={cn(
-                      'text-[26px] leading-none text-ink',
+                      'flex h-7 items-end text-[26px] leading-none text-ink',
                       SPECIMEN_FONT[typeset.value],
                     )}
                   >

@@ -40,10 +40,10 @@ export function Hero({ specimen }: { specimen: Root }) {
   return (
     <header className="relative overflow-hidden border-b border-rule desk-grid print:border-0 print:bg-none">
       <HeroSpecimen hast={specimen} />
-      <div className="mx-auto max-w-6xl px-5 pt-10 pb-16 md:pt-14 md:pb-24 print:p-0">
+      <div className="mx-auto max-w-6xl px-5 pt-10 pb-10 md:pt-14 md:pb-24 print:p-0">
         <Breadcrumb />
 
-        <p className="mt-14 animate-rise label-caps text-proof [animation-delay:60ms] md:mt-20">
+        <p className="mt-8 animate-rise label-caps text-proof [animation-delay:60ms] md:mt-20">
           {SECTIONS.length} topics · {EXAMPLE_COUNT} editable examples
         </p>
         <h1 className="mt-5 max-w-3xl animate-rise font-display text-[clamp(3.4rem,10vw,8rem)] leading-[0.88] tracking-[-0.02em] text-ink [animation-delay:120ms]">
