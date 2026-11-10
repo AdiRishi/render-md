@@ -12,7 +12,7 @@ import { visit } from 'unist-util-visit'
  * await this on its result.
  */
 
-const THEMES = { light: 'kanagawa-lotus', dark: 'kanagawa-dragon' } as const
+const THEMES = { light: 'kanagawa-lotus', dark: 'nord' } as const
 
 const LANGUAGE_ALIASES: Record<string, string> = {
   sh: 'shellscript',
@@ -49,10 +49,7 @@ function getHighlighter() {
       import('shiki/engine/javascript'),
     ])
     return createHighlighterCore({
-      themes: [
-        import('shiki/themes/kanagawa-lotus.mjs'),
-        import('shiki/themes/kanagawa-dragon.mjs'),
-      ],
+      themes: [import('shiki/themes/kanagawa-lotus.mjs'), import('shiki/themes/nord.mjs')],
       langs: [],
       engine: createJavaScriptRegexEngine({ forgiving: true }),
     })

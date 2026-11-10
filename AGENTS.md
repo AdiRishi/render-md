@@ -154,6 +154,7 @@ crosses documents.
 - Ink scale: `ink` → `ink-2` → `ink-3` → `ink-4`. Rules: `rule`, `rule-strong`.
 - Type: **Newsreader** (display headings, at its optical display size, and the Editorial body), **Hanken Grotesk** (UI, Modern typeset), **Geist Mono** (code, labels). Small mono uppercase labels use the `label-caps` utility.
 - Printer's details: crop marks around sheets, a `¶` folio line, `§` heading anchors, `⁂` for horizontal rules.
+- The dark theme is **graphite**, not a dark version of the warm desk: neutral greys with a trace of blue (`.dark` in `tokens.css`), so proof red and the document's own colors are the only hue. The dark Mermaid palette (`diagram/mermaid.ts`) holds hex copies of those tokens — change them together.
 - Light and dark themes are both first-class; theme preference is `light | dark | system`, resolved pre-paint by an inline script (`features/theme/theme.ts`) and switched with a View Transition.
 
 ## Conventions
