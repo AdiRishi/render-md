@@ -7,6 +7,8 @@ export type DocumentContextValue = {
   onToggleTask?: (line: number) => void
   /** How Mermaid diagrams are drawn. */
   diagramLook?: DiagramLook
+  /** Rendering for print: light diagrams whatever the theme, images loaded up front. */
+  printing?: boolean
 }
 
 export const DocumentContext = createContext<DocumentContextValue>({})

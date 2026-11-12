@@ -10,6 +10,7 @@ import { TopBar } from './chrome/TopBar'
 import { CommandPalette } from './dialogs/CommandPalette'
 import { DropOverlay } from './dialogs/DropOverlay'
 import { OpenUrlDialog } from './dialogs/OpenUrlDialog'
+import { PdfDialog } from './dialogs/PdfDialog'
 import { ShareDialog } from './dialogs/ShareDialog'
 import { useFileDrop } from './hooks/use-file-drop'
 import { useHotkeys } from './hooks/use-hotkeys'
@@ -17,6 +18,8 @@ import { useIncomingDocuments } from './hooks/use-incoming-documents'
 import { EditorPane } from './panes/EditorPane'
 import { PreviewPane } from './panes/preview/PreviewPane'
 import { SplitDivider } from './panes/SplitDivider'
+import { PrintSheet } from './pdf/PrintSheet'
+import { usePrintJob } from './pdf/use-print-job'
 import { useScrollSync } from './scroll-sync/use-scroll-sync'
 import { useDocumentStore } from './state/document-store'
 import { useSettingsStore } from './state/settings-store'
@@ -45,7 +48,8 @@ export function Workspace({
   const containerRef = useRef<HTMLDivElement>(null)
   const previewRef = useRef<HTMLDivElement>(null)
 
-  const { result, error } = useRenderedMarkdown(markdown, baseUrl)
+  const { result, error, pending } = useRenderedMarkdown(markdown, baseUrl)
+  const printJob = usePrintJob()
 
   useHotkeys()
   useFileDrop(openDroppedFile)
@@ -96,6 +100,10 @@ export function Workspace({
         <CommandPalette headings={result?.headings ?? []} />
         <ShareDialog />
         <OpenUrlDialog />
+        <PdfDialog headings={result?.headings ?? []} />
+        {printJob ? (
+          <PrintSheet job={printJob} result={result} error={error} pending={pending} />
+        ) : null}
         <DropOverlay />
       </ClientOnly>
     </div>

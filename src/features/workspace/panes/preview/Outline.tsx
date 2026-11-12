@@ -42,7 +42,7 @@ export function Outline({
   return (
     <nav
       aria-label="Outline"
-      className="sticky top-12 hidden max-h-[calc(100vh-10rem)] w-52 shrink-0 scrollbar-quiet self-start overflow-y-auto pe-2 xl:block print:hidden"
+      className="sticky top-12 hidden max-h-[calc(100vh-10rem)] w-52 shrink-0 scrollbar-quiet self-start overflow-y-auto pe-2 xl:block"
     >
       <p className="mb-3 label-caps text-ink-3">Contents</p>
       <ol className="space-y-px border-s border-rule">

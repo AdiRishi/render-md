@@ -21,6 +21,11 @@ export function useHotkeys() {
       } else if (key === 'o' && !event.shiftKey) {
         event.preventDefault()
         void documentActions.openFile()
+      } else if (key === 'p' && !event.shiftKey) {
+        event.preventDefault()
+        const { dialog, openDialog } = useUiStore.getState()
+        if (dialog === 'pdf') documentActions.printPdf()
+        else openDialog('pdf')
       } else if (key === 's' && !event.shiftKey) {
         event.preventDefault()
         void documentActions.save()

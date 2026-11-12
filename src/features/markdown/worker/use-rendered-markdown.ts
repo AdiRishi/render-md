@@ -2,16 +2,20 @@ import { useEffect, useRef, useState } from 'react'
 
 import { type RenderResult } from '../engine/pipeline'
 
+type RenderInput = { markdown: string; baseUrl: string | null }
+
 /**
  * Renders markdown in a worker. While a render is in flight, newer input is
  * coalesced so only the latest text is rendered next — the preview never
- * falls further behind than one render.
+ * falls further behind than one render. `pending` is true until the result
+ * (or error) matches the current input.
  */
 export function useRenderedMarkdown(markdown: string, baseUrl: string | null) {
   const [result, setResult] = useState<RenderResult | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [renderedInput, setRenderedInput] = useState<RenderInput | null>(null)
   const inFlight = useRef(false)
-  const queued = useRef<{ markdown: string; baseUrl: string | null } | null>(null)
+  const queued = useRef<RenderInput | null>(null)
   const mounted = useRef(true)
 
   useEffect(() => {
@@ -45,6 +49,7 @@ export function useRenderedMarkdown(markdown: string, baseUrl: string | null) {
             setError(renderError instanceof Error ? renderError.message : String(renderError))
           }
         } finally {
+          if (mounted.current) setRenderedInput(next)
           inFlight.current = false
         }
       }
@@ -52,5 +57,6 @@ export function useRenderedMarkdown(markdown: string, baseUrl: string | null) {
     void pump()
   }, [markdown, baseUrl])
 
-  return { result, error }
+  const pending = renderedInput?.markdown !== markdown || renderedInput.baseUrl !== baseUrl
+  return { result, error, pending }
 }

@@ -33,6 +33,7 @@ export function DocumentView({
   ref,
   onToggleTask,
   diagramLook,
+  printing,
 }: DocumentViewProps) {
   const content = useMemo(
     () =>
@@ -48,7 +49,7 @@ export function DocumentView({
   )
 
   return (
-    <DocumentContext value={{ onToggleTask, diagramLook }}>
+    <DocumentContext value={{ onToggleTask, diagramLook, printing }}>
       <article
         ref={ref}
         className={cn('doc', className)}

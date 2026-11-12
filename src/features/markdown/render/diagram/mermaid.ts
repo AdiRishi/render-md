@@ -9,6 +9,8 @@ let mermaidPromise: Promise<MermaidApi> | null = null
 let queue: Promise<unknown> = Promise.resolve()
 let counter = 0
 const cache = new Map<string, Promise<string>>()
+/** Finished SVGs by the same key, so a diagram drawn before can appear without waiting. */
+const drawn = new Map<string, string>()
 
 const PALETTES: Record<ResolvedTheme, Record<string, string>> = {
   light: {
@@ -74,6 +76,13 @@ function enqueue<T>(task: () => Promise<T>) {
 /** The page color behind a diagram, for exports that need an opaque background. */
 export const diagramBackground = (theme: ResolvedTheme) => PALETTES[theme].background
 
+const cacheKey = (code: string, theme: ResolvedTheme, look: DiagramLook, htmlLabels: boolean) =>
+  `${theme}|${look}|${htmlLabels}|${code}`
+
+/** The SVG of a diagram that has already been drawn with these settings, if any. */
+export const drawnMermaid = (code: string, theme: ResolvedTheme, look: DiagramLook) =>
+  drawn.get(cacheKey(code, theme, look, true))
+
 /**
  * Renders a diagram to an SVG string. `htmlLabels: false` draws labels as SVG text
  * instead of `foreignObject` HTML, which images and canvases can rasterize safely.
@@ -84,7 +93,7 @@ export function renderMermaid(
   look: DiagramLook,
   { htmlLabels = true } = {},
 ) {
-  const key = `${theme}|${look}|${htmlLabels}|${code}`
+  const key = cacheKey(code, theme, look, htmlLabels)
   const cached = cache.get(key)
   if (cached) return cached
 
@@ -108,7 +117,15 @@ export function renderMermaid(
   })
 
   cache.set(key, result)
-  result.catch(() => cache.delete(key))
-  if (cache.size > 120) cache.delete(cache.keys().next().value!)
+  result.then(
+    // Skip a result whose entry was evicted while it rendered, or it would never be evicted.
+    (svg) => cache.get(key) === result && drawn.set(key, svg),
+    () => cache.delete(key),
+  )
+  if (cache.size > 120) {
+    const oldest = cache.keys().next().value!
+    cache.delete(oldest)
+    drawn.delete(oldest)
+  }
   return result
 }

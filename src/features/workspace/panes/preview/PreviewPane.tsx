@@ -53,15 +53,15 @@ export function PreviewPane({
   return (
     <div
       ref={scrollRef}
-      className="@container relative h-full scrollbar-quiet overflow-x-hidden overflow-y-auto desk-grid print:overflow-visible print:bg-none"
+      className="@container relative h-full scrollbar-quiet overflow-x-hidden overflow-y-auto desk-grid"
     >
       {reading ? <ReadingProgress scrollRef={scrollRef} /> : null}
 
-      <div className="mx-auto flex w-full max-w-[90rem] justify-center gap-12 px-3 pt-5 pb-28 @md:px-10 @md:pt-12 print:p-0">
+      <div className="mx-auto flex w-full max-w-[90rem] justify-center gap-12 px-3 pt-5 pb-28 @md:px-10 @md:pt-12">
         {withOutline ? <Outline headings={headings} scrollRef={scrollRef} /> : null}
 
         <div className="w-full min-w-0" style={{ maxWidth: `calc(${MEASURES[measure]} + 10rem)` }}>
-          <div className="mb-4 flex items-center justify-between gap-4 label-caps text-ink-3 @md:mb-8 print:hidden">
+          <div className="mb-4 flex items-center justify-between gap-4 label-caps text-ink-3 @md:mb-8">
             <span className="flex items-center gap-2">
               <span className="text-proof">¶</span>
               {result && !isEmpty ? (
@@ -80,7 +80,7 @@ export function PreviewPane({
           </div>
 
           <div
-            className="relative rounded-[3px] bg-paper px-5 py-6 shadow-paper @md:px-12 @md:py-14 @2xl:px-[4.5rem] @2xl:py-[4.5rem] print:rounded-none print:p-0 print:shadow-none"
+            className="relative rounded-[3px] bg-paper px-5 py-6 shadow-paper @md:px-12 @md:py-14 @2xl:px-[4.5rem] @2xl:py-[4.5rem]"
             onDoubleClick={onDoubleClick}
           >
             <CropMarks offset={24} size={16} className="hidden @lg:block" />
@@ -106,7 +106,7 @@ export function PreviewPane({
             </div>
           </div>
 
-          <p className="mt-6 text-center label-caps text-ink-4 print:hidden">
+          <p className="mt-6 text-center label-caps text-ink-4">
             Rendered on your device · RenderMD
           </p>
         </div>

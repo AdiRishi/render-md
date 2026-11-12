@@ -40,7 +40,7 @@ export const analytics = {
   /** Starts PostHog so it records page views. */
   start: () => void loadPostHog(),
 
-  capture: (event: string, properties: Record<string, string>) =>
+  capture: (event: string, properties: Record<string, string | boolean>) =>
     void loadPostHog()?.then((posthog) => posthog?.capture(event, properties)),
 
   captureException: (error: unknown) =>

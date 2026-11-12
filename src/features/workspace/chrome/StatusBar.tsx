@@ -19,7 +19,7 @@ export function StatusBar({ stats }: { stats: DocumentStats | null }) {
   const setSetting = useSettingsStore((state) => state.set)
 
   return (
-    <footer className="flex h-7 shrink-0 items-center gap-3 border-t border-rule bg-desk px-4 font-mono text-[10.5px] text-ink-3 tabular-nums max-md:hidden print:hidden">
+    <footer className="flex h-7 shrink-0 items-center gap-3 border-t border-rule bg-desk px-4 font-mono text-[10.5px] text-ink-3 tabular-nums max-md:hidden">
       {stats ? (
         <span className="flex items-center gap-2">
           <span>{formatNumber(stats.words)} words</span>

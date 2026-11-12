@@ -168,9 +168,12 @@ export function CommandPalette({ headings }: { headings: HeadingEntry[] }) {
               <FileDown />
               Download as web page (.html)
             </CommandItem>
-            <CommandItem keywords={['pdf']} onSelect={run(documentActions.print)}>
+            <CommandItem
+              keywords={['pdf', 'print', 'paper']}
+              onSelect={run(() => openDialog('pdf'))}
+            >
               <Printer />
-              Print or save as PDF
+              Save as PDF…
               <CommandShortcut>
                 <KbdGroup>
                   <Kbd>{mod}</Kbd>

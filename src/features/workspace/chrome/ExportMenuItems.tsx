@@ -11,6 +11,7 @@ import {
 import { Kbd, KbdGroup } from '@/ui/kbd'
 
 import { documentActions } from '../actions'
+import { useUiStore } from '../state/ui-store'
 
 export function ExportMenuItems() {
   const mod = modKey()
@@ -44,9 +45,9 @@ export function ExportMenuItems() {
           <FileText />
           Web page (.html)
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={documentActions.print}>
+        <DropdownMenuItem onClick={() => useUiStore.getState().openDialog('pdf')}>
           <Printer />
-          Print or save as PDF
+          PDF document…
           <DropdownMenuShortcut>
             <KbdGroup>
               <Kbd>{mod}</Kbd>
