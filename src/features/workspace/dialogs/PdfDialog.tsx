@@ -173,8 +173,11 @@ export function PdfDialog({ headings }: { headings: HeadingEntry[] }) {
 
   return (
     <Dialog open={open} onOpenChange={(next) => !next && closeDialog()}>
-      <DialogContent initialFocus={saveRef} className="gap-0 overflow-hidden p-0 sm:max-w-[46rem]">
-        <div className="grid sm:grid-cols-[15rem_1fr]">
+      <DialogContent
+        initialFocus={saveRef}
+        className="max-h-[calc(100dvh-2rem)] grid-rows-[minmax(0,1fr)] gap-0 overflow-hidden p-0 sm:max-w-[46rem]"
+      >
+        <div className="grid min-h-0 sm:grid-cols-[15rem_1fr]">
           <div className="hidden flex-col items-center justify-center gap-5 border-e border-rule desk-grid px-6 py-8 sm:flex">
             <div className="grid w-full grid-cols-2 items-start gap-3">
               {sheets.slice(0, 2).map((kind, index) => (
@@ -192,7 +195,7 @@ export function PdfDialog({ headings }: { headings: HeadingEntry[] }) {
             </p>
           </div>
 
-          <div className="flex flex-col gap-5 p-6">
+          <div className="flex min-h-0 flex-col gap-5 overflow-y-auto p-6">
             <DialogHeader>
               <p className="label-caps text-ink-3">Export</p>
               <DialogTitle className="font-display text-[1.9rem] leading-tight font-normal tracking-[-0.01em]">
