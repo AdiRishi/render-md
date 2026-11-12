@@ -101,7 +101,9 @@ export function Workspace({
         <ShareDialog />
         <OpenUrlDialog />
         <PdfDialog headings={result?.headings ?? []} />
-        {printJob ? <PrintSheet job={printJob} result={result} pending={pending} /> : null}
+        {printJob ? (
+          <PrintSheet job={printJob} result={result} error={error} pending={pending} />
+        ) : null}
         <DropOverlay />
       </ClientOnly>
     </div>

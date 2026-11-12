@@ -10,21 +10,34 @@ import { toast } from '@/ui/toast'
 
 import { getDocumentTitle } from '../actions'
 import { useSettingsStore } from '../state/settings-store'
-import { type PrintJob } from '../state/ui-store'
+import { type PrintJob, useUiStore } from '../state/ui-store'
 import { coverFromFrontmatter } from './cover'
 import { MARGINS, PAPERS, pageStyle } from './page-setup'
-import { withPrintIds } from './print-hast'
+import { PRINT_ID_PREFIX, withPrintIds } from './print-hast'
 import { PrintContents, contentsEntries } from './PrintContents'
 import { PrintCover } from './PrintCover'
 
-/** Whether the document opens with the cover's title as its first block. */
-function startsWithTitle(hast: Root, title: string) {
+/**
+ * A title page replaces the document's opening H1 when it repeats the title.
+ * Its id moves to the title page, so links to it still land.
+ */
+function withoutOpeningTitle(hast: Root, title: string) {
   const first = hast.children.find((node) => node.type === 'element')
-  return first?.tagName === 'h1' && toText(first).trim() === title
+  if (first?.tagName !== 'h1' || toText(first).trim() !== title) return { body: hast, id: null }
+  const id = typeof first.properties.id === 'string' ? first.properties.id : null
+  return { body: { ...hast, children: hast.children.filter((node) => node !== first) }, id }
 }
 
-/** Open the print dialog once the sheet has drawn, saying so if that takes a moment. */
-async function printWhenSettled(sheet: HTMLElement, signal: AbortSignal) {
+/**
+ * Open the print dialog once the sheet has drawn, saying so if that takes a
+ * moment. Never prints a document whose current text failed to render, or
+ * hasn't rendered yet: the sheet would still hold the previous version.
+ */
+async function printWhenSettled(
+  sheet: HTMLElement,
+  signal: AbortSignal,
+  isRendered: () => boolean,
+) {
   let loading: string | null = null
   const slow = setTimeout(() => {
     loading = toast.add({ type: 'loading', title: 'Preparing your PDF…' })
@@ -33,6 +46,15 @@ async function printWhenSettled(sheet: HTMLElement, signal: AbortSignal) {
   clearTimeout(slow)
   if (loading) toast.close(loading)
   if (signal.aborted) return
+  if (!isRendered()) {
+    toast.add({
+      type: 'error',
+      title: 'Couldn’t render this document',
+      description: 'Fix the problem shown in the preview, then save as PDF again.',
+    })
+    useUiStore.getState().endPrint()
+    return
+  }
   if (!settled) {
     toast.add({
       title: 'Some images or diagrams hadn’t loaded',
@@ -52,15 +74,24 @@ async function printWhenSettled(sheet: HTMLElement, signal: AbortSignal) {
 export function PrintSheet({
   job,
   result,
+  error,
   pending,
 }: {
   job: PrintJob
   result: RenderResult | null
+  error: string | null
   pending: boolean
 }) {
   const { pdf, typeset, textSize, diagramLook } = useSettingsStore()
   const sheetRef = useRef<HTMLDivElement>(null)
   const title = result?.title ?? getDocumentTitle()
+
+  // Read after the wait, so it reflects the render at that moment.
+  const rendered = result !== null && !pending && !error
+  const renderedRef = useRef(rendered)
+  useLayoutEffect(() => {
+    renderedRef.current = rendered
+  })
 
   // Browsers name the saved PDF after the page title.
   useLayoutEffect(() => {
@@ -75,7 +106,7 @@ export function PrintSheet({
     const sheet = sheetRef.current
     if (job !== 'export' || !sheet) return
     const controller = new AbortController()
-    void printWhenSettled(sheet, controller.signal)
+    void printWhenSettled(sheet, controller.signal, () => renderedRef.current)
     return () => controller.abort()
   }, [job])
 
@@ -83,6 +114,7 @@ export function PrintSheet({
   const margin = MARGINS[pdf.margins]
   const contents = pdf.contents && result ? contentsEntries(result.headings) : []
   const cover = pdf.titlePage ? coverFromFrontmatter(result?.frontmatter ?? null, title) : null
+  const opening = cover && result ? withoutOpeningTitle(result.hast, cover.title) : null
 
   return createPortal(
     <div
@@ -92,21 +124,22 @@ export function PrintSheet({
       style={{ width: `${paper.width - 2 * margin.inline}mm` }}
     >
       <style>{pageStyle(pdf, title)}</style>
-      {cover ? <PrintCover cover={cover} typeset={typeset} /> : null}
+      {cover ? (
+        <PrintCover
+          cover={cover}
+          typeset={typeset}
+          id={opening?.id ? PRINT_ID_PREFIX + opening.id : undefined}
+        />
+      ) : null}
       {contents.length >= 2 ? <PrintContents entries={contents} typeset={typeset} /> : null}
       {result ? (
         <DocumentView
-          hast={withPrintIds(result.hast)}
+          hast={withPrintIds(opening?.body ?? result.hast)}
           frontmatter={cover ? null : result.frontmatter}
           typeset={typeset}
           textSize={textSize}
           diagramLook={diagramLook}
           printing
-          className={
-            cover && startsWithTitle(result.hast, cover.title)
-              ? '[&>h1:first-child]:hidden'
-              : undefined
-          }
         />
       ) : null}
     </div>,

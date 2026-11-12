@@ -11,7 +11,16 @@ const TITLE_SIZE: Record<Typeset, string> = {
 }
 
 /** The PDF's title page: a proof-red rule, the title, and a colophon line at the foot. */
-export function PrintCover({ cover, typeset }: { cover: Cover; typeset: Typeset }) {
+export function PrintCover({
+  cover,
+  typeset,
+  id,
+}: {
+  cover: Cover
+  typeset: Typeset
+  /** The id of the heading the title replaces, so links to it land here. */
+  id?: string
+}) {
   const byline = cover.authors.join(' · ')
   return (
     <section
@@ -20,7 +29,10 @@ export function PrintCover({ cover, typeset }: { cover: Cover; typeset: Typeset 
     >
       <div className="mt-[30%]">
         <div className="mb-10 h-[1.5pt] w-14 bg-proof" />
-        <h1 className={cn('text-balance text-ink', HEADING_FONT[typeset], TITLE_SIZE[typeset])}>
+        <h1
+          id={id}
+          className={cn('text-balance text-ink', HEADING_FONT[typeset], TITLE_SIZE[typeset])}
+        >
           {cover.title}
         </h1>
         {cover.subtitle ? (
