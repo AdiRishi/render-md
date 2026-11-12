@@ -16,7 +16,7 @@ import {
 import { fetchRemoteMarkdown } from './io/remote'
 import { SAMPLE_MARKDOWN, useDocumentStore } from './state/document-store'
 import { type ViewMode, useSettingsStore } from './state/settings-store'
-import { previewArticle } from './state/ui-store'
+import { previewArticle, useUiStore } from './state/ui-store'
 
 function errorMessage(error: unknown) {
   return error instanceof Error ? error.message : 'Something went wrong.'
@@ -239,14 +239,22 @@ export const documentActions = {
     }
   },
 
-  print: () => {
-    const { viewMode } = useSettingsStore.getState()
-    track('document_exported', { format: 'print' })
-    if (viewMode === 'write') {
-      useSettingsStore.getState().set('viewMode', 'read')
-      setTimeout(() => window.print(), 350)
+  /** Lay the document out for paper and open the print dialog once it's ready. */
+  printPdf: () => {
+    const ui = useUiStore.getState()
+    ui.closeDialog()
+    if (!useDocumentStore.getState().markdown.trim()) {
+      toast.add({ title: 'There’s nothing to print yet' })
       return
     }
-    window.print()
+    if (ui.printJob) return
+    ui.startPrint('export')
+    const { pdf } = useSettingsStore.getState()
+    track('document_exported', {
+      format: 'pdf',
+      paper: pdf.paper,
+      title_page: pdf.titlePage,
+      contents: pdf.contents,
+    })
   },
 }

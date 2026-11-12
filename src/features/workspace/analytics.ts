@@ -1,6 +1,7 @@
 import { analytics } from '@/features/site/analytics'
 
 import { type SaveResult } from './io/file-system'
+import { type Paper } from './pdf/page-setup'
 import { type DocumentSource, useDocumentStore } from './state/document-store'
 
 /**
@@ -23,7 +24,9 @@ type WorkspaceEvents = {
   document_open_failed: { source: 'url' }
   document_edited: { document_source: DocumentSource }
   document_saved: { destination: Exclude<SaveResult, 'cancelled'> }
-  document_exported: { format: 'markdown' | 'html' | 'print' }
+  document_exported:
+    | { format: 'markdown' | 'html' }
+    | { format: 'pdf'; paper: Paper; title_page: boolean; contents: boolean }
   document_copied: { format: 'markdown' | 'rich_text' | 'markdown_fallback' }
   document_shared: { method: 'copy_link' | 'share_sheet' }
 }

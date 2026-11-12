@@ -20,7 +20,7 @@ export function ReadingProgress({ scrollRef }: { scrollRef: RefObject<HTMLDivEle
   return (
     <div
       className={cn(
-        'pointer-events-none sticky top-0 z-10 h-0.5 transition-opacity duration-500 print:hidden',
+        'pointer-events-none sticky top-0 z-10 h-0.5 transition-opacity duration-500',
         progress > 0.995 && 'opacity-0',
       )}
       aria-hidden

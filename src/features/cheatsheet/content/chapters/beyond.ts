@@ -162,6 +162,9 @@ export const beyond: CheatsheetChapter = {
           ),
         },
       ],
+      tips: [
+        'In RenderMD, `<!-- pagebreak -->` on its own line starts a new page when you save as PDF. Other renderers hide it like any other comment.',
+      ],
     },
     {
       id: 'frontmatter',
@@ -184,6 +187,7 @@ export const beyond: CheatsheetChapter = {
       ],
       tips: [
         'It must be the very first thing in the file. RenderMD shows it as a metadata card and uses `title` as the document name.',
+        'When you save as PDF with a title page, RenderMD prints `title`, `subtitle`, `author` and `date` on it.',
       ],
     },
   ],

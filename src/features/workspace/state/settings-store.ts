@@ -3,6 +3,8 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 
 import { type DiagramLook, type TextSize, type Typeset } from '@/features/markdown/render/typesets'
 
+import { type PdfSettings, defaultPdfSettings } from '../pdf/page-setup'
+
 export type ViewMode = 'write' | 'split' | 'read'
 export type Measure = 'narrow' | 'normal' | 'wide'
 
@@ -16,6 +18,7 @@ type Settings = {
   showOutline: boolean
   /** Editor share of the split view, 0–1. */
   splitRatio: number
+  pdf: PdfSettings
 }
 
 type SettingsStore = Settings & {
@@ -31,6 +34,7 @@ export const DEFAULT_SETTINGS: Settings = {
   syncScroll: true,
   showOutline: true,
   splitRatio: 0.5,
+  pdf: defaultPdfSettings(typeof navigator === 'undefined' ? 'en-GB' : navigator.language),
 }
 
 export const useSettingsStore = create<SettingsStore>()(

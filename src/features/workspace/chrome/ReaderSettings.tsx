@@ -4,8 +4,8 @@ import { TYPESETS } from '@/features/markdown/render/typesets'
 import { cn } from '@/lib/utils'
 import { Button } from '@/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/ui/popover'
+import { SegmentedControl } from '@/ui/segmented-control'
 import { Switch } from '@/ui/switch'
-import { ToggleGroup, ToggleGroupItem } from '@/ui/toggle-group'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/ui/tooltip'
 
 import { useSettingsStore } from '../state/settings-store'
@@ -22,42 +22,6 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
       <span className="text-[13px] text-ink-2">{label}</span>
       {children}
     </div>
-  )
-}
-
-/** A single-choice toggle group: one option is always selected. */
-function Choice<T extends string>({
-  label,
-  value,
-  onChange,
-  options,
-}: {
-  label: string
-  value: T
-  onChange: (value: T) => void
-  options: Array<{ value: T; label: React.ReactNode; title?: string }>
-}) {
-  return (
-    <ToggleGroup
-      aria-label={label}
-      value={[value]}
-      onValueChange={(next) => {
-        if (next[0]) onChange(next[0] as T)
-      }}
-      className="w-36 gap-0 rounded-lg bg-desk-2 p-0.5 dark:bg-desk"
-    >
-      {options.map((option) => (
-        <ToggleGroupItem
-          key={option.value}
-          value={option.value}
-          title={option.title}
-          aria-label={option.title}
-          className="h-6 min-w-0 flex-1 rounded-md px-2 text-xs text-ink-3 transition-all duration-150 hover:bg-transparent hover:text-ink aria-pressed:bg-segment aria-pressed:text-ink aria-pressed:shadow-segment"
-        >
-          {option.label}
-        </ToggleGroupItem>
-      ))}
-    </ToggleGroup>
   )
 }
 
@@ -116,7 +80,7 @@ export function ReaderSettings() {
 
         <div className="space-y-3 border-t border-rule p-4">
           <Row label="Text size">
-            <Choice
+            <SegmentedControl
               label="Text size"
               value={settings.textSize}
               onChange={(value) => settings.set('textSize', value)}
@@ -128,7 +92,7 @@ export function ReaderSettings() {
             />
           </Row>
           <Row label="Line length">
-            <Choice
+            <SegmentedControl
               label="Line length"
               value={settings.measure}
               onChange={(value) => settings.set('measure', value)}
@@ -140,7 +104,7 @@ export function ReaderSettings() {
             />
           </Row>
           <Row label="Diagrams">
-            <Choice
+            <SegmentedControl
               label="Diagram look"
               value={settings.diagramLook}
               onChange={(value) => settings.set('diagramLook', value)}

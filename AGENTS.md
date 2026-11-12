@@ -17,6 +17,9 @@ pnpm test         # Vitest
 pnpm check        # oxfmt --check + oxlint --type-aware + tsc (TypeScript 7) — what CI runs
 pnpm fix          # Format and auto-fix lint issues
 pnpm deploy       # Deploy dist/ with wrangler
+node build/check-render-worker.ts  # After a build: the worker renders without a DOM
+node build/check-pdf.ts            # After a build: export the print fixture to PDF and check the pages
+                                   # (--url http://localhost:3000 runs it against `pnpm dev`)
 ```
 
 ## Toolchain
@@ -46,7 +49,7 @@ src/
 ├── lib/           Framework-free helpers (utils → cn, format, platform, download, seo, share-link).
 ├── styles/        Global CSS: Tailwind entry (app.css) and color tokens (tokens.css).
 └── router.tsx
-build/             Build-time tooling (the render-worker smoke test) — never shipped.
+build/             Build-time tooling (render-worker smoke test, PDF check and its fixture) — never shipped.
 ```
 
 ### Layers and dependency rules
@@ -102,7 +105,7 @@ markdown/
 ```
 
 Pipeline order: `remark-parse → frontmatter → gfm → math → text math → gemoji → code meta →
-remark-rehype → rehype-raw → source lines → rehype-sanitize → KaTeX → alerts →
+remark-rehype → rehype-raw → page breaks → source lines → rehype-sanitize → KaTeX → alerts →
 slug → fragment links → base URL → heading outline`, then `highlightCodeBlocks`,
 which every caller (worker, main-thread fallback, cheat sheet server function)
 awaits because grammars load on demand. Anything a plugin adds _before_
@@ -119,9 +122,10 @@ workspace/
 ├── chrome/                TopBar, ViewSwitch, DocumentTitle, Open/Export menu items, ReaderSettings, StatusBar
 ├── panes/                 EditorPane, SplitDivider, preview/ (PreviewPane, Outline, EmptyState, …)
 ├── scroll-sync/           line-accurate editor ↔ preview sync (pure math + hook)
-├── dialogs/               CommandPalette, ShareDialog, OpenUrlDialog, DropOverlay
+├── dialogs/               CommandPalette, ShareDialog, OpenUrlDialog, PdfDialog, DropOverlay
 ├── hooks/                 hotkeys, file drop, incoming documents (share links, ?url=, OS file opens)
 ├── io/                    file-system, remote (URLs/GitHub), export (HTML, rich text)
+├── pdf/                   Save as PDF: page setup, print job, the print sheet (title page, contents)
 └── state/                 document-store (current doc + recents, cross-tab merge),
                            settings-store, ui-store, debounced-storage, sample.md
 ```
@@ -132,10 +136,22 @@ document always archives the previous one to _recents_, so actions can offer
 Undo. The editor remounts per loaded document (`loadKey`), so undo history never
 crosses documents.
 
+**Save as PDF** uses the browser's own print engine; nothing is uploaded.
+`documentActions.printPdf` starts a print job, and `pdf/PrintSheet` portals a
+second copy of the document into `<body>`, laid out off-screen, with the page
+stylesheet from `pdf/page-setup.ts` (`@page` size, margins, running header and
+folio in margin boxes) and an optional title page and contents. It waits for
+`whenDocumentSettled` (render current, diagrams drawn, fonts and images loaded),
+then calls `window.print()`. While it is mounted, only the sheet prints.
+Printing from the browser's menu mounts it too, on `beforeprint`. Print is
+always light: the dark tokens and Shiki colours apply only on screen, and the
+sheet draws Mermaid in the light palette. Ids and fragment links in the sheet
+carry a `print-` prefix so PDF links land on the printed copy.
+
 ### Styling
 
 - `styles/app.css` — the Tailwind 4 entry. Fonts, shadows and easing live in a plain `@theme` block (emitted as CSS variables, because the CodeMirror theme and the document stylesheet read them); colors are mapped in `@theme inline`.
-- `styles/tokens.css` — the light and dark palettes.
+- `styles/tokens.css` — the light and dark palettes. The dark one applies only on screen; print is always light.
 - `features/markdown/render/document.css` — the rendered document as plain semantic CSS scoped to `.doc`, with three typesets via `data-typeset`. It's inlined into **Export → HTML**, so keep it free of Tailwind utilities.
 - `cn()` (`lib/utils.ts`, re-exporting the [`cn`](https://www.npmjs.com/package/cn) package) merges classes; variants use CVA (see `ui/button.tsx`).
 
