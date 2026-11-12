@@ -26,14 +26,18 @@ const actionClass =
   'inline-grid size-7 place-items-center rounded-md text-ink-3 transition-colors hover:bg-paper-3 hover:text-ink disabled:opacity-40'
 
 export function Diagram({ code, line }: { code: string; line?: number }) {
-  const { resolved } = useTheme()
-  const look = use(DocumentContext).diagramLook ?? 'clean'
+  const { resolved: screenTheme } = useTheme()
+  const { diagramLook: look = 'clean', printing = false } = use(DocumentContext)
+  // Paper is always light, so a printed diagram is too.
+  const resolved = printing ? 'light' : screenTheme
   const [state, setState] = useState<DiagramState>({ status: 'loading', svg: null })
   const [expanded, setExpanded] = useState(false)
 
   useEffect(() => {
     let active = true
     // Debounce so typing inside a diagram doesn't queue a render per keystroke.
+    // A print sheet renders once, so it starts straight away.
+    const delay = printing ? 0 : 220
     const timer = setTimeout(() => {
       renderMermaid(code, resolved, look).then(
         (svg) => active && setState({ status: 'ready', svg }),
@@ -45,12 +49,12 @@ export function Diagram({ code, line }: { code: string; line?: number }) {
             message: error instanceof Error ? error.message : 'This diagram could not be rendered.',
           })),
       )
-    }, 220)
+    }, delay)
     return () => {
       active = false
       clearTimeout(timer)
     }
-  }, [code, resolved, look])
+  }, [code, resolved, look, printing])
 
   const svg = state.svg
 
@@ -87,7 +91,11 @@ export function Diagram({ code, line }: { code: string; line?: number }) {
   }
 
   return (
-    <figure className="diagram" data-line={line}>
+    <figure
+      className="diagram"
+      data-line={line}
+      data-pending={state.status === 'loading' ? '' : undefined}
+    >
       <figcaption className="code-block-header">
         <span>Mermaid</span>
         {state.status === 'error' ? (

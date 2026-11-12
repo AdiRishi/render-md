@@ -430,6 +430,27 @@
     color: var(--ink-4);
 }
 
+/* A forced page break (`<!-- pagebreak -->`): a labelled dashed rule on screen. */
+.doc hr.page-break {
+    position: relative;
+    margin: 2.4em 0;
+    border-top: 1px dashed var(--rule-strong);
+}
+.doc hr.page-break::after {
+    content: 'Page break';
+    position: absolute;
+    inset-inline-start: 50%;
+    top: 0;
+    translate: -50% -50%;
+    padding-inline: 0.75em;
+    background: var(--paper);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+}
+
 /* -- Media ------------------------------------------------------------------ */
 
 .doc img,
@@ -611,11 +632,14 @@
     color: var(--shiki-light);
     font-style: var(--shiki-light-font-style, inherit);
 }
-/* The dark theme's colours are tuned for a darker ground than paper-2, so lift them toward ink. */
-.dark .doc pre .token,
-.doc.dark pre .token {
-    color: color-mix(in oklab, var(--shiki-dark) 80%, var(--ink));
-    font-style: var(--shiki-dark-font-style, inherit);
+/* The dark theme's colours are tuned for a darker ground than paper-2, so lift them toward ink.
+   Print always uses the light palette. */
+@media screen {
+    .dark .doc pre .token,
+    .doc.dark pre .token {
+        color: color-mix(in oklab, var(--shiki-dark) 80%, var(--ink));
+        font-style: var(--shiki-dark-font-style, inherit);
+    }
 }
 .doc pre .line:is(.diff-add, .diff-remove),
 .doc pre .line:is(.diff-add, .diff-remove) .token {
@@ -823,33 +847,102 @@
 }
 
 /* =============================================================================
-   Print — only the paper makes it to the page.
+   Print — only the paper makes it to the page. Sizes are in points; the page
+   margins set the line length. Long code blocks and tables break across
+   pages; short ones (`data-short`) stay whole.
    ============================================================================= */
 
 @media print {
-    @page {
-        margin: 18mm 16mm;
+    .doc {
+        --doc-size: 10.5pt;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+    .doc[data-typeset='serif'] {
+        --doc-size: 12pt;
+    }
+    .doc[data-typeset='mono'] {
+        --doc-size: 9.5pt;
     }
 
-    .doc {
-        font-size: calc(var(--doc-size) * 0.8);
-    }
-    .doc pre {
-        white-space: pre-wrap;
-        overflow: visible;
-    }
-    .doc pre code {
-        min-width: 0;
-    }
-    .doc :is(h1, h2, h3, h4) {
-        break-after: avoid;
-    }
-    .doc :is(pre, table, .code-block, .markdown-alert, .diagram, img) {
-        break-inside: avoid;
-    }
     .doc .heading-anchor,
     .doc .code-block-actions,
     .doc .diagram-actions {
         display: none !important;
+    }
+
+    .doc :is(h1, h2, h3, h4, h5, h6) {
+        break-after: avoid;
+        break-inside: avoid;
+    }
+    .doc p {
+        orphans: 2;
+        widows: 2;
+    }
+
+    /* Scroll containers can't break across pages, so nothing scrolls on paper. */
+    .doc :is(.code-block, .table-scroll, pre, .diagram, .diagram-canvas, .math-display) {
+        overflow: visible;
+    }
+
+    .doc .code-block {
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+    }
+    .doc .code-block-header {
+        break-after: avoid;
+    }
+    .doc pre {
+        font-size: calc(8.5pt * var(--doc-scale));
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        orphans: 3;
+        widows: 3;
+    }
+    .doc pre code {
+        min-width: 0;
+    }
+
+    .doc .table-scroll {
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+    }
+    .doc thead {
+        display: table-header-group;
+    }
+    .doc tr {
+        break-inside: avoid;
+    }
+    .doc th {
+        white-space: normal;
+    }
+    .doc td {
+        overflow-wrap: anywhere;
+    }
+
+    .doc :is(.code-block, .table-scroll)[data-short],
+    .doc :is(.markdown-alert, .diagram, .math-display, img, video, blockquote) {
+        break-inside: avoid;
+    }
+
+    /* Figures stay well short of a full page, so the heading above one fits beside it. */
+    .doc :is(img, video) {
+        max-height: calc(var(--page-content-height, 100vh) * 0.75);
+        object-fit: contain;
+    }
+    .doc .diagram-canvas svg {
+        max-height: calc(var(--page-content-height, 100vh) * 0.7);
+    }
+
+    .doc hr.page-break {
+        break-after: page;
+        height: 0;
+        margin: 0;
+        border: 0;
+        visibility: hidden;
+    }
+
+    .doc tbody tr:hover {
+        background: none;
     }
 }
