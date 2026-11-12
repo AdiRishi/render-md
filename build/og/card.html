@@ -1,0 +1,304 @@
+<!doctype html>
+<!-- The Open Graph card, 1200 × 630. build/og/render.ts fills it in for each guide. -->
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            @font-face {
+                font-family: 'Newsreader';
+                font-style: normal;
+                font-weight: 200 800;
+                src: url('../../node_modules/@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2')
+                    format('woff2-variations');
+            }
+            @font-face {
+                font-family: 'Newsreader';
+                font-style: italic;
+                font-weight: 200 800;
+                src: url('../../node_modules/@fontsource-variable/newsreader/files/newsreader-latin-opsz-italic.woff2')
+                    format('woff2-variations');
+            }
+            @font-face {
+                font-family: 'Hanken Grotesk';
+                font-weight: 100 900;
+                src: url('../../node_modules/@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2')
+                    format('woff2-variations');
+            }
+            @font-face {
+                font-family: 'Geist Mono';
+                font-weight: 100 900;
+                src: url('../../node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2')
+                    format('woff2-variations');
+            }
+
+            /* The light palette from src/styles/tokens.css. */
+            :root {
+                --desk: oklch(0.958 0.006 84);
+                --desk-dot: oklch(0.21 0.012 60 / 0.07);
+                --paper: oklch(0.994 0.003 90);
+                --paper-2: oklch(0.973 0.005 85);
+                --ink: oklch(0.215 0.012 60);
+                --ink-2: oklch(0.415 0.012 60);
+                --ink-3: oklch(0.53 0.01 65);
+                --ink-4: oklch(0.72 0.008 70);
+                --rule: oklch(0.89 0.008 80);
+                --rule-strong: oklch(0.82 0.01 78);
+                --proof: oklch(0.605 0.205 33);
+                --note: oklch(0.55 0.16 255);
+                --display: 'Newsreader', Georgia, serif;
+                --sans: 'Hanken Grotesk', system-ui, sans-serif;
+                --mono: 'Geist Mono', ui-monospace, monospace;
+            }
+            * {
+                box-sizing: border-box;
+                margin: 0;
+            }
+            body {
+                position: relative;
+                width: 1200px;
+                height: 630px;
+                overflow: hidden;
+                background-color: var(--desk);
+                background-image: radial-gradient(var(--desk-dot) 1px, transparent 1.2px);
+                background-size: 22px 22px;
+                background-position: -11px -11px;
+                color: var(--ink);
+                -webkit-font-smoothing: antialiased;
+            }
+
+            .brand {
+                position: absolute;
+                top: 60px;
+                left: 72px;
+                display: flex;
+                align-items: center;
+                gap: 14px;
+            }
+            .brand svg {
+                width: 40px;
+                height: 40px;
+            }
+            .brand .word {
+                font-family: var(--display);
+                font-size: 36px;
+                letter-spacing: -0.01em;
+            }
+            .brand .md {
+                margin-left: 4px;
+                font-family: var(--mono);
+                font-size: 14px;
+                font-weight: 600;
+                letter-spacing: 0.16em;
+                color: var(--proof);
+                vertical-align: 14px;
+            }
+
+            .title {
+                position: absolute;
+                top: 150px;
+                bottom: 120px;
+                left: 72px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            .eyebrow {
+                margin-bottom: 20px;
+                font-family: var(--mono);
+                font-size: 16px;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--proof);
+            }
+            h1 {
+                margin-left: -4px;
+                font-family: var(--display);
+                font-size: 112px;
+                font-weight: 400;
+                line-height: 0.92;
+                letter-spacing: -0.02em;
+                white-space: nowrap;
+            }
+            h1 em {
+                color: var(--ink-3);
+            }
+            .url {
+                position: absolute;
+                bottom: 58px;
+                left: 72px;
+                font-family: var(--mono);
+                font-size: 16px;
+                letter-spacing: 0.08em;
+                color: var(--ink-3);
+            }
+
+            .source {
+                position: absolute;
+                top: 100px;
+                left: 688px;
+                width: 400px;
+                height: 240px;
+                padding: 30px 28px;
+                border-radius: 5px;
+                background: var(--ink);
+                color: oklch(0.994 0.003 90 / 0.82);
+                font-family: var(--mono);
+                font-size: 15.5px;
+                line-height: 1.7;
+                white-space: pre;
+                overflow: hidden;
+                transform: rotate(-1deg);
+                box-shadow: 0 24px 48px -16px rgb(35 25 15 / 0.2);
+            }
+            .page {
+                position: absolute;
+                top: 252px;
+                left: 688px;
+                width: 440px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                height: 250px;
+                padding: 26px 40px;
+                border-radius: 4px;
+                background: var(--paper);
+                font-family: var(--sans);
+                font-size: 18px;
+                line-height: 1.5;
+                overflow: hidden;
+                transform: rotate(1deg);
+                box-shadow:
+                    0 0 0 1px rgb(35 25 15 / 0.06),
+                    0 12px 24px -12px rgb(35 25 15 / 0.12),
+                    0 32px 64px -32px rgb(35 25 15 / 0.2);
+            }
+
+            /* What a guide can put on the page. */
+            .page h2 {
+                margin-bottom: 12px;
+                font-family: var(--display);
+                font-size: 40px;
+                font-weight: 400;
+                line-height: 1.05;
+                letter-spacing: -0.012em;
+            }
+            .page .lede {
+                font-family: var(--display);
+                font-size: 19px;
+                font-style: italic;
+                color: var(--ink-3);
+            }
+            .page .note {
+                margin-bottom: 14px;
+                padding: 10px 16px;
+                border-left: 3px solid var(--note);
+                border-radius: 3px;
+                background: color-mix(in oklch, var(--note) 7%, var(--paper));
+            }
+            .page .note b {
+                display: block;
+                font-family: var(--mono);
+                font-size: 11px;
+                font-weight: 600;
+                letter-spacing: 0.12em;
+                color: var(--note);
+            }
+            .page .task {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-top: 6px;
+            }
+            .page .box {
+                display: grid;
+                place-items: center;
+                width: 18px;
+                height: 18px;
+                border: 1.5px solid var(--ink-3);
+                border-radius: 4px;
+                font-size: 12px;
+                line-height: 1;
+            }
+            .page .box.on {
+                border-color: var(--ink);
+                background: var(--ink);
+                color: var(--paper);
+            }
+            .page table {
+                width: 100%;
+                margin-top: 4px;
+                border: 1px solid var(--rule);
+                border-radius: 6px;
+                border-spacing: 0;
+            }
+            .page th {
+                padding: 9px 16px;
+                background: var(--paper-2);
+                font-family: var(--mono);
+                font-size: 11px;
+                font-weight: 600;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                color: var(--ink-2);
+            }
+            .page td {
+                padding: 9px 16px;
+                border-top: 1px solid var(--rule);
+            }
+            .page .markup {
+                font-family: var(--mono);
+                font-size: 15px;
+                line-height: 1.75;
+                color: var(--ink-2);
+                white-space: pre;
+            }
+            .page .markup i {
+                font-style: normal;
+                color: var(--ink-4);
+            }
+            .page .tick {
+                display: block;
+                width: 22px;
+                height: 2px;
+                margin-bottom: 14px;
+                background: var(--proof);
+            }
+            .page .byline {
+                margin-top: 34px;
+                padding-top: 12px;
+                border-top: 1px solid var(--rule-strong);
+                font-family: var(--mono);
+                font-size: 11px;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: var(--ink-3);
+            }
+            .page svg {
+                display: block;
+                width: 100%;
+                font-family: var(--sans);
+                font-size: 12px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="brand">
+            <svg viewBox="0 0 208 208">
+                <rect width="208" height="208" rx="48" fill="var(--ink)" />
+                <path
+                    fill="var(--paper)"
+                    d="M50 138V99l20 25 20-25v39h20V70H90L70 95 50 70H30v68z"
+                />
+                <path fill="var(--proof)" d="M184 104h-20V70h-20v34h-20l30 35z" />
+            </svg>
+            <span><span class="word">Render</span><span class="md">MD</span></span>
+        </div>
+        <div class="title">
+            <p class="eyebrow" data-slot="eyebrow"></p>
+            <h1><span data-slot="lead"></span><br /><em data-slot="emphasis"></em></h1>
+        </div>
+        <p class="url" data-slot="url"></p>
+        <pre class="source" data-slot="source"></pre>
+        <div class="page" data-slot="page"></div>
+    </body>
+</html>
