@@ -45,6 +45,7 @@ export function SyntaxSection({
             entry={entry}
             hast={data.examples[entry.source]}
             origin="cheatsheet"
+            result={{ shows: 'page' }}
           />
         ))}
       </div>

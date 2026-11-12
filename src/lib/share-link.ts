@@ -94,3 +94,11 @@ export async function createShareUrl(
   if (from !== 'share') params.set('from', from)
   return `${origin}/#${params}`
 }
+
+/** Open `markdown` in the workspace through a share link, as a full page load. */
+export async function openInEditor(
+  markdown: string,
+  options: { view: ShareView; from: ShareOrigin },
+) {
+  window.location.assign(await createShareUrl(markdown, window.location.origin, options))
+}

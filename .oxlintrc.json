@@ -121,10 +121,12 @@
                 "group": [
                   "@/features/workspace/**",
                   "@/features/cheatsheet/**",
+                  "@/features/guides/**",
                   "**/features/workspace/**",
-                  "**/features/cheatsheet/**"
+                  "**/features/cheatsheet/**",
+                  "**/features/guides/**"
                 ],
-                "message": "Foundation features (markdown, editor, theme, site) must not depend on product features (workspace, cheatsheet)."
+                "message": "Foundation features (markdown, editor, theme, site) must not depend on product features (workspace, cheatsheet, guides)."
               }
             ]
           }
@@ -146,10 +148,12 @@
                 "group": [
                   "@/features/workspace/**",
                   "@/features/cheatsheet/**",
+                  "@/features/guides/**",
                   "**/features/workspace/**",
-                  "**/features/cheatsheet/**"
+                  "**/features/cheatsheet/**",
+                  "**/features/guides/**"
                 ],
-                "message": "Foundation features (markdown, editor, theme, site) must not depend on product features (workspace, cheatsheet)."
+                "message": "Foundation features (markdown, editor, theme, site) must not depend on product features (workspace, cheatsheet, guides)."
               },
               {
                 "group": ["react", "react-dom", "react/*"],
@@ -183,7 +187,7 @@
                 "message": "Routes are the top layer; nothing imports them."
               },
               {
-                "group": ["@/features/cheatsheet/**"],
+                "group": ["@/features/cheatsheet/**", "@/features/guides/**"],
                 "message": "Product features are independent of each other."
               }
             ]
@@ -203,7 +207,27 @@
                 "message": "Routes are the top layer; nothing imports them."
               },
               {
-                "group": ["@/features/workspace/**"],
+                "group": ["@/features/workspace/**", "@/features/guides/**"],
+                "message": "Product features are independent of each other."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/guides/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/routes/**", "**/routes/**"],
+                "message": "Routes are the top layer; nothing imports them."
+              },
+              {
+                "group": ["@/features/workspace/**", "@/features/cheatsheet/**"],
                 "message": "Product features are independent of each other."
               }
             ]
