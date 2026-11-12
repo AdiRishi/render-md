@@ -18,7 +18,7 @@ function renderMath(value: string, displayMode: boolean): ElementContent[] {
 }
 
 /**
- * rehype: render `$…$`, `$$…$$` and ```math blocks with KaTeX.
+ * rehype: render `$…$`, `\(…\)`, `$$…$$`, `\[…\]` and ```math blocks with KaTeX.
  */
 export function rehypeMath() {
   return (tree: Root) => {
