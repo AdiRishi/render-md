@@ -75,6 +75,13 @@ describe('parseDelimited', () => {
     ])
   })
 
+  it('reads CSV whose quoted values contain tabs', () => {
+    expect(parseDelimited('a,b\n"x\ty","z"')).toEqual([
+      ['a', 'b'],
+      ['x\ty', 'z'],
+    ])
+  })
+
   it('reads CSV with quoted commas, quotes and line breaks', () => {
     expect(parseDelimited('city,note\n"Paris, FR","said ""hi""\nthen left"')).toEqual([
       ['city', 'note'],

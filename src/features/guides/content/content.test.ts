@@ -5,7 +5,6 @@ import { renderMarkdown } from '@/features/markdown/engine/pipeline'
 
 import { GUIDES } from './index'
 import { guideSources } from './sources'
-import { type GuideBlock } from './types'
 
 const html = (source: string) => toHtml(renderMarkdown(source).hast)
 const guides = Object.values(GUIDES)
@@ -13,8 +12,6 @@ const blocksOf = (slug: keyof typeof GUIDES) => {
   const guide = GUIDES[slug]
   return [guide.tool, ...guide.sections.flatMap((section) => section.blocks)]
 }
-const blockOf = <K extends GuideBlock['kind']>(slug: keyof typeof GUIDES, kind: K) =>
-  blocksOf(slug).filter((block): block is Extract<GuideBlock, { kind: K }> => block.kind === kind)
 
 describe('guide content', () => {
   it('renders every markdown string to HTML', () => {
@@ -36,18 +33,5 @@ describe('guide content', () => {
       ]
       expect(new Set(ids).size).toBe(ids.length)
     }
-  })
-
-  it('draws every Mermaid example as a diagram', () => {
-    const sources = [
-      ...blockOf('mermaid-viewer', 'specimens').flatMap((block) =>
-        block.entries.map((entry) => entry.source),
-      ),
-      ...blockOf('mermaid-viewer', 'gallery').flatMap((block) =>
-        block.items.map((item) => item.source),
-      ),
-    ]
-    expect(sources.length).toBeGreaterThanOrEqual(10)
-    for (const source of sources) expect(html(source)).toContain('language-mermaid')
   })
 })

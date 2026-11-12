@@ -232,13 +232,17 @@ export const documentActions = {
   copyHtml: async () => {
     const article = previewOrToast('Open the preview to copy HTML')
     if (!article) return
-    await navigator.clipboard.writeText(articleHtml(article))
-    track('document_copied', { format: 'html' })
-    toast.add({
-      type: 'success',
-      title: 'HTML copied',
-      description: 'The markup only. Download as a web page to include the styles.',
-    })
+    try {
+      await navigator.clipboard.writeText(articleHtml(article))
+      track('document_copied', { format: 'html' })
+      toast.add({
+        type: 'success',
+        title: 'HTML copied',
+        description: 'The markup only. Download as a web page to include the styles.',
+      })
+    } catch (error) {
+      toast.add({ type: 'error', title: 'Couldn’t copy', description: errorMessage(error) })
+    }
   },
 
   copyRichText: async () => {

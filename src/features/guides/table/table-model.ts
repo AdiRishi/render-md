@@ -91,7 +91,8 @@ export function parseMarkdownTable(text: string): Table | null {
 /** Rows of spreadsheet cells (tab-separated) or CSV, with quoted fields. */
 export function parseDelimited(text: string): string[][] {
   const source = text.replace(/\r\n?/g, '\n').replace(/\n$/, '')
-  const separator = source.includes('\t') ? '\t' : ','
+  const unquoted = source.replace(/"(?:[^"]|"")*"/g, '')
+  const separator = unquoted.includes('\t') ? '\t' : ','
   const rows: string[][] = [[]]
   let cell = ''
   let quoted = false

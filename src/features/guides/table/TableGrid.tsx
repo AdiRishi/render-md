@@ -61,12 +61,6 @@ export function TableGrid({
         else if (at.row === lastRow) addRowAndFocus(at.column)
         else focusCell({ ...at, row: at.row + 1 })
         return
-      case 'Tab':
-        if (!event.shiftKey && at.row === lastRow && at.column === lastColumn) {
-          event.preventDefault()
-          addRowAndFocus(0)
-        }
-        return
       case 'ArrowUp':
         if (!event.shiftKey && at.row > 0) move({ ...at, row: at.row - 1 })
         return

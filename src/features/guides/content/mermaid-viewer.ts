@@ -10,7 +10,7 @@ export const mermaidViewer: Guide = {
   lede: 'Write Mermaid and see the diagram as you type. Edit the example, or open a markdown file that has diagrams in it.',
   metaTitle: 'Mermaid Viewer and Live Editor: Preview Diagrams Online | RenderMD',
   metaDescription:
-    'Preview Mermaid diagrams as you type: flowcharts, sequence, class, state, ER, Gantt, pie, mindmap and timeline. Expand, zoom, download as PNG or copy as an image. Free, in your browser.',
+    'Preview Mermaid diagrams as you type: flowcharts, sequence, class, state, ER, Gantt, pie, mindmap and timeline. Expand, zoom, download as PNG or SVG, or copy as an image. Free, in your browser.',
   ogImageAlt: 'A Mermaid flowchart drawn in RenderMD',
   tool: {
     kind: 'specimens',
@@ -173,8 +173,8 @@ export const mermaidViewer: Guide = {
             'Hover over a diagram for its controls.',
             '',
             '- **Expand** opens the diagram full screen. Drag to pan, scroll or pinch to zoom.',
-            '- **Download** saves it as a PNG at twice its size, on the page’s background.',
-            '- **Copy** puts the image on your clipboard, ready to paste into a doc, a slide or a chat.',
+            '- **Download** saves it as a PNG at twice its size, or as an SVG that stays sharp at any size.',
+            '- **Copy** puts the image on your clipboard, ready to paste into a doc, a slide or a chat. It can copy the Mermaid source instead.',
             '',
             'In RenderMD’s reading settings, switch Diagrams to *Sketch* for a hand-drawn look. Diagrams follow the light or dark theme, and always print in the light palette.',
           ),
@@ -212,7 +212,7 @@ export const mermaidViewer: Guide = {
     {
       question: 'Can I export a diagram as SVG?',
       answer:
-        'Not directly. Download saves a PNG and Copy puts an image on your clipboard. To keep diagrams as vector graphics, save the whole document with **Export → PDF document**.',
+        'Yes. Open the diagram’s **Download** menu and choose **Vector (.svg)**. Saving the whole document with **Export → PDF document** keeps its diagrams as vector graphics too.',
     },
     {
       question: 'Do my diagrams leave my computer?',
