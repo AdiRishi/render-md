@@ -88,11 +88,29 @@ export function parseMarkdownTable(text: string): Table | null {
   return normalize({ rows, align })
 }
 
+/**
+ * Tab if the text has a tab outside a quoted field, else comma. A quote opens
+ * a field only at the start of a cell, as in `parseDelimited`.
+ */
+function separatorOf(source: string) {
+  let quoted = false
+  let cellStart = true
+  for (let index = 0; index < source.length; index++) {
+    const char = source[index]
+    if (quoted) {
+      if (char === '"' && source[index + 1] === '"') index++
+      else if (char === '"') quoted = false
+    } else if (char === '\t') return '\t'
+    else if (char === '"' && cellStart) quoted = true
+    cellStart = !quoted && (char === ',' || char === '\n')
+  }
+  return ','
+}
+
 /** Rows of spreadsheet cells (tab-separated) or CSV, with quoted fields. */
 export function parseDelimited(text: string): string[][] {
   const source = text.replace(/\r\n?/g, '\n').replace(/\n$/, '')
-  const unquoted = source.replace(/"(?:[^"]|"")*"/g, '')
-  const separator = unquoted.includes('\t') ? '\t' : ','
+  const separator = separatorOf(source)
   const rows: string[][] = [[]]
   let cell = ''
   let quoted = false

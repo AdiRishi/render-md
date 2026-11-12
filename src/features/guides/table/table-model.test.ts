@@ -75,6 +75,10 @@ describe('parseDelimited', () => {
     ])
   })
 
+  it('keeps quotes inside tab-separated cells as text', () => {
+    expect(parseDelimited('5" bolt\t6" bolt')).toEqual([['5" bolt', '6" bolt']])
+  })
+
   it('reads CSV whose quoted values contain tabs', () => {
     expect(parseDelimited('a,b\n"x\ty","z"')).toEqual([
       ['a', 'b'],
