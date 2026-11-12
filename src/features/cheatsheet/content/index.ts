@@ -10,7 +10,7 @@ import { type CheatsheetChapter } from './types'
 export { FAQ } from './faq'
 export { QUICK_REFERENCE } from './quick-reference'
 export { SUPPORT_LABEL, type Support } from './support'
-export type { CheatsheetChapter, CheatsheetEntry, CheatsheetSection } from './types'
+export type { CheatsheetChapter, CheatsheetSection } from './types'
 export { CHEATSHEET_UPDATED } from './updated'
 
 export const CHAPTERS: CheatsheetChapter[] = [basics, gfm, beyond]

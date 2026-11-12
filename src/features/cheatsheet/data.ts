@@ -6,8 +6,6 @@
 import { createServerFn } from '@tanstack/react-start'
 import { type Root } from 'hast'
 
-import { stripHeadingIds } from '@/features/markdown/engine/hast'
-
 import { FAQ, SECTIONS } from './content'
 
 /** The hero's specimen, shown as source and as the typeset page. */
@@ -25,30 +23,27 @@ export type CheatsheetData = {
   faq: Root[]
 }
 
+const tipsMarkdown = (tips: string[]) => tips.map((tip) => `- ${tip}`).join('\n')
+
 const renderCheatsheet = createServerFn().handler(async () => {
-  const [{ renderMarkdown }, { highlightCodeBlocks }] = await Promise.all([
-    import('@/features/markdown/engine/pipeline'),
-    import('@/features/markdown/engine/highlight'),
-  ])
-  const render = (source: string) =>
-    highlightCodeBlocks(renderMarkdown(source, { stripPositions: true }).hast)
+  const { renderStatic } = await import('@/features/markdown/engine/render-static')
   const entries = SECTIONS.flatMap((section) => section.entries)
-  const tipSections = SECTIONS.filter((section) => section.tips?.length)
-  const [hero, examples, tips, faq] = await Promise.all([
-    render(HERO_SOURCE),
-    Promise.all(entries.map((entry) => render(entry.source))),
-    Promise.all(
-      tipSections.map((section) => render(section.tips!.map((tip) => `- ${tip}`).join('\n'))),
-    ),
-    Promise.all(FAQ.map((item) => render(item.answer))),
+  const tipSections = SECTIONS.flatMap((section) =>
+    section.tips?.length ? [{ id: section.id, markdown: tipsMarkdown(section.tips) }] : [],
+  )
+  const rendered = await renderStatic([
+    HERO_SOURCE,
+    ...entries.map((entry) => entry.source),
+    ...tipSections.map((section) => section.markdown),
+    ...FAQ.map((item) => item.answer),
   ])
   const data: CheatsheetData = {
-    hero: stripHeadingIds(hero),
-    examples: Object.fromEntries(
-      entries.map((entry, index) => [entry.source, stripHeadingIds(examples[index])]),
+    hero: rendered[HERO_SOURCE],
+    examples: Object.fromEntries(entries.map((entry) => [entry.source, rendered[entry.source]])),
+    tips: Object.fromEntries(
+      tipSections.map((section) => [section.id, rendered[section.markdown]]),
     ),
-    tips: Object.fromEntries(tipSections.map((section, index) => [section.id, tips[index]])),
-    faq,
+    faq: FAQ.map((item) => rendered[item.answer]),
   }
   // HAST is plain JSON; a string keeps the server-function contract simple.
   return JSON.stringify(data)

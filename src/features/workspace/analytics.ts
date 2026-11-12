@@ -17,6 +17,7 @@ type WorkspaceEvents = {
       | 'url'
       | 'shared_link'
       | 'cheatsheet_example'
+      | 'guide_example'
       | 'blank_page'
       | 'sample'
       | 'clipboard'
@@ -27,7 +28,7 @@ type WorkspaceEvents = {
   document_exported:
     | { format: 'markdown' | 'html' }
     | { format: 'pdf'; paper: Paper; title_page: boolean; contents: boolean }
-  document_copied: { format: 'markdown' | 'rich_text' | 'markdown_fallback' }
+  document_copied: { format: 'markdown' | 'html' | 'rich_text' | 'markdown_fallback' }
   document_shared: { method: 'copy_link' | 'share_sheet' }
 }
 

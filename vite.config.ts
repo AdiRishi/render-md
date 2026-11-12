@@ -11,6 +11,7 @@ import { visualizer } from 'rollup-plugin-visualizer'
 import { defineConfig } from 'vite'
 
 import { CHEATSHEET_UPDATED } from './src/features/cheatsheet/content/updated.ts'
+import { GUIDE_UPDATED } from './src/features/guides/content/updated.ts'
 import { SITE_URL } from './src/lib/seo.ts'
 
 // KaTeX's package exports don't include its package.json.
@@ -40,7 +41,14 @@ export default defineConfig({
     cloudflare({ viteEnvironment: { name: 'ssr' } }),
     tailwindcss(),
     tanstackStart({
-      pages: [{ path: '/' }, { path: '/cheatsheet', sitemap: { lastmod: CHEATSHEET_UPDATED } }],
+      pages: [
+        { path: '/' },
+        { path: '/cheatsheet', sitemap: { lastmod: CHEATSHEET_UPDATED } },
+        ...Object.entries(GUIDE_UPDATED).map(([slug, lastmod]) => ({
+          path: `/${slug}`,
+          sitemap: { lastmod },
+        })),
+      ],
       sitemap: { host: SITE_URL },
     }),
     viteReact(),

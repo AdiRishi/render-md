@@ -41,15 +41,16 @@ src/
 ├── features/      Everything users can see or do, grouped by feature.
 │   ├── workspace/   The app at "/": layout, panes, chrome, dialogs, state, document I/O.
 │   ├── cheatsheet/  The /cheatsheet reference page (an SEO page — see below).
+│   ├── guides/      The task pages (/mermaid-viewer, /markdown-to-pdf, … — SEO pages, see below).
 │   ├── markdown/    The rendering engine and the React document renderer.
 │   ├── editor/      CodeMirror 6: editor component, toolbar, commands, theme.
 │   ├── theme/       Light/dark/system: provider, toggle, pre-paint boot script.
-│   └── site/        Site chrome shared by content pages: header, footer, 404, analytics.
+│   └── site/        Site chrome shared by content pages: header, footer, breadcrumb, FAQ, the list of content pages, 404, analytics.
 ├── ui/            shadcn/ui components (button, dropdown-menu, dialog, …) + our own primitives. No app state.
 ├── lib/           Framework-free helpers (utils → cn, format, platform, download, seo, share-link).
 ├── styles/        Global CSS: Tailwind entry (app.css) and color tokens (tokens.css).
 └── router.tsx
-build/             Build-time tooling (render-worker smoke test, PDF check and its fixture) — never shipped.
+build/             Build-time tooling (render-worker smoke test, PDF check and its fixture, OG images) — never shipped.
 ```
 
 ### Layers and dependency rules
@@ -61,7 +62,7 @@ a boundary is crossed.
 | Layer                                                      | May import                                                                                                      |
 | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | `routes/`                                                  | anything below                                                                                                  |
-| product features: `workspace`, `cheatsheet`                | foundation features, `ui`, `lib` — not each other                                                               |
+| product features: `workspace`, `cheatsheet`, `guides`      | foundation features, `ui`, `lib` — not each other                                                               |
 | foundation features: `markdown`, `editor`, `theme`, `site` | each other, `ui`, `lib` — never product features                                                                |
 | `features/markdown/engine/`                                | `lib` and npm packages only — **no React**, no other features (it runs in a worker, on the server and in tests) |
 | `ui/`                                                      | `lib` — never features                                                                                          |
@@ -192,3 +193,15 @@ It is one of the site's biggest traffic sources, so treat changes to it with car
 - Keep the H1 containing "Markdown cheat sheet", one H2 per chapter / quick reference / FAQ, and H3 per section. Section ids are public anchors (`/cheatsheet#tables`) — don't rename them.
 - Structured data (`TechArticle` with `dateModified`, `BreadcrumbList`, `FAQPage`) is generated from the same content in `features/cheatsheet/seo.ts`. Bump `CHEATSHEET_UPDATED` when the content changes meaningfully.
 - Examples are editable in place and re-render through the worker; "Open in editor" uses a share link with `view=split`.
+
+## Guides (`/mermaid-viewer`, `/markdown-to-pdf`, `/markdown-to-html`, `/markdown-table-generator`) — SEO pages
+
+Each guide is a task page built around one tool. Treat them like the cheat sheet:
+
+- Content lives in `features/guides/content/`: one file per guide, typed in `types.ts`. A guide is a hero `tool` plus sections of blocks (`prose`, `specimens`, `gallery`, `steps`, `pdf-settings`, `table-generator`). `components/GuideBlock.tsx` draws every block kind in one exhaustive `switch`; a new kind is added to the union, to `content/sources.ts` and to that switch.
+- Every markdown string in a guide is rendered by the real pipeline **on the server** (`data.ts`), keyed by its source: look it up with `data.rendered[source]`. `content/content.test.ts` checks the content renders and that the claims it makes still hold — run `pnpm test` after editing content.
+- Keep one H1 (the guide's `h1`), one H2 per section and for the FAQ, and H3 for gallery items and steps. Section ids and gallery item ids are public anchors (`/mermaid-viewer#gantt-chart`) — don't rename them.
+- `features/site/pages.ts` lists the content pages. The workspace's status bar, the footer and each guide's related links read it, so a new guide is linked from everywhere once it is added there, to `GUIDES` and as a route.
+- Structured data (`TechArticle`, `BreadcrumbList`) comes from `features/guides/seo.ts`. Bump the guide's date in `content/updated.ts` (`GUIDE_UPDATED`) when its content changes meaningfully.
+- The table generator's logic is the pure model in `features/guides/table/table-model.ts`; the grid and toolbar only call it. Add tests there for any change to parsing or output.
+- Each guide's Open Graph image is `public/og-<slug>.png`, drawn by `node build/og/render.ts` from the guide's content and `build/og/card.html`. Run it again when a guide's H1 changes or a guide is added.

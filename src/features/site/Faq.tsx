@@ -2,9 +2,15 @@ import { type Root } from 'hast'
 
 import { DocumentView } from '@/features/markdown/render/DocumentView'
 
-import { FAQ } from '../content'
-
-export function Faq({ answers }: { answers: Root[] }) {
+/** A content page's FAQ: questions as H3s, answers rendered from markdown on the server. */
+export function Faq({
+  items,
+  answers,
+}: {
+  items: ReadonlyArray<{ question: string }>
+  /** Each item's rendered answer, in the same order. */
+  answers: Root[]
+}) {
   return (
     <section id="faq" aria-labelledby="faq-title" className="scroll-mt-24">
       <h2
@@ -14,7 +20,7 @@ export function Faq({ answers }: { answers: Root[] }) {
         Frequently asked
       </h2>
       <div className="grid gap-x-12 gap-y-10 md:grid-cols-2">
-        {FAQ.map((item, index) => (
+        {items.map((item, index) => (
           <div key={item.question} className="border-t border-rule pt-5">
             <h3 className="text-[17px] leading-snug font-semibold tracking-[-0.01em] text-ink">
               {item.question}

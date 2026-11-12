@@ -1,3 +1,5 @@
+import { articleHtml, cleanArticle } from '@/features/markdown/render/article-html'
+
 import documentCss from '@/features/markdown/render/document.css?raw'
 
 /**
@@ -42,33 +44,6 @@ function escapeHtml(value: string) {
   return value.replace(/[&<>"]/g, (char) => `&#${char.charCodeAt(0)};`)
 }
 
-/** Clone the article and strip interactive chrome (buttons, anchors…). */
-export function cleanArticle(article: HTMLElement) {
-  const clone = article.cloneNode(true) as HTMLElement
-  clone
-    .querySelectorAll('button, .heading-anchor, .code-block-actions, .diagram-actions')
-    .forEach((node) => node.remove())
-  clone
-    .querySelectorAll('input[type="checkbox"]')
-    .forEach((node) => node.setAttribute('disabled', ''))
-  clone.querySelectorAll('[data-line]').forEach((node) => node.removeAttribute('data-line'))
-  clone.querySelectorAll('pre[tabindex]').forEach((node) => node.removeAttribute('tabindex'))
-  // Links must work outside the app: unwrap "open in RenderMD" links and make
-  // every other non-fragment link absolute.
-  clone.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((anchor) => {
-    const href = anchor.getAttribute('href') ?? ''
-    if (href.startsWith('#')) return
-    try {
-      const url = new URL(href, window.location.href)
-      const original = url.origin === window.location.origin ? url.searchParams.get('url') : null
-      anchor.setAttribute('href', original ?? url.href)
-    } catch {
-      // Leave unparsable links alone.
-    }
-  })
-  return clone
-}
-
 export function buildStandaloneHtml(article: HTMLElement, title: string) {
   const computed = getComputedStyle(document.documentElement)
   const isDark = document.documentElement.classList.contains('dark')
@@ -109,7 +84,7 @@ ${clone.outerHTML}
 
 /** Copy as rich text (pastes formatted into Docs, Gmail, Notion…) + markdown. */
 export async function copyRichText(article: HTMLElement, markdown: string) {
-  const html = cleanArticle(article).outerHTML
+  const html = articleHtml(article)
   if (typeof ClipboardItem === 'undefined') {
     await navigator.clipboard.writeText(markdown)
     return 'plain' as const

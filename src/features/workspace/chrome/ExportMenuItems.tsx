@@ -1,4 +1,4 @@
-import { Code2, Copy, FileDown, FileText, Printer } from 'lucide-react'
+import { Code2, Copy, FileCode, FileDown, FileText, Printer } from 'lucide-react'
 
 import { modKey } from '@/lib/platform'
 import {
@@ -22,6 +22,10 @@ export function ExportMenuItems() {
         <DropdownMenuItem onClick={() => void documentActions.copyRichText()}>
           <Copy />
           Formatted text
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => void documentActions.copyHtml()}>
+          <FileCode />
+          HTML
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => void documentActions.copyMarkdown()}>
           <Code2 />

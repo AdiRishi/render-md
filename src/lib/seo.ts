@@ -19,6 +19,24 @@ export const OG_IMAGE = `${SITE_URL}/og.png`
 export const THEME_COLOR = '#1c1915'
 const DEFAULT_IMAGE_ALT = 'RenderMD, with markdown on the left and the typeset page on the right'
 
+/** RenderMD as the author and publisher of an article. */
+export const SITE_PUBLISHER = {
+  '@type': 'Organization',
+  name: SITE_NAME,
+  url: SITE_URL,
+  logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo512.png` },
+}
+
+/** A BreadcrumbList from the home page down to `page`, the current one. */
+export const breadcrumbJsonLd = (page: { name: string; url: string }) => ({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: SITE_NAME, item: SITE_URL },
+    { '@type': 'ListItem', position: 2, name: page.name, item: page.url },
+  ],
+})
+
 /**
  * Convert JSON-LD schema objects to script tags for TanStack head
  */

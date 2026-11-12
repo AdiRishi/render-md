@@ -1,14 +1,14 @@
+import { ClosingCta } from '@/features/site/ClosingCta'
+import { Faq } from '@/features/site/Faq'
 import { SiteFooter } from '@/features/site/SiteFooter'
 import { SiteHeader } from '@/features/site/SiteHeader'
 
 import { Chapter } from './components/Chapter'
-import { ClosingCta } from './components/ClosingCta'
-import { Faq } from './components/Faq'
 import { Hero } from './components/Hero'
 import { MobileNav } from './components/MobileNav'
 import { QuickReference } from './components/QuickReference'
 import { Sidebar } from './components/Sidebar'
-import { CHAPTERS } from './content'
+import { CHAPTERS, FAQ } from './content'
 import { type CheatsheetData } from './data'
 import { useActiveSection } from './hooks/use-active-section'
 
@@ -34,8 +34,8 @@ export function CheatsheetPage({ data }: { data: CheatsheetData }) {
           {CHAPTERS.map((chapter) => (
             <Chapter key={chapter.id} chapter={chapter} data={data} />
           ))}
-          <Faq answers={data.faq} />
-          <ClosingCta />
+          <Faq items={FAQ} answers={data.faq} />
+          <ClosingCta headline="Write markdown and see it typeset as you go." />
         </main>
       </div>
 

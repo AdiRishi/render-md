@@ -11,6 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CheatsheetRouteImport } from './routes/cheatsheet'
+import { Route as MarkdownTableGeneratorRouteImport } from './routes/markdown-table-generator'
+import { Route as MarkdownToHtmlRouteImport } from './routes/markdown-to-html'
+import { Route as MarkdownToPdfRouteImport } from './routes/markdown-to-pdf'
+import { Route as MermaidViewerRouteImport } from './routes/mermaid-viewer'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +26,86 @@ const CheatsheetRoute = CheatsheetRouteImport.update({
   path: '/cheatsheet',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MarkdownTableGeneratorRoute = MarkdownTableGeneratorRouteImport.update({
+  id: '/markdown-table-generator',
+  path: '/markdown-table-generator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarkdownToHtmlRoute = MarkdownToHtmlRouteImport.update({
+  id: '/markdown-to-html',
+  path: '/markdown-to-html',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarkdownToPdfRoute = MarkdownToPdfRouteImport.update({
+  id: '/markdown-to-pdf',
+  path: '/markdown-to-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MermaidViewerRoute = MermaidViewerRouteImport.update({
+  id: '/mermaid-viewer',
+  path: '/mermaid-viewer',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cheatsheet': typeof CheatsheetRoute
+  '/markdown-table-generator': typeof MarkdownTableGeneratorRoute
+  '/markdown-to-html': typeof MarkdownToHtmlRoute
+  '/markdown-to-pdf': typeof MarkdownToPdfRoute
+  '/mermaid-viewer': typeof MermaidViewerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cheatsheet': typeof CheatsheetRoute
+  '/markdown-table-generator': typeof MarkdownTableGeneratorRoute
+  '/markdown-to-html': typeof MarkdownToHtmlRoute
+  '/markdown-to-pdf': typeof MarkdownToPdfRoute
+  '/mermaid-viewer': typeof MermaidViewerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/cheatsheet': typeof CheatsheetRoute
+  '/markdown-table-generator': typeof MarkdownTableGeneratorRoute
+  '/markdown-to-html': typeof MarkdownToHtmlRoute
+  '/markdown-to-pdf': typeof MarkdownToPdfRoute
+  '/mermaid-viewer': typeof MermaidViewerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cheatsheet'
+  fullPaths:
+    | '/'
+    | '/cheatsheet'
+    | '/markdown-table-generator'
+    | '/markdown-to-html'
+    | '/markdown-to-pdf'
+    | '/mermaid-viewer'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cheatsheet'
-  id: '__root__' | '/' | '/cheatsheet'
+  to:
+    | '/'
+    | '/cheatsheet'
+    | '/markdown-table-generator'
+    | '/markdown-to-html'
+    | '/markdown-to-pdf'
+    | '/mermaid-viewer'
+  id:
+    | '__root__'
+    | '/'
+    | '/cheatsheet'
+    | '/markdown-table-generator'
+    | '/markdown-to-html'
+    | '/markdown-to-pdf'
+    | '/mermaid-viewer'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CheatsheetRoute: typeof CheatsheetRoute
+  MarkdownTableGeneratorRoute: typeof MarkdownTableGeneratorRoute
+  MarkdownToHtmlRoute: typeof MarkdownToHtmlRoute
+  MarkdownToPdfRoute: typeof MarkdownToPdfRoute
+  MermaidViewerRoute: typeof MermaidViewerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +124,44 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheatsheetRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/markdown-table-generator': {
+      id: '/markdown-table-generator'
+      path: '/markdown-table-generator'
+      fullPath: '/markdown-table-generator'
+      preLoaderRoute: typeof MarkdownTableGeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/markdown-to-html': {
+      id: '/markdown-to-html'
+      path: '/markdown-to-html'
+      fullPath: '/markdown-to-html'
+      preLoaderRoute: typeof MarkdownToHtmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/markdown-to-pdf': {
+      id: '/markdown-to-pdf'
+      path: '/markdown-to-pdf'
+      fullPath: '/markdown-to-pdf'
+      preLoaderRoute: typeof MarkdownToPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mermaid-viewer': {
+      id: '/mermaid-viewer'
+      path: '/mermaid-viewer'
+      fullPath: '/mermaid-viewer'
+      preLoaderRoute: typeof MermaidViewerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CheatsheetRoute: CheatsheetRoute,
+  MarkdownTableGeneratorRoute: MarkdownTableGeneratorRoute,
+  MarkdownToHtmlRoute: MarkdownToHtmlRoute,
+  MarkdownToPdfRoute: MarkdownToPdfRoute,
+  MermaidViewerRoute: MermaidViewerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

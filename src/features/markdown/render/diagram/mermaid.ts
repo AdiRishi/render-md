@@ -12,6 +12,23 @@ const cache = new Map<string, Promise<string>>()
 /** Finished SVGs by the same key, so a diagram drawn before can appear without waiting. */
 const drawn = new Map<string, string>()
 
+/**
+ * Mindmaps and timelines colour each branch from cScale0–11 and a mindmap's
+ * root from git0. The base theme derives those from the primary colour and
+ * darkens them, which on the dark palette is near-black, so the dark theme
+ * sets them: alternating paper greys, with the root a step lighter.
+ */
+const DARK_BRANCHES = {
+  ...Object.fromEntries(
+    Array.from({ length: 12 }, (_, index) => [
+      [`cScale${index}`, index % 2 ? '#2b2d31' : '#35363b'],
+      [`cScaleLabel${index}`, '#eae9e6'],
+    ]).flat(),
+  ),
+  git0: '#4a4c52',
+  gitBranchLabel0: '#eae9e6',
+}
+
 const PALETTES: Record<ResolvedTheme, Record<string, string>> = {
   light: {
     background: '#fefdfb',
@@ -56,6 +73,7 @@ const PALETTES: Record<ResolvedTheme, Record<string, string>> = {
     actorBorder: '#b8b9bb',
     signalColor: '#b8b9bb',
     labelBoxBkgColor: '#252629',
+    ...DARK_BRANCHES,
   },
 }
 
@@ -110,6 +128,9 @@ export function renderMermaid(
       htmlLabels,
       // Mermaid's default minimum node width (120px) makes diagrams so wide that fitting them shrinks the labels.
       flowchart: { curve: 'basis', padding: 14, minNodeWidth: 64 },
+      // Gantt charts take their container's width, which a detached render doesn't have, so
+      // they default to 1200px and shrink to unreadable. Lay them out at the document's measure.
+      gantt: { useWidth: 560 },
       suppressErrorRendering: true,
     })
     const { svg } = await mermaid.render(`mermaid-${++counter}`, code)

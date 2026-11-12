@@ -1,4 +1,4 @@
-import { jsonLdScripts, seo, SITE_NAME, SITE_URL } from '@/lib/seo'
+import { breadcrumbJsonLd, jsonLdScripts, seo, SITE_PUBLISHER, SITE_URL } from '@/lib/seo'
 
 import { CHEATSHEET_UPDATED, EXAMPLE_COUNT, FAQ, SECTIONS } from './content'
 
@@ -31,23 +31,11 @@ export const getCheatsheetJsonLd = () => [
     proficiencyLevel: 'Beginner',
     about: { '@type': 'Thing', name: 'Markdown', sameAs: 'https://en.wikipedia.org/wiki/Markdown' },
     articleSection: SECTIONS.map((section) => section.title),
-    author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
-    publisher: {
-      '@type': 'Organization',
-      name: SITE_NAME,
-      url: SITE_URL,
-      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo512.png` },
-    },
+    author: SITE_PUBLISHER,
+    publisher: SITE_PUBLISHER,
     mainEntityOfPage: { '@type': 'WebPage', '@id': CHEATSHEET_URL },
   },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'RenderMD', item: SITE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Markdown cheat sheet', item: CHEATSHEET_URL },
-    ],
-  },
+  breadcrumbJsonLd({ name: 'Markdown cheat sheet', url: CHEATSHEET_URL }),
   {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',

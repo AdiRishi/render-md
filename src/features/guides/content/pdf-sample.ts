@@ -1,0 +1,48 @@
+import { fence, lines } from '@/lib/markdown-authoring'
+
+/**
+ * The document the PDF guide opens in RenderMD: frontmatter for the title
+ * page, enough headings for a contents page, and a page break.
+ */
+export const PDF_SAMPLE = lines(
+  '---',
+  'title: Quarterly report',
+  'subtitle: Q1 2026',
+  'author: Jo Rivera',
+  'date: 2026-03-14',
+  '---',
+  '',
+  '# Quarterly report',
+  '',
+  'Press <kbd>⌘</kbd> <kbd>P</kbd> on a Mac or <kbd>Ctrl</kbd> <kbd>P</kbd> on Windows and Linux to save this document as a PDF. Turn on **Title page** and **Contents** to see the pages they add.',
+  '',
+  '## Summary',
+  '',
+  'Revenue grew in every region, and support requests fell after the March release.',
+  '',
+  '| Region | Revenue | Change |',
+  '| :--- | ---: | ---: |',
+  '| Europe | $1.2M | +8% |',
+  '| Americas | $2.1M | +12% |',
+  '| Asia Pacific | $0.9M | +5% |',
+  '',
+  '## Releases',
+  '',
+  '- [x] Offline mode',
+  '- [x] Faster startup',
+  '- [ ] Plugin API',
+  '',
+  `${fence}mermaid`,
+  'flowchart LR',
+  '  Plan --> Build --> Review --> Release',
+  fence,
+  '',
+  '<!-- pagebreak -->',
+  '',
+  '## Next quarter',
+  '',
+  'The comment above this heading starts a new page in the PDF.',
+  '',
+  '1. Ship the plugin API',
+  '2. Open the beta in two more regions',
+)
