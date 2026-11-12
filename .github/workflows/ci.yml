@@ -29,3 +29,6 @@ jobs:
       - run: pnpm build
       # The app hides a crashing render worker by rendering on the main thread.
       - run: node build/check-render-worker.ts
+      # Export the print fixture to PDF in headless Chromium and check the pages.
+      - run: pnpm exec playwright-core install --only-shell chromium
+      - run: node build/check-pdf.ts
