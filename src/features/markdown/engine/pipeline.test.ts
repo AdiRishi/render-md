@@ -73,18 +73,37 @@ describe('renderMarkdown', () => {
     })
 
     it('leaves escaped punctuation that is not math as text', () => {
-      const out = html(
-        'He said \\[sic\\] it.\n\nAn unclosed \\(aside.\n\nA backslash: \\\\(x\\\\).',
-      )
+      const out = html('He said \\[sic\\] it.\n\nAn unclosed \\(aside.')
       expect(out).not.toContain('class="math')
       expect(out).toContain('He said [sic] it.')
       expect(out).toContain('An unclosed (aside.')
-      expect(out).toContain('A backslash: \\(x\\).')
+    })
+
+    // ChatGPT's copy button escapes the LaTeX so the markdown renders back to its source.
+    it("renders math copied with ChatGPT's copy button", () => {
+      const out = html(
+        [
+          'Einstein:',
+          '',
+          '\\\\[ \\boxed{ R\\_{\\mu\\nu} = \\frac{8\\pi G}{c^4}T\\_{\\mu\\nu} } \\\\]',
+          '',
+          'A path integral \\\\(Z[J] = \\int \\mathcal{D}\\phi\\\\, \\exp\\Bigg\\\\{ x \\Bigg\\\\}\\\\) inline.',
+          '',
+          'Then \\\\[ a \\\\] mid-sentence.',
+        ].join('\n'),
+      )
+      expect(out).toContain('<div class="math math-display" data-line="3">')
+      expect(out).toContain(tex(' \\boxed{ R_{\\mu\\nu} = \\frac{8\\pi G}{c^4}T_{\\mu\\nu} } '))
+      expect(out).toContain('<span class="math math-inline">')
+      expect(out).toContain(tex('Z[J] = \\int \\mathcal{D}\\phi\\, \\exp\\Bigg\\{ x \\Bigg\\}'))
+      expect(out).toMatch(/Then <span class="math math-display">[\s\S]*<\/span> mid-sentence\./)
+      expect(out).not.toContain('\\[')
     })
 
     it('keeps the delimiters literal in code', () => {
-      const out = html('`\\(x\\)`\n\n```\n\\[y\\]\n```')
+      const out = html('`\\(x\\)` `\\\\(w\\\\)`\n\n```\n\\[y\\]\n```')
       expect(out).toContain('<code>\\(x\\)</code>')
+      expect(out).toContain('<code>\\\\(w\\\\)</code>')
       expect(out).toContain('\\[y\\]')
       expect(out).not.toContain('katex')
     })

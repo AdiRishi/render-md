@@ -101,7 +101,7 @@ markdown/
     └── typesets.ts, context.ts
 ```
 
-Pipeline order: `remark-parse → frontmatter → gfm → math → gemoji → code meta →
+Pipeline order: `remark-parse → frontmatter → gfm → math → text math → gemoji → code meta →
 remark-rehype → rehype-raw → source lines → rehype-sanitize → KaTeX → alerts →
 slug → fragment links → base URL → heading outline`, then `highlightCodeBlocks`,
 which every caller (worker, main-thread fallback, cheat sheet server function)
