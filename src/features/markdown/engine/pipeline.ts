@@ -6,7 +6,7 @@ import rehypeSlug from 'rehype-slug'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkGemoji from 'remark-gemoji'
 import remarkGfm from 'remark-gfm'
-import remarkMath from 'remark-math'
+import remarkMath from 'remark-math-extended'
 import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import { type Processor, unified } from 'unified'
@@ -21,6 +21,7 @@ import { rehypeCollectHeadings } from './plugins/headings'
 import { rehypeMath } from './plugins/math'
 import { rehypeSourceLines } from './plugins/source-lines'
 import { rehypeStripPositions } from './plugins/strip-positions'
+import { remarkTextMath } from './plugins/text-math'
 import { sanitizeSchema } from './sanitize-schema'
 import { type DocumentStats, getDocumentStats } from './stats'
 import { type Frontmatter, type HeadingEntry } from './types'
@@ -57,6 +58,7 @@ function getProcessor({ baseUrl = null, stripPositions = false }: RenderOptions)
     .use(remarkExtractFrontmatter)
     .use(remarkGfm)
     .use(remarkMath)
+    .use(remarkTextMath)
     .use(remarkGemoji)
     .use(remarkCodeMeta)
     .use(remarkRehype, { allowDangerousHtml: true, clobberPrefix: '' })

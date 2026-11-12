@@ -6,6 +6,9 @@ import { renderMarkdown } from './pipeline'
 const html = (markdown: string, baseUrl?: string) =>
   toHtml(renderMarkdown(markdown, { baseUrl }).hast)
 
+/** KaTeX keeps the TeX it was given in the MathML annotation. */
+const tex = (source: string) => `<annotation encoding="application/x-tex">${source}</annotation>`
+
 describe('renderMarkdown', () => {
   it('renders GitHub flavored markdown', () => {
     const out = html('| a | b |\n|---|:-:|\n| 1 | 2 |\n\n- [x] done\n- [ ] todo\n\n~~gone~~')
@@ -39,6 +42,73 @@ describe('renderMarkdown', () => {
     expect(out).toContain('class="math math-inline"')
     expect(out.match(/class="math math-display"/g)).toHaveLength(2)
     expect(out).toContain('class="katex"')
+  })
+
+  describe('LaTeX delimiters', () => {
+    it('renders \\(…\\) as inline math without reading markdown inside it', () => {
+      const out = html('Sum \\(a_1 * b_2\\) and *real*')
+      expect(out.match(/class="math math-inline"/g)).toHaveLength(1)
+      expect(out).toContain(tex('a_1 * b_2'))
+      expect(out).toContain('<em>real</em>')
+      expect(out.match(/<em>/g)).toHaveLength(1)
+    })
+
+    it('renders \\[…\\] as display math right after a paragraph line, keeping source lines', () => {
+      const out = html(
+        'Text:\n\\[\n\\begin{aligned}\na_1 &= b \\\\\nc &= d\n\\end{aligned}\n\\]\nAfter',
+      )
+      expect(out).toContain('<p data-line="1">Text:</p>')
+      expect(out).toContain('<div class="math math-display" data-line="2">')
+      expect(out).toContain(
+        tex('\\begin{aligned}\na_1 &#x26;= b \\\\\nc &#x26;= d\n\\end{aligned}'),
+      )
+      expect(out).toContain('<p data-line="8">After</p>')
+    })
+
+    it('renders \\[…\\] inside list items and blockquotes', () => {
+      const list = html('1. Step\n   \\[\n   x = 1\n   \\]\n2. Next')
+      expect(list).toMatch(/<li[^>]*>Step\s*<div class="math math-display"/)
+      const quote = html('> \\[\n> x = 1\n> \\]')
+      expect(quote).toMatch(/<blockquote[^>]*>\s*<div class="math math-display"/)
+    })
+
+    it('leaves escaped punctuation that is not math as text', () => {
+      const out = html('He said \\[sic\\] it.\n\nAn unclosed \\(aside.')
+      expect(out).not.toContain('class="math')
+      expect(out).toContain('He said [sic] it.')
+      expect(out).toContain('An unclosed (aside.')
+    })
+
+    // ChatGPT's copy button escapes the LaTeX so the markdown renders back to its source.
+    it("renders math copied with ChatGPT's copy button", () => {
+      const out = html(
+        [
+          'Einstein:',
+          '',
+          '\\\\[ \\boxed{ R\\_{\\mu\\nu} = \\frac{8\\pi G}{c^4}T\\_{\\mu\\nu} } \\\\]',
+          '',
+          'A path integral \\\\(Z[J] = \\int \\mathcal{D}\\phi\\\\, \\exp\\Bigg\\\\{ x \\Bigg\\\\}\\\\) inline.',
+          '',
+          '\\\\[ a \\\\] then \\\\[ b \\\\]',
+        ].join('\n'),
+      )
+      expect(out).toContain('<div class="math math-display" data-line="3">')
+      expect(out).toContain(tex(' \\boxed{ R_{\\mu\\nu} = \\frac{8\\pi G}{c^4}T_{\\mu\\nu} } '))
+      expect(out).toContain('<span class="math math-inline">')
+      expect(out).toContain(tex('Z[J] = \\int \\mathcal{D}\\phi\\, \\exp\\Bigg\\{ x \\Bigg\\}'))
+      expect(out).toMatch(
+        /<p data-line="7"><span class="math math-display">.*<\/span> then <span class="math math-display">/,
+      )
+      expect(out).not.toContain('\\[')
+    })
+
+    it('keeps the delimiters literal in code', () => {
+      const out = html('`\\(x\\)` `\\\\(w\\\\)`\n\n```\n\\[y\\]\n```')
+      expect(out).toContain('<code>\\(x\\)</code>')
+      expect(out).toContain('<code>\\\\(w\\\\)</code>')
+      expect(out).toContain('\\[y\\]')
+      expect(out).not.toContain('katex')
+    })
   })
 
   it('turns GitHub alerts into callouts', () => {

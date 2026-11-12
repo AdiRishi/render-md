@@ -76,6 +76,8 @@ $$
 \int_{-\infty}^{\infty} e^{-x^2}\,dx = \sqrt{\pi}
 $$
 
+Pasted from ChatGPT? `\(…\)` and `\[…\]` work too: \(e^{i\pi} + 1 = 0\).
+
 ## Tables
 
 | Action          |            Mac            |              Windows & Linux |

@@ -18,7 +18,7 @@ function renderMath(value: string, displayMode: boolean): ElementContent[] {
 }
 
 /**
- * rehype: render `$…$`, `$$…$$` and ```math blocks with KaTeX.
+ * rehype: render `$…$`, `\(…\)`, `$$…$$`, `\[…\]` and ```math blocks with KaTeX.
  */
 export function rehypeMath() {
   return (tree: Root) => {
@@ -41,17 +41,19 @@ export function rehypeMath() {
         return SKIP
       }
 
-      // Inline math: <code class="language-math math-inline">
-      if (node.tagName === 'code' && hasClass(node, 'math-inline')) {
-        const replacement: Element = {
-          type: 'element',
-          tagName: 'span',
-          properties: { className: ['math', 'math-inline'] },
-          children: renderMath(toText(node, { whitespace: 'pre' }), false),
-        }
-        parent.children[index] = replacement as RootContent & ElementContent
-        return SKIP
+      // Inline math: <code class="language-math math-inline">, or math-display
+      // for `\[…\]` found in the middle of a paragraph.
+      if (node.tagName !== 'code') return
+      const display = hasClass(node, 'math-display')
+      if (!display && !hasClass(node, 'math-inline')) return
+      const replacement: Element = {
+        type: 'element',
+        tagName: 'span',
+        properties: { className: ['math', display ? 'math-display' : 'math-inline'] },
+        children: renderMath(toText(node, { whitespace: 'pre' }), display),
       }
+      parent.children[index] = replacement as RootContent & ElementContent
+      return SKIP
     })
   }
 }

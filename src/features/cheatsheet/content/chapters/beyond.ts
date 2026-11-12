@@ -12,7 +12,7 @@ export const beyond: CheatsheetChapter = {
       title: 'Math',
       support: 'extended',
       summary:
-        'Write LaTeX between single dollar signs for inline math and double dollar signs for display equations. RenderMD typesets it with KaTeX.',
+        'Write LaTeX between single dollar signs for inline math and double dollar signs for display equations. RenderMD also reads the `\\(…\\)` and `\\[…\\]` delimiters that ChatGPT and other AI tools write, and typesets everything with KaTeX.',
       entries: [
         {
           label: 'Inline',
@@ -39,6 +39,15 @@ export const beyond: CheatsheetChapter = {
             `${fence}math`,
             'f(x) = \\int_{-\\infty}^{\\infty} \\hat f(\\xi)\\, e^{2 \\pi i \\xi x} \\,d\\xi',
             fence,
+          ),
+        },
+        {
+          label: 'LaTeX delimiters',
+          source: lines(
+            'Inline \\(e^{i\\pi} + 1 = 0\\), and display:',
+            '\\[',
+            '\\int_0^1 x^2 \\,dx = \\frac{1}{3}',
+            '\\]',
           ),
         },
       ],

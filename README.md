@@ -20,7 +20,7 @@ The web is full of "markdown preview" sites wrapped in ads and cookie banners. R
 
 - **Bring anything** — paste, drop a file anywhere on the page, open from disk, or load a URL. GitHub repos, files and gists are converted to raw automatically, and relative images keep working: `render-md.com/?url=github.com/owner/repo`.
 - **Read it beautifully** — three typesets (_Modern_, _Editorial_, _Technical_), adjustable size and line length, an outline, reading progress, light and dark themes.
-- **Everything renders** — GitHub Flavored Markdown, GitHub alerts, footnotes, emoji shortcodes, YAML frontmatter, safe raw HTML (`<details>`, `<kbd>`, centered images…), KaTeX math, every Mermaid diagram type (with an optional hand-drawn look), and syntax highlighting for 200+ languages.
+- **Everything renders** — GitHub Flavored Markdown, GitHub alerts, footnotes, emoji shortcodes, YAML frontmatter, safe raw HTML (`<details>`, `<kbd>`, centered images…), KaTeX math (`$…$`, and the `\(…\)` / `\[…\]` that ChatGPT writes), every Mermaid diagram type (with an optional hand-drawn look), and syntax highlighting for 200+ languages.
 - **Share privately** — a share link _is_ the document, compressed into the URL fragment, which browsers never send to a server.
 - **Take it with you** — copy as formatted text (pastes cleanly into Docs, Gmail, Notion), save `.md` back to the file you opened, export a standalone `.html`, or print to PDF.
 - **Write comfortably** — CodeMirror 6 with a formatting toolbar and shortcuts, line-accurate scroll sync, double-click the preview to jump to the source, tick task boxes right in the preview, a command palette (<kbd>⌘K</kbd>), and Undo for every document swap.
