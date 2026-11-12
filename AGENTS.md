@@ -144,14 +144,15 @@ folio in margin boxes) and an optional title page and contents. It waits for
 `whenDocumentSettled` (render current, diagrams drawn, fonts and images loaded),
 then calls `window.print()`. While it is mounted, only the sheet prints.
 Printing from the browser's menu mounts it too, on `beforeprint`. Print is
-always light: the dark tokens and Shiki colours apply only on screen, and the
-sheet draws Mermaid in the light palette. Ids and fragment links in the sheet
+always light: the dark tokens apply only on screen, and the sheet's copy
+(`data-printing`) keeps Shiki's light colours and draws Mermaid in the light
+palette. Ids and fragment links in the sheet
 carry a `print-` prefix so PDF links land on the printed copy.
 
 ### Styling
 
 - `styles/app.css` — the Tailwind 4 entry. Fonts, shadows and easing live in a plain `@theme` block (emitted as CSS variables, because the CodeMirror theme and the document stylesheet read them); colors are mapped in `@theme inline`.
-- `styles/tokens.css` — the light and dark palettes. The dark one applies only on screen; print is always light.
+- `styles/tokens.css` — the light and dark palettes. The dark one applies only on screen; PDFs are always light.
 - `features/markdown/render/document.css` — the rendered document as plain semantic CSS scoped to `.doc`, with three typesets via `data-typeset`. It's inlined into **Export → HTML**, so keep it free of Tailwind utilities.
 - `cn()` (`lib/utils.ts`, re-exporting the [`cn`](https://www.npmjs.com/package/cn) package) merges classes; variants use CVA (see `ui/button.tsx`).
 
