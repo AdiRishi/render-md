@@ -144,9 +144,9 @@ folio in margin boxes) and an optional title page and contents. It waits for
 `whenDocumentSettled` (render current, diagrams drawn, fonts and images loaded),
 then calls `window.print()`. While it is mounted, only the sheet prints.
 Printing from the browser's menu mounts it too, on `beforeprint`. Print is
-always light: the dark tokens apply only on screen, and the sheet's copy
-(`data-printing`) keeps Shiki's light colours and draws Mermaid in the light
-palette. Ids and fragment links in the sheet
+always light: the dark tokens and dark Shiki colours apply only on screen, and
+the sheet draws Mermaid in the light palette. (A dark HTML export adds the dark
+Shiki colours back for print, since it freezes the dark tokens.) Ids and fragment links in the sheet
 carry a `print-` prefix so PDF links land on the printed copy.
 
 ### Styling

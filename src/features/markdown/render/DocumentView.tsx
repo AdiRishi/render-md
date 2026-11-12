@@ -55,7 +55,6 @@ export function DocumentView({
         className={cn('doc', className)}
         data-typeset={typeset}
         data-text-size={textSize}
-        data-printing={printing || undefined}
       >
         {frontmatter ? <FrontmatterCard data={frontmatter} /> : null}
         {content}

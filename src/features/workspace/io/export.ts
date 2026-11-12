@@ -28,6 +28,13 @@ const TOKENS = [
   'alert-caution',
 ]
 
+/**
+ * A dark export freezes the dark tokens for print too, so its code keeps the
+ * dark syntax colours on paper as well (document.css applies them on screen only).
+ */
+const DARK_CODE_IN_PRINT =
+  '@media print{.dark .doc pre .token{color:color-mix(in oklab,var(--shiki-dark) 80%,var(--ink));font-style:var(--shiki-dark-font-style,inherit)}}'
+
 const FONTS_HREF =
   'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap'
 
@@ -88,6 +95,7 @@ html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 body{margin:0;background:var(--paper);color:var(--ink)}
 main{max-width:46rem;margin:0 auto;padding:clamp(1.5rem,6vw,5rem) 1.5rem 6rem}
 ${documentCss}
+${isDark ? DARK_CODE_IN_PRINT : ''}
 </style>
 </head>
 <body>

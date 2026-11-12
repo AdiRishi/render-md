@@ -633,11 +633,13 @@
     font-style: var(--shiki-light-font-style, inherit);
 }
 /* The dark theme's colours are tuned for a darker ground than paper-2, so lift them toward ink.
-   A PDF's print copy (`data-printing`) is on light paper, so it keeps the light colours. */
-.dark .doc:not([data-printing]) pre .token,
-.doc.dark pre .token {
-    color: color-mix(in oklab, var(--shiki-dark) 80%, var(--ink));
-    font-style: var(--shiki-dark-font-style, inherit);
+   Screen only, like the dark tokens: printed pages are light. */
+@media screen {
+    .dark .doc pre .token,
+    .doc.dark pre .token {
+        color: color-mix(in oklab, var(--shiki-dark) 80%, var(--ink));
+        font-style: var(--shiki-dark-font-style, inherit);
+    }
 }
 .doc pre .line:is(.diff-add, .diff-remove),
 .doc pre .line:is(.diff-add, .diff-remove) .token {
