@@ -23,7 +23,7 @@ export const FAQ: Array<{ question: string; answer: string }> = [
   {
     question: 'How do I write math equations in markdown?',
     answer:
-      'Use LaTeX between dollar signs: `$E = mc^2$` for inline math and `$$ … $$` on their own lines for display equations. GitHub, GitLab, Obsidian and RenderMD all support this syntax.',
+      'Use LaTeX between dollar signs: `$E = mc^2$` for inline math and `$$ … $$` on their own lines for display equations. GitHub, GitLab, Obsidian and RenderMD all support this syntax. RenderMD also renders `\\(…\\)` and `\\[…\\]`, the delimiters ChatGPT and other AI tools use.',
   },
   {
     question: 'Can I use HTML in markdown?',

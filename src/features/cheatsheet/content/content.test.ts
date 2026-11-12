@@ -37,6 +37,7 @@ describe('cheatsheet content', () => {
     expect(html(find('footnotes').entries[0].source)).toContain('data-footnotes')
     expect(html(find('alerts').entries[4].source)).toContain('markdown-alert-caution')
     expect(html(find('math').entries[2].source)).toContain('katex-display')
+    expect(html(find('math').entries[4].source)).toMatch(/math-inline[\s\S]*katex-display/)
     expect(html(find('emoji').entries[0].source)).toContain('🚀')
     expect(renderMarkdown(find('frontmatter').entries[0].source).frontmatter?.title).toBe(
       'Release notes',
