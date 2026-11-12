@@ -176,6 +176,28 @@ describe('renderMarkdown', () => {
     expect(result.title).toBe('Doc')
   })
 
+  it('turns a pagebreak comment into a page break', () => {
+    const out = html('One\n\n<!-- pagebreak -->\n\nTwo\n\n<!--newpage-->\n\nThree')
+    expect(out.match(/<hr class="page-break" data-line="\d+">/g)).toHaveLength(2)
+  })
+
+  it('turns the empty page-break div other editors write into a page break', () => {
+    const out = html(
+      'One\n\n<div style="page-break-after: always;"></div>\n\nTwo\n\n<div style="break-before: page"></div>',
+    )
+    expect(out.match(/<hr class="page-break"/g)).toHaveLength(2)
+    expect(out).not.toContain('style=')
+  })
+
+  it('leaves page-break text alone outside a standalone marker', () => {
+    const out = html(
+      '```html\n<!-- pagebreak -->\n```\n\nInline `<!-- pagebreak -->` here\n\n<div style="page-break-after: always">Text</div>\n\n<p class="page-break">x</p>',
+    )
+    expect(out).not.toContain('<hr')
+    expect(out).toContain('&#x3C;!-- pagebreak -->')
+    expect(out).not.toContain('class="page-break"')
+  })
+
   it('counts words across scripts', () => {
     const { stats } = renderMarkdown('# Hello world\n\nこんにちは世界')
     expect(stats.words).toBeGreaterThanOrEqual(4)

@@ -26,6 +26,7 @@ export const sanitizeSchema: SanitizeSchema = {
     ...defaultSchema.attributes,
     '*': [...(defaultSchema.attributes?.['*'] ?? []), 'dataLine'],
     code: [['className', /^language-./, 'math-inline', 'math-display'], 'dataMeta'],
+    hr: [['className', 'page-break']],
     video: ['src', 'poster', 'controls', 'loop', 'muted', 'playsInline', 'width', 'height'],
   },
   protocols: {

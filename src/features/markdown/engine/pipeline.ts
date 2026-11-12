@@ -19,6 +19,7 @@ import { rehypeResolveFragmentLinks } from './plugins/fragment-links'
 import { remarkExtractFrontmatter } from './plugins/frontmatter'
 import { rehypeCollectHeadings } from './plugins/headings'
 import { rehypeMath } from './plugins/math'
+import { rehypePageBreaks } from './plugins/page-breaks'
 import { rehypeSourceLines } from './plugins/source-lines'
 import { rehypeStripPositions } from './plugins/strip-positions'
 import { remarkTextMath } from './plugins/text-math'
@@ -63,6 +64,7 @@ function getProcessor({ baseUrl = null, stripPositions = false }: RenderOptions)
     .use(remarkCodeMeta)
     .use(remarkRehype, { allowDangerousHtml: true, clobberPrefix: '' })
     .use(rehypeRaw)
+    .use(rehypePageBreaks)
     .use(rehypeSourceLines)
     .use(rehypeSanitize, sanitizeSchema)
     .use(rehypeMath)
