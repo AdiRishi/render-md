@@ -13,14 +13,12 @@ import {
 import { toast } from '@/ui/toast'
 
 import { DocumentContext } from '../context'
-import { diagramBackground, renderMermaid } from './mermaid'
+import { diagramBackground, drawnMermaid, renderMermaid } from './mermaid'
 import { PanZoom } from './PanZoom'
 import { svgToPng } from './png'
 
-type DiagramState =
-  | { status: 'loading'; svg: string | null }
-  | { status: 'ready'; svg: string }
-  | { status: 'error'; svg: string | null; message: string }
+/** The latest draw: which inputs it was for, and the SVG or error it produced. */
+type DiagramState = { key: string | null; svg: string | null; error: string | null }
 
 const actionClass =
   'inline-grid size-7 place-items-center rounded-md text-ink-3 transition-colors hover:bg-paper-3 hover:text-ink disabled:opacity-40'
@@ -30,8 +28,15 @@ export function Diagram({ code, line }: { code: string; line?: number }) {
   const { diagramLook: look = 'clean', printing = false } = use(DocumentContext)
   // Paper is always light, so a printed diagram is too.
   const resolved = printing ? 'light' : screenTheme
-  const [state, setState] = useState<DiagramState>({ status: 'loading', svg: null })
+  const key = `${resolved}|${look}|${code}`
+  // A diagram drawn before shows at once, which a print sheet mounted mid-print relies on.
+  const [state, setState] = useState<DiagramState>(() => {
+    const svg = drawnMermaid(code, resolved, look) ?? null
+    return { key: svg ? key : null, svg, error: null }
+  })
   const [expanded, setExpanded] = useState(false)
+  // Not yet drawn for the current code, theme and look.
+  const pending = state.key !== key
 
   useEffect(() => {
     let active = true
@@ -40,13 +45,13 @@ export function Diagram({ code, line }: { code: string; line?: number }) {
     const delay = printing ? 0 : 220
     const timer = setTimeout(() => {
       renderMermaid(code, resolved, look).then(
-        (svg) => active && setState({ status: 'ready', svg }),
+        (svg) => active && setState({ key, svg, error: null }),
         (error: unknown) =>
           active &&
           setState((previous) => ({
-            status: 'error',
+            key,
             svg: previous.svg,
-            message: error instanceof Error ? error.message : 'This diagram could not be rendered.',
+            error: error instanceof Error ? error.message : 'This diagram could not be rendered.',
           })),
       )
     }, delay)
@@ -54,9 +59,9 @@ export function Diagram({ code, line }: { code: string; line?: number }) {
       active = false
       clearTimeout(timer)
     }
-  }, [code, resolved, look, printing])
+  }, [key, code, resolved, look, printing])
 
-  const svg = state.svg
+  const { svg, error } = state
 
   async function renderPng() {
     const flat = await renderMermaid(code, resolved, look, { htmlLabels: false })
@@ -91,14 +96,10 @@ export function Diagram({ code, line }: { code: string; line?: number }) {
   }
 
   return (
-    <figure
-      className="diagram"
-      data-line={line}
-      data-pending={state.status === 'loading' ? '' : undefined}
-    >
+    <figure className="diagram" data-line={line} data-pending={pending ? '' : undefined}>
       <figcaption className="code-block-header">
         <span>Mermaid</span>
-        {state.status === 'error' ? (
+        {error ? (
           <span className="flex items-center gap-1.5 tracking-normal text-[color:var(--alert-caution)] normal-case">
             <TriangleAlert className="size-3.5" /> Syntax error
           </span>
@@ -171,20 +172,18 @@ export function Diagram({ code, line }: { code: string; line?: number }) {
       {svg ? (
         <div
           className="diagram-canvas transition-opacity duration-200"
-          style={{ opacity: state.status === 'ready' ? 1 : 0.45 }}
+          style={{ opacity: pending || error ? 0.45 : 1 }}
           // Sanitized by Mermaid (securityLevel: strict).
           dangerouslySetInnerHTML={{ __html: svg }}
         />
-      ) : state.status === 'loading' ? (
+      ) : !error ? (
         <div className="diagram-canvas">
           <div className="h-40 w-full animate-pulse rounded-lg bg-paper-3/60" />
         </div>
       ) : null}
 
-      {state.status === 'error' ? (
-        <pre className="!py-3 font-mono text-xs whitespace-pre-wrap text-ink-2">
-          {state.message}
-        </pre>
+      {error ? (
+        <pre className="!py-3 font-mono text-xs whitespace-pre-wrap text-ink-2">{error}</pre>
       ) : null}
 
       <DialogPrimitive.Root open={expanded} onOpenChange={setExpanded}>

@@ -45,6 +45,8 @@ type Page = { number: number; width: number; height: number; lines: Line[] }
 type Scenario = {
   name: string
   theme: 'light' | 'dark'
+  /** Save as PDF through the app's dialog, or print straight from the browser's menu. */
+  via: 'dialog' | 'browser'
   pdf: PdfSettings
   check: (pages: Page[], sheet: { diagram: string }) => void
 }
@@ -148,6 +150,7 @@ const scenarios: Scenario[] = [
   {
     name: 'A4, light, every option',
     theme: 'light',
+    via: 'dialog',
     pdf: {
       paper: 'a4',
       margins: 'normal',
@@ -190,6 +193,7 @@ const scenarios: Scenario[] = [
   {
     name: 'Letter, dark, defaults',
     theme: 'dark',
+    via: 'dialog',
     pdf: {
       paper: 'letter',
       margins: 'normal',
@@ -215,6 +219,7 @@ const scenarios: Scenario[] = [
   {
     name: 'A4, no page numbers or header',
     theme: 'light',
+    via: 'dialog',
     pdf: {
       paper: 'a4',
       margins: 'wide',
@@ -230,6 +235,27 @@ const scenarios: Scenario[] = [
       expect(name, folios.length === 0, 'pages have folios')
       const headers = pages.filter((page) => squash(page.lines[0]?.text) === squash(TITLE))
       expect(name, headers.length === 0, 'pages have a running header')
+    },
+  },
+  {
+    name: 'Browser menu print',
+    theme: 'light',
+    via: 'browser',
+    pdf: {
+      paper: 'a4',
+      margins: 'normal',
+      titlePage: false,
+      contents: false,
+      pageNumbers: true,
+      runningHeader: true,
+    },
+    check(pages) {
+      const name = this.name
+      checkPaperSize(name, pages, 210 * PT, 297 * PT)
+      checkCommon(name, pages)
+      // A diagram label: missing if the diagram printed as a loading box.
+      const all = squash(pages.map(textOf).join('\n'))
+      expect(name, all.includes('looksgood?'), 'the diagram is missing')
     },
   },
 ]
@@ -249,6 +275,15 @@ async function exportPdf(browser: Browser, origin: string, scenario: Scenario) {
   const page = await context.newPage()
   await page.goto(await createShareUrl(FIXTURE, origin))
   await page.locator('.doc h2', { hasText: 'After the break' }).first().waitFor()
+
+  if (scenario.via === 'browser') {
+    // Printing from the browser's menu doesn't wait; the diagram the preview drew must print.
+    await page.locator('.doc .diagram:not([data-pending]) svg').first().waitFor()
+    const bytes = await page.pdf({ preferCSSPageSize: true })
+    await context.close()
+    return { bytes, diagram: '' }
+  }
+
   await page.evaluate(() => {
     window.print = () => {
       document.documentElement.dataset.printRequested = ''
