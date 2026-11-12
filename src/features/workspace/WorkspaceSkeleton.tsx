@@ -1,3 +1,4 @@
+import { PageLinks } from '@/features/site/PageLinks'
 import { BrandMark, Wordmark } from '@/ui/brand'
 
 /** Server-rendered first paint: the shape of the workspace with a real intro. */
@@ -34,6 +35,9 @@ export function WorkspaceSkeleton() {
           </div>
         </div>
       </div>
+      <footer className="flex h-7 shrink-0 items-center border-t border-rule bg-desk px-4 font-mono text-[10.5px] text-ink-3 max-md:hidden">
+        <PageLinks className="mx-auto min-w-0 max-lg:hidden" />
+      </footer>
     </div>
   )
 }

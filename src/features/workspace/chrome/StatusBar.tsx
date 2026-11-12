@@ -1,6 +1,7 @@
 import { ArrowDownUp } from 'lucide-react'
 
 import { type DocumentStats } from '@/features/markdown/engine/stats'
+import { PageLinks } from '@/features/site/PageLinks'
 import { formatNumber } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
@@ -21,7 +22,7 @@ export function StatusBar({ stats }: { stats: DocumentStats | null }) {
   return (
     <footer className="flex h-7 shrink-0 items-center gap-3 border-t border-rule bg-desk px-4 font-mono text-[10.5px] text-ink-3 tabular-nums max-md:hidden">
       {stats ? (
-        <span className="flex items-center gap-2">
+        <span className="flex shrink-0 items-center gap-2">
           <span>{formatNumber(stats.words)} words</span>
           <Dot />
           <span>{formatNumber(stats.characters)} chars</span>
@@ -30,7 +31,9 @@ export function StatusBar({ stats }: { stats: DocumentStats | null }) {
         </span>
       ) : null}
 
-      <span className="ms-auto flex items-center gap-3">
+      <PageLinks className="mx-auto min-w-0 max-lg:hidden" />
+
+      <span className="flex shrink-0 items-center gap-3 max-lg:ms-auto">
         {cursor && viewMode !== 'read' ? (
           <span>
             Ln {cursor.line}, Col {cursor.column}

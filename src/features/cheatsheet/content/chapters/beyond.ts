@@ -101,6 +101,7 @@ export const beyond: CheatsheetChapter = {
       tips: [
         'Every diagram type and option is documented at [mermaid.js.org](https://mermaid.js.org/intro/).',
         'In RenderMD, switch Diagrams to *Sketch* in the reading settings for a hand-drawn look.',
+        'Try each diagram type in the [Mermaid viewer](/mermaid-viewer).',
       ],
     },
     {

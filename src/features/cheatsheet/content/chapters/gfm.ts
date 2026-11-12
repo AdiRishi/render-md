@@ -40,6 +40,7 @@ export const gfm: CheatsheetChapter = {
         'The pipes don’t need to line up, though aligned tables are easier to read in source.',
         'Escape a literal pipe inside a cell with `\\|`.',
         'Cells can only hold inline content. Use `<br>` for line breaks; lists and code blocks aren’t allowed.',
+        'Fill in a grid or paste from a spreadsheet with the [markdown table generator](/markdown-table-generator).',
       ],
     },
     {
