@@ -118,7 +118,8 @@ export function renderMermaid(
 
   cache.set(key, result)
   result.then(
-    (svg) => drawn.set(key, svg),
+    // Skip a result whose entry was evicted while it rendered, or it would never be evicted.
+    (svg) => cache.get(key) === result && drawn.set(key, svg),
     () => cache.delete(key),
   )
   if (cache.size > 120) {
