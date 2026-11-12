@@ -3,7 +3,7 @@ import { type InlineMath, type Math } from 'mdast-util-math'
 import { SKIP, visit } from 'unist-util-visit'
 
 const DELIMITED = /(?<!\\)\\\(([\s\S]+?)\\\)|(?<!\\)\\\[([\s\S]+?)\\\]/g
-const WHOLE_DISPLAY = /^\s*\\\[([\s\S]+?)\\\]\s*$/
+const WHOLE_DISPLAY = /^\s*\\\[((?:(?!\\\])[\s\S])+)\\\]\s*$/
 
 // Shaped like the nodes mdast-util-math parses: remark-rehype renders them from `data`.
 function blockMath(value: string): Math {

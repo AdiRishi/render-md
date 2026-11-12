@@ -89,14 +89,16 @@ describe('renderMarkdown', () => {
           '',
           'A path integral \\\\(Z[J] = \\int \\mathcal{D}\\phi\\\\, \\exp\\Bigg\\\\{ x \\Bigg\\\\}\\\\) inline.',
           '',
-          'Then \\\\[ a \\\\] mid-sentence.',
+          '\\\\[ a \\\\] then \\\\[ b \\\\]',
         ].join('\n'),
       )
       expect(out).toContain('<div class="math math-display" data-line="3">')
       expect(out).toContain(tex(' \\boxed{ R_{\\mu\\nu} = \\frac{8\\pi G}{c^4}T_{\\mu\\nu} } '))
       expect(out).toContain('<span class="math math-inline">')
       expect(out).toContain(tex('Z[J] = \\int \\mathcal{D}\\phi\\, \\exp\\Bigg\\{ x \\Bigg\\}'))
-      expect(out).toMatch(/Then <span class="math math-display">[\s\S]*<\/span> mid-sentence\./)
+      expect(out).toMatch(
+        /<p data-line="7"><span class="math math-display">.*<\/span> then <span class="math math-display">/,
+      )
       expect(out).not.toContain('\\[')
     })
 
