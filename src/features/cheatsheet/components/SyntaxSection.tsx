@@ -1,10 +1,10 @@
 import { DocumentView } from '@/features/markdown/render/DocumentView'
+import { Specimen } from '@/features/markdown/specimen/Specimen'
 
 import { type CheatsheetSection } from '../content'
 import { sectionNumber } from '../content'
 import { type CheatsheetData } from '../data'
 import { InlineMarkdown } from './InlineMarkdown'
-import { Specimen } from './Specimen'
 import { SupportBadge } from './SupportBadge'
 
 export function SyntaxSection({
@@ -40,7 +40,12 @@ export function SyntaxSection({
 
       <div className="flex flex-col gap-9">
         {section.entries.map((entry) => (
-          <Specimen key={entry.source} entry={entry} hast={data.examples[entry.source]} />
+          <Specimen
+            key={entry.source}
+            entry={entry}
+            hast={data.examples[entry.source]}
+            origin="cheatsheet"
+          />
         ))}
       </div>
 

@@ -1,4 +1,5 @@
-import { fence, lines } from '../authoring'
+import { fence, lines } from '@/lib/markdown-authoring'
+
 import { type CheatsheetChapter } from '../types'
 
 export const beyond: CheatsheetChapter = {

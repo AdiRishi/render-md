@@ -4,19 +4,38 @@ import { useEffect, useState } from 'react'
 
 import { stripHeadingIds } from '@/features/markdown/engine/hast'
 import { DocumentView } from '@/features/markdown/render/DocumentView'
+import { type ShareOrigin } from '@/lib/share-link'
 import { CopyButton } from '@/ui/copy-button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/ui/tooltip'
 
-import { type CheatsheetEntry } from '../content'
+/** One example: its markdown, and an optional caption for the variant it shows. */
+export type SpecimenEntry = {
+  /** Optional caption for this variant, e.g. "Alignment". */
+  label?: string
+  source: string
+}
 
-async function openInEditor(source: string) {
+async function openInEditor(source: string, origin: ShareOrigin) {
   const { createShareUrl } = await import('@/lib/share-link')
   window.location.assign(
-    await createShareUrl(source, window.location.origin, { view: 'split', from: 'cheatsheet' }),
+    await createShareUrl(source, window.location.origin, { view: 'split', from: origin }),
   )
 }
 
-export function Specimen({ entry, hast }: { entry: CheatsheetEntry; hast: Root }) {
+/**
+ * A live markdown example: editable source beside its rendered result. It
+ * starts from HAST rendered on the server and re-renders edits in the worker.
+ */
+export function Specimen({
+  entry,
+  hast,
+  origin,
+}: {
+  entry: SpecimenEntry
+  hast: Root
+  /** Which page made the "Open in the editor" link, for analytics. */
+  origin: ShareOrigin
+}) {
   const [source, setSource] = useState(entry.source)
   const [rendered, setRendered] = useState(hast)
   const edited = source !== entry.source
@@ -90,7 +109,7 @@ export function Specimen({ entry, hast }: { entry: CheatsheetEntry; hast: Root }
                       type="button"
                       aria-label="Open in the editor"
                       className={iconButton}
-                      onClick={() => void openInEditor(source)}
+                      onClick={() => void openInEditor(source, origin)}
                     />
                   }
                 >

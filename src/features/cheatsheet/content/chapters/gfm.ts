@@ -1,4 +1,5 @@
-import { lines } from '../authoring'
+import { lines } from '@/lib/markdown-authoring'
+
 import { type CheatsheetChapter } from '../types'
 
 export const gfm: CheatsheetChapter = {

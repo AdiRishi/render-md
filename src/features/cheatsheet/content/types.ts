@@ -1,10 +1,6 @@
-import { type Support } from './support'
+import { type SpecimenEntry } from '@/features/markdown/specimen/Specimen'
 
-export type CheatsheetEntry = {
-  /** Optional caption for this variant, e.g. "Alignment". */
-  label?: string
-  source: string
-}
+import { type Support } from './support'
 
 export type CheatsheetSection = {
   id: string
@@ -12,7 +8,7 @@ export type CheatsheetSection = {
   support: Support
   /** One or two sentences of plain explanation (shown under the heading). */
   summary: string
-  entries: CheatsheetEntry[]
+  entries: SpecimenEntry[]
   /** Markdown bullets: gotchas and good-to-knows. */
   tips?: string[]
 }

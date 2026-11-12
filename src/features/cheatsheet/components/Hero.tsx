@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { type Root } from 'hast'
 import { ArrowRight } from 'lucide-react'
 
+import { Breadcrumb } from '@/features/site/Breadcrumb'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/ui/button'
 
@@ -15,33 +16,13 @@ const UPDATED_LABEL = new Date(`${CHEATSHEET_UPDATED}T12:00:00Z`).toLocaleDateSt
   timeZone: 'UTC',
 })
 
-function Breadcrumb() {
-  return (
-    <nav aria-label="Breadcrumb" className="animate-rise print:hidden">
-      <ol className="flex items-center gap-2 font-mono text-[11px] tracking-[0.06em] text-ink-3">
-        <li>
-          <Link to="/" className="hover:text-ink">
-            RenderMD
-          </Link>
-        </li>
-        <li aria-hidden className="text-ink-4">
-          /
-        </li>
-        <li aria-current="page" className="text-ink-2">
-          Markdown cheat sheet
-        </li>
-      </ol>
-    </nav>
-  )
-}
-
 /** Breadcrumb, the keyword-led H1, search and the source→page specimen. */
 export function Hero({ specimen }: { specimen: Root }) {
   return (
     <header className="relative overflow-hidden border-b border-rule desk-grid print:border-0 print:bg-none">
       <HeroSpecimen hast={specimen} />
       <div className="mx-auto max-w-6xl px-5 pt-6 pb-10 md:pt-14 md:pb-24 print:p-0">
-        <Breadcrumb />
+        <Breadcrumb current="Markdown cheat sheet" />
 
         <p className="mt-6 animate-rise label-caps text-ink-3 [animation-delay:60ms] md:mt-20">
           {SECTIONS.length} topics · {EXAMPLE_COUNT} editable examples
