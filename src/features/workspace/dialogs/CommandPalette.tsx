@@ -5,6 +5,7 @@ import {
   Code2,
   Columns2,
   Copy,
+  FileCode,
   FileDown,
   FilePlus2,
   FileText,
@@ -149,6 +150,10 @@ export function CommandPalette({ headings }: { headings: HeadingEntry[] }) {
             >
               <Copy />
               Copy formatted text
+            </CommandItem>
+            <CommandItem keywords={['markup', 'source']} onSelect={run(documentActions.copyHtml)}>
+              <FileCode />
+              Copy HTML
             </CommandItem>
             <CommandItem onSelect={run(documentActions.copyMarkdown)}>
               <Code2 />

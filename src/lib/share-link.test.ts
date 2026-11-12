@@ -47,6 +47,12 @@ describe('share links', () => {
     expect(readShareOrigin(shared.hash)).toBe('share')
   })
 
+  it('marks links made by a guide page and ignores unknown origins', async () => {
+    const url = new URL(await createShareUrl('# Hi', 'https://x.dev', { from: 'guide' }))
+    expect(readShareOrigin(url.hash)).toBe('guide')
+    expect(readShareOrigin('#md=abc&from=elsewhere')).toBe('share')
+  })
+
   it('ignores unrelated fragments', () => {
     expect(readSharePayload('#section-2')).toBeNull()
     expect(readSharePayload('')).toBeNull()

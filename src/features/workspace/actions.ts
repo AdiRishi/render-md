@@ -1,4 +1,5 @@
 import { guessTitle } from '@/features/markdown/engine/source'
+import { articleHtml } from '@/features/markdown/render/article-html'
 import { downloadFile } from '@/lib/download'
 import { toFileSlug } from '@/lib/format'
 import { type ShareOrigin } from '@/lib/share-link'
@@ -17,6 +18,19 @@ import { fetchRemoteMarkdown } from './io/remote'
 import { SAMPLE_MARKDOWN, useDocumentStore } from './state/document-store'
 import { type ViewMode, useSettingsStore } from './state/settings-store'
 import { previewArticle, useUiStore } from './state/ui-store'
+
+const OPENED_FROM = {
+  share: 'shared_link',
+  cheatsheet: 'cheatsheet_example',
+  guide: 'guide_example',
+} as const satisfies Record<ShareOrigin, string>
+
+/** The rendered preview, or null after telling the user to open it. */
+function previewOrToast(title: string) {
+  const article = previewArticle.current
+  if (!article) toast.add({ type: 'error', title })
+  return article
+}
 
 function errorMessage(error: unknown) {
   return error instanceof Error ? error.message : 'Something went wrong.'
@@ -132,9 +146,7 @@ export const documentActions = {
       'Opened a shared document',
     )
     useSettingsStore.getState().set('viewMode', view)
-    track('document_opened', {
-      source: from === 'cheatsheet' ? 'cheatsheet_example' : 'shared_link',
-    })
+    track('document_opened', { source: OPENED_FROM[from] })
   },
 
   newDocument: () => {
@@ -204,11 +216,8 @@ export const documentActions = {
   },
 
   downloadHtml: () => {
-    const article = previewArticle.current
-    if (!article) {
-      toast.add({ type: 'error', title: 'Open the preview to export HTML' })
-      return
-    }
+    const article = previewOrToast('Open the preview to export HTML')
+    if (!article) return
     downloadFile(getFileName('html'), buildStandaloneHtml(article, getDocumentTitle()), 'text/html')
     track('document_exported', { format: 'html' })
     toast.add({ type: 'success', title: 'Exported a standalone HTML file' })
@@ -220,12 +229,21 @@ export const documentActions = {
     toast.add({ type: 'success', title: 'Markdown copied' })
   },
 
+  copyHtml: async () => {
+    const article = previewOrToast('Open the preview to copy HTML')
+    if (!article) return
+    await navigator.clipboard.writeText(articleHtml(article))
+    track('document_copied', { format: 'html' })
+    toast.add({
+      type: 'success',
+      title: 'HTML copied',
+      description: 'The markup only. Download as a web page to include the styles.',
+    })
+  },
+
   copyRichText: async () => {
-    const article = previewArticle.current
-    if (!article) {
-      toast.add({ type: 'error', title: 'Open the preview to copy formatted text' })
-      return
-    }
+    const article = previewOrToast('Open the preview to copy formatted text')
+    if (!article) return
     try {
       const mode = await copyRichText(article, useDocumentStore.getState().markdown)
       track('document_copied', { format: mode === 'rich' ? 'rich_text' : 'markdown_fallback' })

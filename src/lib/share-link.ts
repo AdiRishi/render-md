@@ -58,8 +58,15 @@ export async function decodeShareFragment(payload: string) {
 
 export type ShareView = 'read' | 'split' | 'write'
 
-/** Where a share link was made: the share dialog, or a cheat sheet example's "Open in editor". */
-export type ShareOrigin = 'share' | 'cheatsheet'
+/**
+ * Where a share link was made: the share dialog, or an example's "Open in editor"
+ * on the cheat sheet or a guide page.
+ */
+const SHARE_ORIGINS = ['share', 'cheatsheet', 'guide'] as const
+export type ShareOrigin = (typeof SHARE_ORIGINS)[number]
+
+const isShareOrigin = (value: string | null): value is ShareOrigin =>
+  SHARE_ORIGINS.some((origin) => origin === value)
 
 export function readSharePayload(hash: string) {
   const params = new URLSearchParams(hash.replace(/^#/, ''))
@@ -73,9 +80,8 @@ export function readShareView(hash: string): ShareView {
 }
 
 export function readShareOrigin(hash: string): ShareOrigin {
-  return new URLSearchParams(hash.replace(/^#/, '')).get('from') === 'cheatsheet'
-    ? 'cheatsheet'
-    : 'share'
+  const from = new URLSearchParams(hash.replace(/^#/, '')).get('from')
+  return isShareOrigin(from) ? from : 'share'
 }
 
 export async function createShareUrl(
