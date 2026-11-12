@@ -13,7 +13,6 @@ const metaContent = (slug: GuideSlug, key: string) =>
 describe('guide <head>', () => {
   it('points the canonical link and og:url at the guide’s own URL', () => {
     const urls = {
-      'github-readme-viewer': 'https://www.render-md.com/github-readme-viewer',
       'mermaid-viewer': 'https://www.render-md.com/mermaid-viewer',
       'markdown-to-pdf': 'https://www.render-md.com/markdown-to-pdf',
       'markdown-to-html': 'https://www.render-md.com/markdown-to-html',

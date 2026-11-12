@@ -194,11 +194,11 @@ It is one of the site's biggest traffic sources, so treat changes to it with car
 - Structured data (`TechArticle` with `dateModified`, `BreadcrumbList`, `FAQPage`) is generated from the same content in `features/cheatsheet/seo.ts`. Bump `CHEATSHEET_UPDATED` when the content changes meaningfully.
 - Examples are editable in place and re-render through the worker; "Open in editor" uses a share link with `view=split`.
 
-## Guides (`/github-readme-viewer`, `/mermaid-viewer`, `/markdown-to-pdf`, `/markdown-to-html`, `/markdown-table-generator`) — SEO pages
+## Guides (`/mermaid-viewer`, `/markdown-to-pdf`, `/markdown-to-html`, `/markdown-table-generator`) — SEO pages
 
 Each guide is a task page built around one tool. Treat them like the cheat sheet:
 
-- Content lives in `features/guides/content/`: one file per guide, typed in `types.ts`. A guide is a hero `tool` plus sections of blocks (`prose`, `specimens`, `gallery`, `steps`, `open-url`, `url-forms`, `pdf-settings`, `table-generator`). `components/GuideBlock.tsx` draws every block kind in one exhaustive `switch`; a new kind is added to the union, to `content/sources.ts` and to that switch.
+- Content lives in `features/guides/content/`: one file per guide, typed in `types.ts`. A guide is a hero `tool` plus sections of blocks (`prose`, `specimens`, `gallery`, `steps`, `pdf-settings`, `table-generator`). `components/GuideBlock.tsx` draws every block kind in one exhaustive `switch`; a new kind is added to the union, to `content/sources.ts` and to that switch.
 - Every markdown string in a guide is rendered by the real pipeline **on the server** (`data.ts`), keyed by its source: look it up with `data.rendered[source]`. `content/content.test.ts` checks the content renders and that the claims it makes still hold — run `pnpm test` after editing content.
 - Keep one H1 (the guide's `h1`), one H2 per section and for the FAQ, and H3 for gallery items and steps. Section ids and gallery item ids are public anchors (`/mermaid-viewer#gantt-chart`) — don't rename them.
 - `features/site/pages.ts` lists the content pages. The workspace's status bar, the footer and each guide's related links read it, so a new guide is linked from everywhere once it is added there, to `GUIDES` and as a route.

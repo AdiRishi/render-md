@@ -2,7 +2,6 @@ import { toHtml } from 'hast-util-to-html'
 import { describe, expect, it } from 'vitest'
 
 import { renderMarkdown } from '@/features/markdown/engine/pipeline'
-import { parseRemoteInput } from '@/lib/remote-url'
 
 import { GUIDES } from './index'
 import { guideSources } from './sources'
@@ -50,28 +49,5 @@ describe('guide content', () => {
     ]
     expect(sources.length).toBeGreaterThanOrEqual(10)
     for (const source of sources) expect(html(source)).toContain('language-mermaid')
-  })
-
-  it('opens every link form the README guide lists', () => {
-    const expected: Record<string, string> = {
-      'github.com/owner/repo': 'https://raw.githubusercontent.com/owner/repo/HEAD/README.md',
-      'github.com/owner/repo/tree/branch/docs':
-        'https://raw.githubusercontent.com/owner/repo/branch/docs/README.md',
-      'github.com/owner/repo/blob/main/docs/guide.md':
-        'https://raw.githubusercontent.com/owner/repo/main/docs/guide.md',
-      'gist.github.com/user/id': 'https://gist.githubusercontent.com/user/id/raw',
-      'gitlab.com/group/project/-/blob/main/README.md':
-        'https://gitlab.com/group/project/-/raw/main/README.md',
-      'raw.githubusercontent.com/owner/repo/main/README.md':
-        'https://raw.githubusercontent.com/owner/repo/main/README.md',
-    }
-    const rows = blockOf('github-readme-viewer', 'url-forms').flatMap((block) => block.rows)
-    expect(rows.map((row) => row.paste)).toEqual(Object.keys(expected))
-    for (const row of rows) {
-      expect(parseRemoteInput(row.paste).candidates[0]).toBe(expected[row.paste])
-    }
-    for (const block of blockOf('github-readme-viewer', 'open-url')) {
-      for (const example of block.examples) expect(() => parseRemoteInput(example)).not.toThrow()
-    }
   })
 })

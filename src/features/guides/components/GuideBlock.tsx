@@ -6,10 +6,8 @@ import { type GuideData } from '../data'
 import { toMarkdown } from '../table/table-model'
 import { TableGenerator } from '../table/TableGenerator'
 import { Gallery } from './Gallery'
-import { OpenUrlForm } from './OpenUrlForm'
 import { PdfSettings } from './PdfSettings'
 import { Steps } from './Steps'
-import { UrlFormsTable } from './UrlFormsTable'
 
 /** One block of a guide, drawn from its content and the server-rendered markdown. */
 export function GuideBlock({ block, data }: { block: Block; data: GuideData }) {
@@ -38,10 +36,6 @@ export function GuideBlock({ block, data }: { block: Block; data: GuideData }) {
       return <Gallery items={block.items} rendered={data.rendered} />
     case 'steps':
       return <Steps steps={block.steps} rendered={data.rendered} />
-    case 'open-url':
-      return <OpenUrlForm examples={block.examples} />
-    case 'url-forms':
-      return <UrlFormsTable rows={block.rows} />
     case 'pdf-settings':
       return <PdfSettings />
     case 'table-generator':

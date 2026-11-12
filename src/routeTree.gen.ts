@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CheatsheetRouteImport } from './routes/cheatsheet'
-import { Route as GithubReadmeViewerRouteImport } from './routes/github-readme-viewer'
 import { Route as MarkdownTableGeneratorRouteImport } from './routes/markdown-table-generator'
 import { Route as MarkdownToHtmlRouteImport } from './routes/markdown-to-html'
 import { Route as MarkdownToPdfRouteImport } from './routes/markdown-to-pdf'
@@ -25,11 +24,6 @@ const IndexRoute = IndexRouteImport.update({
 const CheatsheetRoute = CheatsheetRouteImport.update({
   id: '/cheatsheet',
   path: '/cheatsheet',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GithubReadmeViewerRoute = GithubReadmeViewerRouteImport.update({
-  id: '/github-readme-viewer',
-  path: '/github-readme-viewer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MarkdownTableGeneratorRoute = MarkdownTableGeneratorRouteImport.update({
@@ -56,7 +50,6 @@ const MermaidViewerRoute = MermaidViewerRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cheatsheet': typeof CheatsheetRoute
-  '/github-readme-viewer': typeof GithubReadmeViewerRoute
   '/markdown-table-generator': typeof MarkdownTableGeneratorRoute
   '/markdown-to-html': typeof MarkdownToHtmlRoute
   '/markdown-to-pdf': typeof MarkdownToPdfRoute
@@ -65,7 +58,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cheatsheet': typeof CheatsheetRoute
-  '/github-readme-viewer': typeof GithubReadmeViewerRoute
   '/markdown-table-generator': typeof MarkdownTableGeneratorRoute
   '/markdown-to-html': typeof MarkdownToHtmlRoute
   '/markdown-to-pdf': typeof MarkdownToPdfRoute
@@ -75,7 +67,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/cheatsheet': typeof CheatsheetRoute
-  '/github-readme-viewer': typeof GithubReadmeViewerRoute
   '/markdown-table-generator': typeof MarkdownTableGeneratorRoute
   '/markdown-to-html': typeof MarkdownToHtmlRoute
   '/markdown-to-pdf': typeof MarkdownToPdfRoute
@@ -86,7 +77,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/cheatsheet'
-    | '/github-readme-viewer'
     | '/markdown-table-generator'
     | '/markdown-to-html'
     | '/markdown-to-pdf'
@@ -95,7 +85,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/cheatsheet'
-    | '/github-readme-viewer'
     | '/markdown-table-generator'
     | '/markdown-to-html'
     | '/markdown-to-pdf'
@@ -104,7 +93,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/cheatsheet'
-    | '/github-readme-viewer'
     | '/markdown-table-generator'
     | '/markdown-to-html'
     | '/markdown-to-pdf'
@@ -114,7 +102,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CheatsheetRoute: typeof CheatsheetRoute
-  GithubReadmeViewerRoute: typeof GithubReadmeViewerRoute
   MarkdownTableGeneratorRoute: typeof MarkdownTableGeneratorRoute
   MarkdownToHtmlRoute: typeof MarkdownToHtmlRoute
   MarkdownToPdfRoute: typeof MarkdownToPdfRoute
@@ -135,13 +122,6 @@ declare module '@tanstack/react-router' {
       path: '/cheatsheet'
       fullPath: '/cheatsheet'
       preLoaderRoute: typeof CheatsheetRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/github-readme-viewer': {
-      id: '/github-readme-viewer'
-      path: '/github-readme-viewer'
-      fullPath: '/github-readme-viewer'
-      preLoaderRoute: typeof GithubReadmeViewerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/markdown-table-generator': {
@@ -178,7 +158,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CheatsheetRoute: CheatsheetRoute,
-  GithubReadmeViewerRoute: GithubReadmeViewerRoute,
   MarkdownTableGeneratorRoute: MarkdownTableGeneratorRoute,
   MarkdownToHtmlRoute: MarkdownToHtmlRoute,
   MarkdownToPdfRoute: MarkdownToPdfRoute,

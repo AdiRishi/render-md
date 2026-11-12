@@ -13,8 +13,6 @@ function blockSources(block: GuideBlock): string[] {
       return block.steps.map((step) => step.markdown)
     case 'table-generator':
       return [toMarkdown(block.initial)]
-    case 'open-url':
-    case 'url-forms':
     case 'pdf-settings':
       return []
     default: {

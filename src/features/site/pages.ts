@@ -5,7 +5,6 @@
  */
 export const CONTENT_PAGES = [
   { to: '/cheatsheet', label: 'Markdown cheat sheet', short: 'Cheat sheet' },
-  { to: '/github-readme-viewer', label: 'GitHub README viewer', short: 'README viewer' },
   { to: '/mermaid-viewer', label: 'Mermaid viewer', short: 'Mermaid' },
   { to: '/markdown-to-pdf', label: 'Markdown to PDF', short: 'PDF' },
   { to: '/markdown-to-html', label: 'Markdown to HTML', short: 'HTML' },

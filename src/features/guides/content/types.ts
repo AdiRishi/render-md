@@ -8,14 +8,6 @@ type SlugOf<Path> = Path extends `/${infer Slug}` ? Slug : never
 /** A guide's URL segment. Every guide is a content page, so the site links to all of them. */
 export type GuideSlug = SlugOf<Exclude<ContentPage['to'], '/cheatsheet'>>
 
-/** A row of the README guide's "URLs you can open" table. */
-export type UrlFormRow = {
-  /** What you paste, e.g. `github.com/owner/repo`. */
-  paste: string
-  /** What RenderMD opens, in words. */
-  opens: string
-}
-
 export type GalleryItem = {
   /** A public anchor, like section ids. */
   id: string
@@ -36,8 +28,6 @@ export type GuideBlock =
   /** Live examples under their own H3 anchors, with a jump list. */
   | { kind: 'gallery'; items: GalleryItem[] }
   | { kind: 'steps'; steps: Array<{ title: string; markdown: string }> }
-  | { kind: 'open-url'; examples: string[] }
-  | { kind: 'url-forms'; rows: UrlFormRow[] }
   | { kind: 'pdf-settings' }
   /** The generator, starting from `initial`, which is also rendered on the server. */
   | { kind: 'table-generator'; initial: Table }

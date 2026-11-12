@@ -33,6 +33,6 @@ export const FAQ: Array<{ question: string; answer: string }> = [
   {
     question: 'How can I preview a markdown file?',
     answer:
-      'Paste or drop it into [RenderMD](https://www.render-md.com). It renders in your browser, including tables, math and diagrams, and the file is never uploaded. You can also open a URL, or paste a GitHub repository link into the [GitHub README viewer](/github-readme-viewer).',
+      'Paste or drop it into [RenderMD](https://www.render-md.com). It renders in your browser, including tables, math and diagrams, and the file is never uploaded. You can also open a URL or a GitHub repository directly.',
   },
 ]

@@ -53,20 +53,6 @@ const arrow = (from: number, to: number) =>
   `<path d="M${from} 40H${to - 5}" stroke="var(--ink-2)" fill="none"/><path d="M${to} 40l-7-4v8z" fill="var(--ink-2)"/>`
 
 const ART: Record<GuideSlug, Art> = {
-  'github-readme-viewer': {
-    eyebrow: 'Repositories · Files · Gists',
-    source: [
-      '# Tidepool',
-      '',
-      '> [!NOTE]',
-      '> Requires Node 22 or later.',
-      '',
-      '- [x] Command-line interface',
-    ].join('\n'),
-    page: `<h2>Tidepool</h2>
-      <div class="note"><b>NOTE</b>Requires Node 22 or later.</div>
-      <div class="task"><span class="box on">✓</span>Command-line interface</div>`,
-  },
   'mermaid-viewer': {
     eyebrow: `Live preview · ${galleryCount(GUIDES['mermaid-viewer'])} diagram types`,
     source: toolSource(GUIDES['mermaid-viewer']),
