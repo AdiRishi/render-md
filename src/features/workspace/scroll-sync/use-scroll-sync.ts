@@ -89,8 +89,6 @@ export function useScrollSync({
       driver = 'editor'
     }
     const driveFromPreview = () => {
-      // False positive on a callback-local reassignment, fixed in oxlint 1.92.0.
-      // oxlint-disable-next-line react/immutability
       driver = 'preview'
     }
 
