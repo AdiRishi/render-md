@@ -52,7 +52,7 @@ export default defineConfig({
       sitemap: { host: SITE_URL },
     }),
     viteReact(),
-    babel({ presets: [reactCompilerPreset()] }),
+    babel({ parallel: true, presets: [reactCompilerPreset()] }),
     visualizer({ filename: 'dist/stats.html' }),
   ],
 })
