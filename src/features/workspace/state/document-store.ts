@@ -95,17 +95,18 @@ function recentsWithinBudget(recents: DocumentRecord[], currentSize: number) {
 }
 
 /**
- * True while applying another tab's write. That tab has saved it already, and
- * saving our state back would put our document over the one it just stored.
+ * True while folding another tab's documents into our recents. That tab has
+ * saved its document already, and saving our state back would put our
+ * document over the one it just stored.
  */
-let applyingOtherTab = false
+let mergingOtherTab = false
 
-function applyFromOtherTab(state: Partial<DocumentStore>) {
-  applyingOtherTab = true
+function mergeOtherTabRecents(recents: DocumentRecord[]) {
+  mergingOtherTab = true
   try {
-    useDocumentStore.setState(state)
+    useDocumentStore.setState({ recents })
   } finally {
-    applyingOtherTab = false
+    mergingOtherTab = false
   }
 }
 
@@ -178,7 +179,7 @@ export const useDocumentStore = create<DocumentStore>()(
         return {
           ...storage,
           setItem: (name, value) => {
-            if (!applyingOtherTab) storage.setItem(name, value)
+            if (!mergingOtherTab) storage.setItem(name, value)
           },
         }
       }),
@@ -216,7 +217,8 @@ if (typeof window !== 'undefined') {
 
       if (incoming.id === current.id) {
         if (incoming.markdown !== current.markdown && incoming.updatedAt > current.updatedAt) {
-          applyFromOtherTab({ markdown: incoming.markdown, updatedAt: incoming.updatedAt })
+          // Saved back on purpose: it replaces any older edit of ours still waiting to be written.
+          useDocumentStore.setState({ markdown: incoming.markdown, updatedAt: incoming.updatedAt })
         }
         return
       }
@@ -233,7 +235,7 @@ if (typeof window !== 'undefined') {
             entry.id === current.recents[index].id &&
             entry.markdown === current.recents[index].markdown,
         )
-      if (!unchanged) applyFromOtherTab({ recents })
+      if (!unchanged) mergeOtherTabRecents(recents)
     } catch {
       // Ignore malformed writes.
     }
