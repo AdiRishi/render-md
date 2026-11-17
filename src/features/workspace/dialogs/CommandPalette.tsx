@@ -25,7 +25,7 @@ import {
   Workflow,
 } from 'lucide-react'
 
-import { getEditorView } from '@/features/editor/bridge'
+import { getEditorView, scrollLineToTop } from '@/features/editor/bridge'
 import { type FormatCommand, formatting } from '@/features/editor/commands'
 import { type HeadingEntry } from '@/features/markdown/engine/pipeline'
 import { guessTitle } from '@/features/markdown/engine/source'
@@ -82,6 +82,8 @@ export function CommandPalette({ headings }: { headings: HeadingEntry[] }) {
       document
         .querySelector(`.doc [id="${CSS.escape(heading.id)}"]`)
         ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      // Scroll sync follows the pane the user is in, so the editor needs its own scroll.
+      if (settings.viewMode !== 'read' && heading.line) scrollLineToTop(heading.line)
     })
   }
 
