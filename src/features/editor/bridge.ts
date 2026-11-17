@@ -35,3 +35,11 @@ export function revealLine(line: number, { focus = true } = {}) {
   })
   if (focus) view.focus()
 }
+
+/** Scroll a 1-based line to the top of the editor without moving the caret. */
+export function scrollLineToTop(line: number) {
+  const view = currentView
+  if (!view) return
+  const target = view.state.doc.line(Math.min(Math.max(1, line), view.state.doc.lines))
+  view.dispatch({ effects: EditorView.scrollIntoView(target.from, { y: 'start' }) })
+}

@@ -18,7 +18,7 @@ export function createDebouncedStorage(
   delay = 400,
   /** Told whether each write landed — quota errors must not be silent. */
   onWrite?: (name: string, ok: boolean) => void,
-): StateStorage {
+): StateStorage & { refresh: (name: string, value: string) => void } {
   const queued = new Map<string, string>()
   let timer: ReturnType<typeof setTimeout> | null = null
 
@@ -51,6 +51,10 @@ export function createDebouncedStorage(
     setItem: (name, value) => {
       queued.set(name, value)
       timer ??= setTimeout(flush, delay)
+    },
+    /** Replace a write that is still waiting, without starting a new one. */
+    refresh: (name, value) => {
+      if (queued.has(name)) queued.set(name, value)
     },
     removeItem: (name) => {
       queued.delete(name)

@@ -38,7 +38,7 @@ const theme = EditorView.theme({
     // CodeMirror's own flex-grow fills the pane up to this measure, and the scroller's
     // justify-content centers gutter and text as one column beyond it. Don't size the content
     // with flex-basis: CodeMirror writes an inline one when the pane is narrower than the text
-    // (as when Read mode collapses it), and without flex-grow that stale value sets the width.
+    // (as in a narrow split), and without flex-grow that stale value sets the width.
     maxWidth: '78ch',
   },
   '.cm-line': { padding: '0 28px 0 6px' },

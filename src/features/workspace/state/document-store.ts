@@ -94,6 +94,22 @@ function recentsWithinBudget(recents: DocumentRecord[], currentSize: number) {
   })
 }
 
+/**
+ * True while applying another tab's write. That tab has saved it already, so
+ * this only refreshes a save of ours that is still waiting: starting a new one
+ * would put our document over the one it just stored.
+ */
+let applyingOtherTab = false
+
+function applyFromOtherTab(state: Partial<DocumentStore>) {
+  applyingOtherTab = true
+  try {
+    useDocumentStore.setState(state)
+  } finally {
+    applyingOtherTab = false
+  }
+}
+
 /** Whether the last write to browser storage succeeded. */
 export const usePersistStatus = create<{ saved: boolean }>()(() => ({ saved: true }))
 
@@ -156,9 +172,16 @@ export const useDocumentStore = create<DocumentStore>()(
     {
       name: STORAGE_KEY,
       version: 2,
-      storage: createJSONStorage(() =>
-        createDebouncedStorage(400, (_, ok) => usePersistStatus.setState({ saved: ok })),
-      ),
+      storage: createJSONStorage(() => {
+        const storage = createDebouncedStorage(400, (_, ok) =>
+          usePersistStatus.setState({ saved: ok }),
+        )
+        return {
+          ...storage,
+          setItem: (name, value) =>
+            applyingOtherTab ? storage.refresh(name, value) : storage.setItem(name, value),
+        }
+      }),
       partialize: ({ id, markdown, name, baseUrl, source, updatedAt, recents }) => ({
         id,
         markdown,
@@ -193,7 +216,7 @@ if (typeof window !== 'undefined') {
 
       if (incoming.id === current.id) {
         if (incoming.markdown !== current.markdown && incoming.updatedAt > current.updatedAt) {
-          useDocumentStore.setState({ markdown: incoming.markdown, updatedAt: incoming.updatedAt })
+          applyFromOtherTab({ markdown: incoming.markdown, updatedAt: incoming.updatedAt })
         }
         return
       }
@@ -210,7 +233,7 @@ if (typeof window !== 'undefined') {
             entry.id === current.recents[index].id &&
             entry.markdown === current.recents[index].markdown,
         )
-      if (!unchanged) useDocumentStore.setState({ recents })
+      if (!unchanged) applyFromOtherTab({ recents })
     } catch {
       // Ignore malformed writes.
     }

@@ -1,7 +1,13 @@
-import CodeMirror, { type BasicSetupOptions, type ViewUpdate } from '@uiw/react-codemirror'
+import CodeMirror, {
+  type BasicSetupOptions,
+  type EditorView,
+  type ViewUpdate,
+} from '@uiw/react-codemirror'
+import { useEffect, useRef, useState } from 'react'
 
 import { setEditorView } from './bridge'
 import { createEditorExtensions } from './extensions'
+import { replaceDocument } from './replace-document'
 
 const extensions = createEditorExtensions()
 
@@ -41,6 +47,18 @@ export function MarkdownEditor({
   onCursorChange?: (cursor: CursorPosition | null) => void
   placeholder?: string
 }) {
+  // CodeMirror gets the first value only. Later outside changes go through replaceDocument:
+  // the wrapper would replace the whole document, which moves the caret and scroll position
+  // and can turn a selection inside out.
+  const [initialValue] = useState(value)
+  const viewRef = useRef<EditorView | null>(null)
+
+  useEffect(() => {
+    const view = viewRef.current
+    const transaction = view && replaceDocument(view.state, value)
+    if (transaction) view.dispatch(transaction)
+  }, [value])
+
   const onUpdate = (update: ViewUpdate) => {
     if (!onCursorChange || (!update.selectionSet && !update.focusChanged)) return
     const range = update.state.selection.main
@@ -58,10 +76,13 @@ export function MarkdownEditor({
 
   return (
     <CodeMirror
-      value={value}
+      value={initialValue}
       onChange={onChange}
       onUpdate={onUpdate}
-      onCreateEditor={(view) => setEditorView(view)}
+      onCreateEditor={(view) => {
+        viewRef.current = view
+        setEditorView(view)
+      }}
       extensions={extensions}
       basicSetup={basicSetup}
       theme="none"
