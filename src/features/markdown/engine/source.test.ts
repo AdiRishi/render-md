@@ -12,6 +12,13 @@ describe('toggleTaskAtLine', () => {
     expect(toggleTaskAtLine(doc, 6)).toContain('1. [x] numbered')
   })
 
+  it('toggles tasks inside blockquotes and callouts', () => {
+    const quoted = '> [!NOTE]\n> - [ ] in a callout\n\n> > - [x] nested quote\n>- [ ] tight'
+    expect(toggleTaskAtLine(quoted, 2)).toContain('> - [x] in a callout')
+    expect(toggleTaskAtLine(quoted, 4)).toContain('> > - [ ] nested quote')
+    expect(toggleTaskAtLine(quoted, 5)).toContain('>- [x] tight')
+  })
+
   it('returns null when the line has no task', () => {
     expect(toggleTaskAtLine(doc, 1)).toBeNull()
     expect(toggleTaskAtLine(doc, 7)).toBeNull()

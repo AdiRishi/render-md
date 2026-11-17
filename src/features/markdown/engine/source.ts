@@ -1,6 +1,6 @@
 /** Fast, render-free helpers that work on raw markdown source. */
 
-const TASK_PATTERN = /^(\s*(?:[-*+]|\d+[.)])\s+\[)([ xX])(\])/
+const TASK_PATTERN = /^((?:\s*>)*\s*(?:[-*+]|\d+[.)])\s+\[)([ xX])(\])/
 
 /** Flip the GFM task checkbox on a 1-based source line. Returns null if none. */
 export function toggleTaskAtLine(markdown: string, line: number) {
