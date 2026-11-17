@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 
+import { getEditorView } from '@/features/editor/bridge'
+
 import { documentActions } from '../actions'
 import { type ViewMode, useSettingsStore } from '../state/settings-store'
 import { useUiStore } from '../state/ui-store'
@@ -33,6 +35,11 @@ export function useHotkeys() {
         event.preventDefault()
         const settings = useSettingsStore.getState()
         settings.set('viewMode', CYCLE[settings.viewMode])
+        // Read mode makes the editor inert, which drops focus to the page. Hand it back once the
+        // editor is interactive again, unless the user has focused something else.
+        if (settings.viewMode === 'read' && document.activeElement === document.body) {
+          requestAnimationFrame(() => getEditorView()?.focus())
+        }
       }
     }
     window.addEventListener('keydown', onKeyDown, { capture: true })
