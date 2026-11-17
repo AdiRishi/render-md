@@ -35,11 +35,12 @@ const theme = EditorView.theme({
   '.cm-content': {
     padding: '28px 0 40vh',
     caretColor: 'var(--proof)',
+    // CodeMirror's own flex-grow fills the pane up to this measure, and the scroller's
+    // justify-content centers gutter and text as one column beyond it. Don't size the content
+    // with flex-basis: CodeMirror writes an inline one when the pane is narrower than the text
+    // (as when Read mode collapses it), and without flex-grow that stale value sets the width.
     maxWidth: '78ch',
   },
-  // Gutter and text stay together as one centered column once the pane outgrows the measure.
-  '.cm-scroller > .cm-gutters, .cm-scroller > .cm-content': { flexGrow: '0' },
-  '.cm-scroller > .cm-content': { flexBasis: '78ch' },
   '.cm-line': { padding: '0 28px 0 6px' },
   '.cm-cursor, .cm-dropCursor': { borderLeft: '2px solid var(--proof)' },
   '&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection':
