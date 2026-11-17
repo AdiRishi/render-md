@@ -7,6 +7,10 @@
 /** Clone the article and strip interactive chrome (buttons, anchors…). */
 export function cleanArticle(article: HTMLElement) {
   const clone = article.cloneNode(true) as HTMLElement
+  // The measure fits the document to the preview's sheet; exports set their own width.
+  clone.removeAttribute('data-measure')
+  clone.style.removeProperty('--doc-measure')
+  if (!clone.getAttribute('style')) clone.removeAttribute('style')
   clone
     .querySelectorAll('button, .heading-anchor, .code-block-actions, .diagram-actions')
     .forEach((node) => node.remove())

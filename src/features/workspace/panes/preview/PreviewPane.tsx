@@ -30,6 +30,7 @@ export function PreviewPane({
   const { viewMode, typeset, textSize, measure, showOutline, diagramLook } = useSettingsStore()
 
   const isEmpty = markdown.trim() === ''
+  const measureWidth = MEASURES[measure]
   const reading = viewMode === 'read'
   const headings = result?.headings ?? []
   const withOutline = reading && showOutline && headings.length >= 3
@@ -57,11 +58,16 @@ export function PreviewPane({
     >
       {reading ? <ReadingProgress scrollRef={scrollRef} /> : null}
 
-      <div className="mx-auto flex w-full max-w-[90rem] justify-center gap-12 px-3 pt-5 pb-28 @md:px-10 @md:pt-12">
+      <div className="flex w-full justify-center gap-12 px-3 pt-5 pb-28 @md:px-10 @md:pt-12">
         {withOutline ? <Outline headings={headings} scrollRef={scrollRef} /> : null}
 
-        <div className="w-full min-w-0" style={{ maxWidth: `calc(${MEASURES[measure]} + 10rem)` }}>
-          <div className="mb-4 flex items-center justify-between gap-4 label-caps text-ink-3 @md:mb-8">
+        {/* The sheet is as wide as its widest block, and shrinks to fit the pane. */}
+        <div className="min-w-0">
+          {/* Its width keeps the sheet at the measure when nothing in it is wider. */}
+          <div
+            className="mb-4 flex max-w-full items-center justify-between gap-4 label-caps text-ink-3 @md:mb-8"
+            style={{ width: `calc(${measureWidth} + 10rem)` }}
+          >
             <span className="flex items-center gap-2">
               <span className="text-proof">¶</span>
               {result && !isEmpty ? (
@@ -84,26 +90,29 @@ export function PreviewPane({
             onDoubleClick={onDoubleClick}
           >
             <CropMarks offset={24} size={16} className="hidden @lg:block" />
-            <div className="mx-auto" style={{ maxWidth: MEASURES[measure] }}>
-              {error && !isEmpty ? <RenderError message={error} /> : null}
-              {isEmpty ? (
-                <EmptyState />
-              ) : result ? (
-                <DocumentView
-                  ref={(element) => {
-                    previewArticle.current = element
-                  }}
-                  hast={result.hast}
-                  frontmatter={result.frontmatter}
-                  typeset={typeset}
-                  textSize={textSize}
-                  onToggleTask={toggleTask}
-                  diagramLook={diagramLook}
-                />
-              ) : error ? null : (
-                <SheetSkeleton />
-              )}
-            </div>
+            {error && !isEmpty ? (
+              <div className="mx-auto" style={{ maxWidth: measureWidth }}>
+                <RenderError message={error} />
+              </div>
+            ) : null}
+            {result && !isEmpty ? (
+              <DocumentView
+                ref={(element) => {
+                  previewArticle.current = element
+                }}
+                hast={result.hast}
+                frontmatter={result.frontmatter}
+                typeset={typeset}
+                textSize={textSize}
+                measure={measureWidth}
+                onToggleTask={toggleTask}
+                diagramLook={diagramLook}
+              />
+            ) : (
+              <div className="mx-auto" style={{ maxWidth: measureWidth }}>
+                {isEmpty ? <EmptyState /> : error ? null : <SheetSkeleton />}
+              </div>
+            )}
           </div>
 
           <p className="mt-6 text-center label-caps text-ink-4">
