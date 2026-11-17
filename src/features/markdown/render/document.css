@@ -848,11 +848,12 @@
 
 /* -- Measure ----------------------------------------------------------------
    With a measure (`data-measure`, set by the workspace preview), prose keeps to that line
-   length, and code, tables and display math may grow past it to fit their content, up to the
-   document's width. The prose's max-width also caps what it adds to the document's intrinsic
-   width, so a host that sizes the page to fit its content grows only for those blocks. */
+   length, and code, tables, display math and top-level media may grow past it to fit their
+   content, up to the document's width. The prose's max-width also caps what it adds to the
+   document's intrinsic width, so a host that sizes the page to fit its content grows only for
+   those blocks. The cap must stay a plain length: a percentage would lift it. */
 
-.doc[data-measure] > * {
+.doc[data-measure] > :not(img, video) {
     max-width: var(--doc-measure);
     margin-inline: auto;
 }
