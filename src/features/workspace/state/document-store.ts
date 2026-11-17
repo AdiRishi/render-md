@@ -95,18 +95,18 @@ function recentsWithinBudget(recents: DocumentRecord[], currentSize: number) {
 }
 
 /**
- * True while folding another tab's documents into our recents. That tab has
- * saved its document already, and saving our state back would put our
- * document over the one it just stored.
+ * True while applying another tab's write. That tab has saved it already, so
+ * this only refreshes a save of ours that is still waiting: starting a new one
+ * would put our document over the one it just stored.
  */
-let mergingOtherTab = false
+let applyingOtherTab = false
 
-function mergeOtherTabRecents(recents: DocumentRecord[]) {
-  mergingOtherTab = true
+function applyFromOtherTab(state: Partial<DocumentStore>) {
+  applyingOtherTab = true
   try {
-    useDocumentStore.setState({ recents })
+    useDocumentStore.setState(state)
   } finally {
-    mergingOtherTab = false
+    applyingOtherTab = false
   }
 }
 
@@ -178,9 +178,8 @@ export const useDocumentStore = create<DocumentStore>()(
         )
         return {
           ...storage,
-          setItem: (name, value) => {
-            if (!mergingOtherTab) storage.setItem(name, value)
-          },
+          setItem: (name, value) =>
+            applyingOtherTab ? storage.refresh(name, value) : storage.setItem(name, value),
         }
       }),
       partialize: ({ id, markdown, name, baseUrl, source, updatedAt, recents }) => ({
@@ -217,8 +216,7 @@ if (typeof window !== 'undefined') {
 
       if (incoming.id === current.id) {
         if (incoming.markdown !== current.markdown && incoming.updatedAt > current.updatedAt) {
-          // Saved back on purpose: it replaces any older edit of ours still waiting to be written.
-          useDocumentStore.setState({ markdown: incoming.markdown, updatedAt: incoming.updatedAt })
+          applyFromOtherTab({ markdown: incoming.markdown, updatedAt: incoming.updatedAt })
         }
         return
       }
@@ -235,7 +233,7 @@ if (typeof window !== 'undefined') {
             entry.id === current.recents[index].id &&
             entry.markdown === current.recents[index].markdown,
         )
-      if (!unchanged) mergeOtherTabRecents(recents)
+      if (!unchanged) applyFromOtherTab({ recents })
     } catch {
       // Ignore malformed writes.
     }
