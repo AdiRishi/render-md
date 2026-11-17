@@ -1,6 +1,6 @@
 import { type Root } from 'hast'
 import { toJsxRuntime } from 'hast-util-to-jsx-runtime'
-import { type Ref, useMemo } from 'react'
+import { type CSSProperties, type Ref, useMemo } from 'react'
 import { Fragment, jsx, jsxs } from 'react/jsx-runtime'
 
 import { cn } from '@/lib/utils'
@@ -16,6 +16,8 @@ export type DocumentViewProps = {
   frontmatter?: Frontmatter | null
   typeset?: Typeset
   textSize?: TextSize
+  /** Line length for prose, as a CSS length. Code blocks, tables and display math may be wider. */
+  measure?: string
   className?: string
   ref?: Ref<HTMLElement>
 } & DocumentContextValue
@@ -29,6 +31,7 @@ export function DocumentView({
   frontmatter,
   typeset = 'sans',
   textSize = 'm',
+  measure,
   className,
   ref,
   onToggleTask,
@@ -55,6 +58,8 @@ export function DocumentView({
         className={cn('doc', className)}
         data-typeset={typeset}
         data-text-size={textSize}
+        data-measure={measure}
+        style={measure ? ({ '--doc-measure': measure } as CSSProperties) : undefined}
       >
         {frontmatter ? <FrontmatterCard data={frontmatter} /> : null}
         {content}
