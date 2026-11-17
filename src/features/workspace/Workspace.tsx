@@ -65,7 +65,10 @@ export function Workspace({
 
       <main
         ref={containerRef}
-        className={cn('relative flex min-h-0 flex-1', resizing && 'cursor-col-resize select-none')}
+        className={cn(
+          '@container relative flex min-h-0 flex-1',
+          resizing && 'cursor-col-resize select-none',
+        )}
       >
         <section
           aria-label="Editor"
@@ -77,7 +80,11 @@ export function Workspace({
           )}
           style={{ flexBasis: editorBasis, flexShrink: 0 }}
         >
-          <EditorPane />
+          {/* Read mode hides the editor by clipping it, not squeezing it: at zero width
+              CodeMirror rewraps every line and loses its scroll position. */}
+          <div className="h-full" style={{ minWidth: `${splitRatio * 100}cqw` }}>
+            <EditorPane />
+          </div>
         </section>
 
         {viewMode === 'split' ? (
